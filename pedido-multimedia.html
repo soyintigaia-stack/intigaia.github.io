@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedidos a Laura — PulsoIA</title>
+    <title>Pedidos a Lara — PulsoIA</title>
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -159,21 +159,21 @@
         @keyframes toastIn { from { opacity:0; transform: translateX(-50%) translateY(10px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
 
         /* LAURA CONFIG */
-        .laura-config {
+        .lara-config {
             background: rgba(0,212,170,0.07); border: 1px solid rgba(0,212,170,0.2);
             border-radius: 12px; padding: 14px 16px; margin-bottom: 24px;
             display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
         }
-        .laura-config-icon { font-size: 22px; }
-        .laura-config-text { flex: 1; min-width: 140px; }
-        .laura-config-text strong { font-size: 13px; display: block; margin-bottom: 2px; }
-        .laura-config-text span { font-size: 12px; color: var(--muted); }
-        .laura-config input {
+        .lara-config-icon { font-size: 22px; }
+        .lara-config-text { flex: 1; min-width: 140px; }
+        .lara-config-text strong { font-size: 13px; display: block; margin-bottom: 2px; }
+        .lara-config-text span { font-size: 12px; color: var(--muted); }
+        .lara-config input {
             border: 2px solid rgba(0,212,170,0.3); border-radius: 10px;
             padding: 8px 12px; font-size: 13px; font-family: inherit;
             background: white; color: var(--text); min-width: 160px;
         }
-        .laura-config input:focus { outline: none; border-color: var(--teal); }
+        .lara-config input:focus { outline: none; border-color: var(--teal); }
 
         /* TARIFAS CONFIG */
         .tarifas-config {
@@ -216,7 +216,7 @@
         }
         .cost-strip input[type="number"]:focus { outline: none; border-color: var(--purple); }
         .cost-sep { color: var(--muted); }
-        .cost-laura { color: var(--teal); font-weight: 800; white-space: nowrap; }
+        .cost-lara { color: var(--teal); font-weight: 800; white-space: nowrap; }
         .cost-presupuesto {
             margin-left: auto; color: var(--amber); font-weight: 800;
             white-space: nowrap; font-size: 14px;
@@ -234,13 +234,13 @@
 <div class="nav-wrap">
     <nav class="nav">
         <a href="index.html" class="logo">Pulso<span>IA</span><em>.</em></a>
-        <span class="nav-sub">Pedidos internos → Laura</span>
+        <span class="nav-sub">Pedidos internos → Lara</span>
     </nav>
 </div>
 
 <div class="header">
     <h1>🎬 Generador de pedidos creativos</h1>
-    <p>Completá el formulario y generá el brief listo para enviarle a Laura</p>
+    <p>Completá el formulario y generá el brief listo para enviarle a Lara</p>
 </div>
 
 <div class="tabs-wrap">
@@ -254,20 +254,20 @@
 
 <!-- LAURA CONFIG (global) -->
 <div style="max-width:780px;margin:16px auto 0;padding:0 20px;">
-    <div class="laura-config">
-        <div class="laura-config-icon">📱</div>
-        <div class="laura-config-text">
-            <strong>WhatsApp de Laura</strong>
+    <div class="lara-config">
+        <div class="lara-config-icon">📱</div>
+        <div class="lara-config-text">
+            <strong>WhatsApp de Lara</strong>
             <span>Se usa para el botón de envío directo</span>
         </div>
-        <input type="text" id="lauraPhone" placeholder="54911..." value="" oninput="saveLaura(this.value)">
+        <input type="text" id="laraPhone" placeholder="54911..." value="" oninput="saveLara(this.value)">
     </div>
 </div>
 
 <!-- TARIFAS CONFIG -->
 <div style="max-width:780px;margin:10px auto 0;padding:0 20px 4px;">
     <details class="tarifas-config" id="tarifas-config">
-        <summary class="tarifas-summary">⚙️ Tarifas base de Laura — configurar precios de referencia</summary>
+        <summary class="tarifas-summary">⚙️ Tarifas base de Lara — configurar precios de referencia</summary>
         <div class="tarifas-body">
             <div class="tarifas-grid">
                 <div class="tarifa-col">
@@ -284,7 +284,7 @@
                 </div>
                 <div class="tarifa-col">
                     <label>📊 Margen de gestión</label>
-                    <div class="tarifa-row"><input type="number" id="cfg-margen" placeholder="20" min="0" max="500" step="5" oninput="saveTarifa('margen',this.value)"><span>% sobre costo Laura</span></div>
+                    <div class="tarifa-row"><input type="number" id="cfg-margen" placeholder="20" min="0" max="500" step="5" oninput="saveTarifa('margen',this.value)"><span>% sobre costo Lara</span></div>
                 </div>
             </div>
         </div>
@@ -403,20 +403,20 @@
         <label>Notas adicionales <span>(cualquier detalle que ayude)</span></label>
         <textarea id="m-notas" placeholder="Ej: el negocio es muy femenino, los colores son pastel, queremos que suene moderno pero cálido..."></textarea>
     </div>
-    <div class="section-title">💰 Costo Laura → presupuesto cliente</div>
+    <div class="section-title">💰 Costo Lara → presupuesto cliente</div>
     <div class="cost-strip">
-        <label>Laura</label>
+        <label>Lara</label>
         <input type="number" id="m-tarifa" min="0" step="100" placeholder="8000" oninput="calcCosto('m')">
         <span class="cost-sep">×</span>
         <input type="number" id="m-qty" min="1" value="1" style="width:50px" oninput="calcCosto('m')">
         <span class="cost-sep">piezas =</span>
-        <span id="m-total-laura" class="cost-laura">—</span>
+        <span id="m-total-lara" class="cost-lara">—</span>
         <span class="cost-sep">· margen</span>
         <input type="number" id="m-margen" min="0" max="500" placeholder="20" oninput="calcCosto('m')">
         <span class="cost-sep">%</span>
         <span id="m-total-cliente" class="cost-presupuesto">—</span>
     </div>
-    <button class="generate-btn" onclick="generateBrief('musica')">✨ Generar brief para Laura</button>
+    <button class="generate-btn" onclick="generateBrief('musica')">✨ Generar brief para Lara</button>
     <div class="output-wrap" id="output-musica">
         <div class="output-header">
             <div><div class="output-header-title">Brief listo para enviar</div><div class="output-header-sub">Copiá el texto o mandalo directo por WhatsApp</div></div>
@@ -496,7 +496,7 @@
 
     <div class="section-title">Material que se entrega</div>
     <div class="field">
-        <label>¿Qué material se le manda a Laura? <span>(marcá lo que va adjunto)</span></label>
+        <label>¿Qué material se le manda a Lara? <span>(marcá lo que va adjunto)</span></label>
         <div class="chips" id="v-material">
             <div class="chip multi" onclick="toggleChip(this)">Videos del cliente</div>
             <div class="chip multi" onclick="toggleChip(this)">Fotos del cliente</div>
@@ -532,7 +532,7 @@
         </select>
     </div>
     <div class="field"><label>CTA al final <span>(qué debe hacer quien lo ve)</span></label><input type="text" id="v-cta" placeholder="Ej: 'Escribinos por WhatsApp', 'Link en bio', 'Agendá tu turno'"></div>
-    <div class="field"><label>Música <span>(si no van a usar el jingle del negocio)</span></label><input type="text" id="v-musica" placeholder="Ej: usar el jingle que creó Laura / música trending de Instagram / link a canción"></div>
+    <div class="field"><label>Música <span>(si no van a usar el jingle del negocio)</span></label><input type="text" id="v-musica" placeholder="Ej: usar el jingle que creó Lara / música trending de Instagram / link a canción"></div>
 
     <div class="section-title">Prioridad y notas</div>
     <div class="field">
@@ -545,20 +545,20 @@
         <input type="hidden" id="v-prioridad" value="Normal (3–5 días)">
     </div>
     <div class="field"><label>Notas adicionales</label><textarea id="v-notas" placeholder="Cualquier indicación especial, referencias de estilo, videos similares que le gusten al cliente..."></textarea></div>
-    <div class="section-title">💰 Costo Laura → presupuesto cliente</div>
+    <div class="section-title">💰 Costo Lara → presupuesto cliente</div>
     <div class="cost-strip">
-        <label>Laura</label>
+        <label>Lara</label>
         <input type="number" id="v-tarifa" min="0" step="1000" placeholder="15000" oninput="calcCosto('v')">
         <span class="cost-sep">×</span>
         <input type="number" id="v-qty" min="1" value="1" style="width:50px" oninput="calcCosto('v')">
         <span class="cost-sep">videos =</span>
-        <span id="v-total-laura" class="cost-laura">—</span>
+        <span id="v-total-lara" class="cost-lara">—</span>
         <span class="cost-sep">· margen</span>
         <input type="number" id="v-margen" min="0" max="500" placeholder="20" oninput="calcCosto('v')">
         <span class="cost-sep">%</span>
         <span id="v-total-cliente" class="cost-presupuesto">—</span>
     </div>
-    <button class="generate-btn" onclick="generateBrief('video')">✨ Generar brief para Laura</button>
+    <button class="generate-btn" onclick="generateBrief('video')">✨ Generar brief para Lara</button>
     <div class="output-wrap" id="output-video">
         <div class="output-header">
             <div><div class="output-header-title">Brief listo para enviar</div><div class="output-header-sub">Copiá el texto o mandalo directo por WhatsApp</div></div>
@@ -614,7 +614,7 @@
         <select id="g-kit">
             <option selected>Sí — se lo mando adjunto</option>
             <option>No todavía — usar referencias que indico</option>
-            <option>Sí, ya lo tiene Laura de otro pedido</option>
+            <option>Sí, ya lo tiene Lara de otro pedido</option>
         </select>
     </div>
 
@@ -641,20 +641,20 @@
         <input type="hidden" id="g-prioridad" value="Normal (3–5 días)">
     </div>
     <div class="field"><label>Notas adicionales</label><textarea id="g-notas" placeholder="Cualquier indicación extra..."></textarea></div>
-    <div class="section-title">💰 Costo Laura → presupuesto cliente</div>
+    <div class="section-title">💰 Costo Lara → presupuesto cliente</div>
     <div class="cost-strip">
-        <label>Laura</label>
+        <label>Lara</label>
         <input type="number" id="g-tarifa" min="0" step="500" placeholder="2000" oninput="calcCosto('g')">
         <span class="cost-sep">×</span>
         <input type="number" id="g-qty" min="1" value="5" style="width:50px" oninput="calcCosto('g')">
         <span class="cost-sep">piezas =</span>
-        <span id="g-total-laura" class="cost-laura">—</span>
+        <span id="g-total-lara" class="cost-lara">—</span>
         <span class="cost-sep">· margen</span>
         <input type="number" id="g-margen" min="0" max="500" placeholder="20" oninput="calcCosto('g')">
         <span class="cost-sep">%</span>
         <span id="g-total-cliente" class="cost-presupuesto">—</span>
     </div>
-    <button class="generate-btn" onclick="generateBrief('graficos')">✨ Generar brief para Laura</button>
+    <button class="generate-btn" onclick="generateBrief('graficos')">✨ Generar brief para Lara</button>
     <div class="output-wrap" id="output-graficos">
         <div class="output-header">
             <div><div class="output-header-title">Brief listo para enviar</div><div class="output-header-sub">Copiá el texto o mandalo directo por WhatsApp</div></div>
@@ -729,21 +729,21 @@
         </div>
         <input type="hidden" id="p-prioridad" value="Normal (3–5 días)">
     </div>
-    <div class="field"><label>Notas finales</label><textarea id="p-notas" placeholder="Todo lo que Laura necesita saber que no entró en los campos anteriores..."></textarea></div>
-    <div class="section-title">💰 Costo Laura → presupuesto cliente</div>
+    <div class="field"><label>Notas finales</label><textarea id="p-notas" placeholder="Todo lo que Lara necesita saber que no entró en los campos anteriores..."></textarea></div>
+    <div class="section-title">💰 Costo Lara → presupuesto cliente</div>
     <div class="cost-strip">
-        <label>Pack total Laura</label>
+        <label>Pack total Lara</label>
         <input type="number" id="p-tarifa" min="0" step="1000" placeholder="50000" oninput="calcCosto('p')">
         <input type="number" id="p-qty" value="1" style="display:none">
         <span class="cost-sep">=</span>
-        <span id="p-total-laura" class="cost-laura">—</span>
+        <span id="p-total-lara" class="cost-lara">—</span>
         <span class="cost-sep">· margen</span>
         <input type="number" id="p-margen" min="0" max="500" placeholder="20" oninput="calcCosto('p')">
         <span class="cost-sep">%</span>
         <span id="p-total-cliente" class="cost-presupuesto">—</span>
     </div>
-    <div class="field"><label>Condiciones de pago a Laura <span>(opcional)</span></label><input type="text" id="p-pago-notas" placeholder="Ej: 50% anticipo, 50% al entregar"></div>
-    <button class="generate-btn" onclick="generateBrief('pack')">✨ Generar brief completo para Laura</button>
+    <div class="field"><label>Condiciones de pago a Lara <span>(opcional)</span></label><input type="text" id="p-pago-notas" placeholder="Ej: 50% anticipo, 50% al entregar"></div>
+    <button class="generate-btn" onclick="generateBrief('pack')">✨ Generar brief completo para Lara</button>
     <div class="output-wrap" id="output-pack">
         <div class="output-header">
             <div><div class="output-header-title">Brief completo listo para enviar</div><div class="output-header-sub">Copiá el texto o mandalo directo por WhatsApp</div></div>
@@ -789,7 +789,7 @@
     }
 
     // ── LAURA PHONE ──
-    function saveLaura(val) { localStorage.setItem('lauraPhone', val); }
+    function saveLara(val) { localStorage.setItem('laraPhone', val); }
 
     // ── TARIFAS ──
     function saveTarifa(key, v) { localStorage.setItem('lt-' + key, v); }
@@ -817,18 +817,18 @@
         const tarifa = parseFloat(document.getElementById(prefix + '-tarifa')?.value) || 0;
         const qty = parseFloat(document.getElementById(prefix + '-qty')?.value) || 1;
         const margen = parseFloat(document.getElementById(prefix + '-margen')?.value) || 0;
-        const totalLaura = tarifa * qty;
-        const totalCliente = totalLaura * (1 + margen / 100);
+        const totalLara = tarifa * qty;
+        const totalCliente = totalLara * (1 + margen / 100);
         const fmt = n => n > 0 ? '$' + n.toFixed(2) + ' USD' : '—';
-        const lEl = document.getElementById(prefix + '-total-laura');
+        const lEl = document.getElementById(prefix + '-total-lara');
         const cEl = document.getElementById(prefix + '-total-cliente');
-        if (lEl) lEl.textContent = fmt(totalLaura);
+        if (lEl) lEl.textContent = fmt(totalLara);
         if (cEl) cEl.textContent = fmt(totalCliente);
     }
 
     window.addEventListener('load', () => {
-        const saved = localStorage.getItem('lauraPhone');
-        if (saved) document.getElementById('lauraPhone').value = saved;
+        const saved = localStorage.getItem('laraPhone');
+        if (saved) document.getElementById('laraPhone').value = saved;
         loadTarifas();
     });
 
@@ -847,8 +847,8 @@
 
     // ── WHATSAPP ──
     function sendWhatsApp(textId) {
-        const phone = document.getElementById('lauraPhone').value.replace(/\D/g,'');
-        if (!phone) { alert('Primero ingresá el número de WhatsApp de Laura arriba.'); return; }
+        const phone = document.getElementById('laraPhone').value.replace(/\D/g,'');
+        if (!phone) { alert('Primero ingresá el número de WhatsApp de Lara arriba.'); return; }
         const text = document.getElementById(textId).textContent;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
     }
@@ -890,7 +890,7 @@
                 ? `\n💰 PRESUPUESTO MULTIMEDIA
 ${sep}
 Producción: ${tipo}
-Tarifa Laura: $${mTarifa.toFixed(2)} USD × ${mQty} pieza/s = $${mTotalL.toFixed(2)} USD
+Tarifa Lara: $${mTarifa.toFixed(2)} USD × ${mQty} pieza/s = $${mTotalL.toFixed(2)} USD
 Margen gestión (${mMargen}%): $${(mTotalC - mTotalL).toFixed(2)} USD
 ─────────────────────────────────────
 ▶ LÍNEA EN PRESUPUESTO CLIENTE: $${mTotalC.toFixed(2)} USD
@@ -954,7 +954,7 @@ Generado con PulsoIA · pedido-multimedia`;
                 ? `\n💰 PRESUPUESTO MULTIMEDIA
 ${sep}
 Producción: ${tipo}
-Tarifa Laura: $${vTarifa.toFixed(2)} USD × ${vQty} video/s = $${vTotalL.toFixed(2)} USD
+Tarifa Lara: $${vTarifa.toFixed(2)} USD × ${vQty} video/s = $${vTotalL.toFixed(2)} USD
 Margen gestión (${vMargen}%): $${(vTotalC - vTotalL).toFixed(2)} USD
 ─────────────────────────────────────
 ▶ LÍNEA EN PRESUPUESTO CLIENTE: $${vTotalC.toFixed(2)} USD
@@ -1017,7 +1017,7 @@ Generado con PulsoIA · pedido-multimedia`;
                 ? `\n💰 PRESUPUESTO MULTIMEDIA
 ${sep}
 Producción: ${tipo}
-Tarifa Laura: $${gTarifa.toFixed(2)} USD × ${gQty} pieza/s = $${gTotalL.toFixed(2)} USD
+Tarifa Lara: $${gTarifa.toFixed(2)} USD × ${gQty} pieza/s = $${gTotalL.toFixed(2)} USD
 Margen gestión (${gMargen}%): $${(gTotalC - gTotalL).toFixed(2)} USD
 ─────────────────────────────────────
 ▶ LÍNEA EN PRESUPUESTO CLIENTE: $${gTotalC.toFixed(2)} USD
@@ -1081,7 +1081,7 @@ ${sep}
 Pack: ${etapa}
 Piezas incluidas:
   • ${piezas}
-Costo total Laura: $${pTotalL.toFixed(2)} USD
+Costo total Lara: $${pTotalL.toFixed(2)} USD
 Margen gestión (${pMargen}%): $${(pTotalC - pTotalL).toFixed(2)} USD${pPagoNotas ? `\nCondiciones de pago: ${pPagoNotas}` : ''}
 ─────────────────────────────────────
 ▶ LÍNEA EN PRESUPUESTO CLIENTE: $${pTotalC.toFixed(2)} USD
