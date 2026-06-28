@@ -83,8 +83,13 @@
         /* SCREENS */
         .screen {
             display: none;
-            min-height: 100vh;
+            position: fixed;
+            inset: 0;
             padding-top: 60px;
+            background: var(--bg);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            z-index: 50;
         }
         .screen.active { display: block; }
         .screen.fade-in { animation: screenFadeIn 0.32s ease forwards; }
@@ -135,7 +140,7 @@
 
         /* ==================== INTRO ==================== */
         #screen-intro {
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -259,11 +264,11 @@
 
         /* ==================== QUESTION ==================== */
         #screen-question {
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             padding: 40px 24px 40px;
-            min-height: calc(100vh - 60px);
+            min-height: calc(100% - 60px);
             justify-content: center;
         }
         #screen-question.active { display: flex; }
@@ -346,13 +351,13 @@
 
         /* ==================== LOADING ==================== */
         #screen-loading {
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
             padding: 40px 24px;
-            min-height: calc(100vh - 60px);
+            min-height: calc(100% - 60px);
         }
         #screen-loading.active { display: flex; }
 
@@ -969,9 +974,9 @@ function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active', 'fade-in'));
     const target = document.getElementById(id);
     target.classList.add('active');
-    void target.offsetWidth; // force reflow
+    target.scrollTop = 0;
+    void target.offsetWidth;
     target.classList.add('fade-in');
-    window.scrollTo(0, 0);
 }
 
 function updateProgress() {
