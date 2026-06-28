@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulsoIA — Diagnóstico Inteligente para tu Negocio</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7C6FFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Descubrí cuánto dinero está perdiendo tu negocio. Diagnóstico con IA en 10 minutos, gratis.">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --purple: #7C6FFF;
+            --purple-dark: #5A4FCC;
+            --teal: #00D4AA;
+            --navy: #0F1224;
+            --navy-mid: #1A1F4C;
+            --text: #1A1F3C;
+            --text-muted: #6B7280;
+            --bg: #F5F7FF;
+            --white: #FFFFFF;
+            --radius: 20px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 55%, #2D1B69 100%);
+            color: var(--white);
+            padding: 48px 24px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(124,111,255,0.15), transparent 70%);
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; left: -40px;
+            width: 250px; height: 250px;
+            background: radial-gradient(circle, rgba(0,212,170,0.1), transparent 70%);
+            pointer-events: none;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto 52px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .logo-accent { color: var(--purple); }
+        .logo-dot { color: var(--teal); }
+
+        .nav-cta {
+            background: rgba(124,111,255,0.2);
+            border: 1px solid rgba(124,111,255,0.4);
+            color: var(--white);
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .nav-cta:hover { background: rgba(124,111,255,0.35); }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,212,170,0.12);
+            border: 1px solid rgba(0,212,170,0.3);
+            color: var(--teal);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            margin-bottom: 28px;
+        }
+        .badge-dot {
+            width: 7px; height: 7px;
+            background: var(--teal);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 6vw, 48px);
+            font-weight: 800;
+            line-height: 1.15;
+            max-width: 640px;
+            margin: 0 auto 20px;
+            letter-spacing: -1px;
+        }
+        .hero h1 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--purple), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 18px;
+            opacity: 0.75;
+            max-width: 480px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        .cta-group { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+        .cta-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--purple);
+            color: var(--white);
+            padding: 18px 36px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 8px 32px rgba(124,111,255,0.45);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 40px rgba(124,111,255,0.55);
+        }
+        .cta-primary svg { transition: transform 0.2s; }
+        .cta-primary:hover svg { transform: translateX(4px); }
+
+        .cta-note {
+            font-size: 13px;
+            opacity: 0.5;
+        }
+
+        /* CARDS */
+        .cards-section {
+            max-width: 920px;
+            margin: -52px auto 0;
+            padding: 0 20px 64px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            box-shadow: 0 4px 24px rgba(15,18,36,0.07);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .card-icon {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            margin-bottom: 16px;
+        }
+        .card-icon.purple { background: rgba(124,111,255,0.1); }
+        .card-icon.teal   { background: rgba(0,212,170,0.1); }
+        .card-icon.amber  { background: rgba(251,191,36,0.1); }
+        .card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+        .card p  { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+        /* HOW IT WORKS */
+        .how {
+            background: var(--white);
+            padding: 72px 24px;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--purple);
+            margin-bottom: 12px;
+        }
+        .section-header h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+        .step {
+            display: flex;
+            gap: 24px;
+            padding-bottom: 36px;
+            position: relative;
+        }
+        .step:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: 21px;
+            top: 48px;
+            width: 2px;
+            height: calc(100% - 24px);
+            background: linear-gradient(to bottom, var(--purple), var(--teal));
+            opacity: 0.25;
+        }
+        .step-num {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), var(--teal));
+            color: var(--white);
+            font-weight: 800;
+            font-size: 16px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px rgba(124,111,255,0.35);
+        }
+        .step-body { padding-top: 10px; }
+        .step-body h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .step-body p  { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+        /* MODULES */
+        .modules-section {
+            background: var(--bg);
+            padding: 72px 24px;
+        }
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+        .module-pill {
+            background: var(--white);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .module-emoji { font-size: 28px; flex-shrink: 0; }
+        .module-pill span { font-size: 14px; font-weight: 600; color: var(--text); }
+
+        /* SOCIAL PROOF */
+        .proof {
+            background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+            color: var(--white);
+            padding: 72px 24px;
+            text-align: center;
+        }
+        .proof h2 {
+            font-size: clamp(24px, 4vw, 36px);
+            font-weight: 800;
+            max-width: 560px;
+            margin: 0 auto 16px;
+            letter-spacing: -0.5px;
+        }
+        .proof p {
+            opacity: 0.8;
+            max-width: 420px;
+            margin: 0 auto 36px;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+        .cta-white {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--white);
+            color: var(--purple);
+            padding: 16px 34px;
+            border-radius: 50px;
+            font-size: 17px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .cta-white:hover { transform: translateY(-2px); }
+
+        /* FOOTER */
+        footer {
+            background: var(--navy);
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            padding: 28px 24px;
+            font-size: 13px;
+        }
+        footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+        footer a:hover { color: var(--white); }
+
+        @media (max-width: 480px) {
+            .nav-cta { display: none; }
+            .cards-section { margin-top: -40px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+    <nav class="nav">
+        <div class="logo">Pulso<span class="logo-accent">IA</span><span class="logo-dot">.</span></div>
+        <a href="diagnostico.html" class="nav-cta">Empezar gratis →</a>
+    </nav>
+
+    <div class="badge">
+        <span class="badge-dot"></span>
+        Diagnóstico gratuito · 10 minutos
+    </div>
+
+    <h1>Descubrí cuánto dinero está<br><em>perdiendo tu negocio</em></h1>
+
+    <p>Respondé 15 preguntas y recibí un reporte personalizado con lo que tenés que mejorar — y cuánto podés ganar haciéndolo.</p>
+
+    <div class="cta-group">
+        <a href="diagnostico.html" class="cta-primary">
+            Hacer diagnóstico gratis
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <span class="cta-note">Sin registro · Sin tarjeta · 100% gratis</span>
+    </div>
+</section>
+
+<!-- FEATURE CARDS -->
+<section class="cards-section">
+    <div class="card">
+        <div class="card-icon purple">⚡</div>
+        <h3>Resultado en 10 minutos</h3>
+        <p>15 preguntas simples. Sin tecnicismos. Funciona desde el celular.</p>
+    </div>
+    <div class="card">
+        <div class="card-icon teal">📊</div>
+        <h3>Reporte con puntaje</h3>
+        <p>Puntaje por área, hallazgos críticos y plan de acción en 90 días.</p>
+    </div>
+    <div class="card">
+        <div class="card-icon amber">💰</div>
+        <h3>ROI proyectado</h3>
+        <p>Te mostramos cuánto estás perdiendo hoy y cuánto podés ganar.</p>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+    <div class="section-header">
+        <span class="section-label">Cómo funciona</span>
+        <h2>Simple, rápido y accionable</h2>
+    </div>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+                <h4>Contanos sobre tu negocio</h4>
+                <p>Rubro, tamaño y ciudad. Sin datos sensibles, en 30 segundos.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+                <h4>Respondé 15 preguntas</h4>
+                <p>Sobre presencia digital, automatización, captación y fidelización de clientes.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+                <h4>Recibís tu reporte al instante</h4>
+                <p>Puntaje, hallazgos críticos, y un roadmap de 90 días listo para ejecutar.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+                <h4>Implementamos juntos</h4>
+                <p>Si querés ayuda para ejecutar el plan, podés agendar una consulta directamente desde el reporte.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MODULES -->
+<section class="modules-section">
+    <div class="section-header">
+        <span class="section-label">Qué analizamos</span>
+        <h2>5 áreas clave de tu negocio</h2>
+    </div>
+    <div class="modules-grid">
+        <div class="module-pill">
+            <span class="module-emoji">📱</span>
+            <span>Presencia Digital</span>
+        </div>
+        <div class="module-pill">
+            <span class="module-emoji">🎯</span>
+            <span>Captación de Clientes</span>
+        </div>
+        <div class="module-pill">
+            <span class="module-emoji">⚙️</span>
+            <span>Automatización</span>
+        </div>
+        <div class="module-pill">
+            <span class="module-emoji">❤️</span>
+            <span>Fidelización</span>
+        </div>
+        <div class="module-pill">
+            <span class="module-emoji">🏆</span>
+            <span>Posicionamiento</span>
+        </div>
+    </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="proof">
+    <h2>Tu negocio tiene más potencial del que imaginás</h2>
+    <p>Averiguá dónde están los puntos ciegos — y qué hacer con cada uno.</p>
+    <a href="diagnostico.html" class="cta-white">
+        Empezar diagnóstico gratis →
+    </a>
+</section>
+
+<footer>
+    PulsoIA · Diagnóstico Inteligente para PyMEs · 2026 &nbsp;·&nbsp;
+    <a href="diagnostico.html">Hacer diagnóstico</a>
+</footer>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+    }
+</script>
+</body>
+</html>
