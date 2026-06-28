@@ -200,50 +200,27 @@
         }
         .tarifa-row input[type="number"]:focus { outline: none; border-color: var(--teal); }
 
-        /* COST CARD */
-        .cost-card {
-            background: linear-gradient(160deg, #0F1629 0%, #1A2545 100%);
-            border: 1px solid rgba(0,212,170,0.25);
-            border-radius: 16px; padding: 20px; margin-bottom: 16px;
+        /* COST STRIP */
+        .cost-strip {
+            display: flex; align-items: center; flex-wrap: wrap;
+            gap: 10px; padding: 12px 16px; margin-bottom: 16px;
+            background: var(--white); border: 1.5px solid #E5E7EB;
+            border-radius: 12px; font-size: 13px;
         }
-        .cost-line {
-            display: grid; grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px; margin-bottom: 16px;
+        .cost-strip label { font-weight: 700; color: var(--muted); white-space: nowrap; }
+        .cost-strip input[type="number"] {
+            width: 70px; padding: 6px 8px; border: 1.5px solid #E5E7EB;
+            border-radius: 8px; font-size: 13px; font-weight: 700;
+            font-family: inherit; color: var(--text); background: var(--bg);
+            text-align: right;
         }
-        .cost-field label {
-            display: block; font-size: 10px; font-weight: 700;
-            color: rgba(255,255,255,0.45); text-transform: uppercase;
-            letter-spacing: 0.5px; margin-bottom: 6px;
+        .cost-strip input[type="number"]:focus { outline: none; border-color: var(--purple); }
+        .cost-sep { color: var(--muted); }
+        .cost-laura { color: var(--teal); font-weight: 800; white-space: nowrap; }
+        .cost-presupuesto {
+            margin-left: auto; color: var(--amber); font-weight: 800;
+            white-space: nowrap; font-size: 14px;
         }
-        .cost-input-wrap { display: flex; align-items: center; gap: 5px; }
-        .cost-currency { color: rgba(255,255,255,0.35); font-size: 14px; }
-        .cost-card input[type="number"] {
-            width: 100%; padding: 10px 12px;
-            border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
-            font-size: 15px; font-weight: 700; font-family: inherit;
-            background: rgba(255,255,255,0.07); color: white; text-align: right;
-        }
-        .cost-card input[type="number"]:focus {
-            outline: none; border-color: var(--teal);
-            background: rgba(0,212,170,0.07);
-        }
-        .cost-result {
-            border-top: 1px solid rgba(255,255,255,0.08);
-            padding-top: 14px; display: flex; flex-direction: column; gap: 6px;
-        }
-        .cost-result-item {
-            display: flex; justify-content: space-between;
-            align-items: center; font-size: 14px;
-        }
-        .cost-result-item > span { color: rgba(255,255,255,0.55); }
-        .cost-laura { color: var(--teal) !important; font-size: 16px; font-weight: 800; }
-        .cost-result-item.highlight {
-            background: rgba(0,212,170,0.09);
-            border: 1px solid rgba(0,212,170,0.25);
-            border-radius: 10px; padding: 10px 14px; margin-top: 4px;
-        }
-        .cost-result-item.highlight > span { color: rgba(255,255,255,0.85) !important; font-weight: 700; font-size: 13px; }
-        .cost-presupuesto { color: var(--amber) !important; font-size: 18px; font-weight: 800; }
 
         @media (max-width: 520px) {
             .field-row, .field-row-3 { grid-template-columns: 1fr; }
@@ -295,15 +272,15 @@
             <div class="tarifas-grid">
                 <div class="tarifa-col">
                     <label>🎵 Música / Audio</label>
-                    <div class="tarifa-row"><span>$</span><input type="number" id="cfg-tarifa-musica" placeholder="80" min="0" step="5" oninput="saveTarifa('musica',this.value)"><span>USD / pieza</span></div>
+                    <div class="tarifa-row"><input type="number" id="cfg-tarifa-musica" placeholder="8000" min="0" step="500" oninput="saveTarifa('musica',this.value)"><span>/ pieza</span></div>
                 </div>
                 <div class="tarifa-col">
                     <label>🎬 Video / Reel</label>
-                    <div class="tarifa-row"><span>$</span><input type="number" id="cfg-tarifa-video" placeholder="120" min="0" step="5" oninput="saveTarifa('video',this.value)"><span>USD / video</span></div>
+                    <div class="tarifa-row"><input type="number" id="cfg-tarifa-video" placeholder="15000" min="0" step="1000" oninput="saveTarifa('video',this.value)"><span>/ video</span></div>
                 </div>
                 <div class="tarifa-col">
                     <label>🖼️ Gráfico / Post</label>
-                    <div class="tarifa-row"><span>$</span><input type="number" id="cfg-tarifa-graficos" placeholder="15" min="0" step="5" oninput="saveTarifa('graficos',this.value)"><span>USD / pieza</span></div>
+                    <div class="tarifa-row"><input type="number" id="cfg-tarifa-graficos" placeholder="2000" min="0" step="500" oninput="saveTarifa('graficos',this.value)"><span>/ pieza</span></div>
                 </div>
                 <div class="tarifa-col">
                     <label>📊 Margen de gestión</label>
@@ -426,32 +403,18 @@
         <label>Notas adicionales <span>(cualquier detalle que ayude)</span></label>
         <textarea id="m-notas" placeholder="Ej: el negocio es muy femenino, los colores son pastel, queremos que suene moderno pero cálido..."></textarea>
     </div>
-    <div class="section-title">💰 Desglose para presupuesto del cliente</div>
-    <div class="cost-card">
-        <div class="cost-line">
-            <div class="cost-field">
-                <label>Tarifa Laura (USD)</label>
-                <div class="cost-input-wrap"><span class="cost-currency">$</span><input type="number" id="m-tarifa" min="0" step="5" placeholder="80" oninput="calcCosto('m')"></div>
-            </div>
-            <div class="cost-field">
-                <label>Cantidad de piezas</label>
-                <input type="number" id="m-qty" min="1" value="1" oninput="calcCosto('m')">
-            </div>
-            <div class="cost-field">
-                <label>Margen gestión (%)</label>
-                <input type="number" id="m-margen" min="0" max="500" placeholder="20" oninput="calcCosto('m')">
-            </div>
-        </div>
-        <div class="cost-result">
-            <div class="cost-result-item">
-                <span>Total a pagar a Laura</span>
-                <strong id="m-total-laura" class="cost-laura">—</strong>
-            </div>
-            <div class="cost-result-item highlight">
-                <span>▶ Línea en presupuesto del cliente</span>
-                <strong id="m-total-cliente" class="cost-presupuesto">—</strong>
-            </div>
-        </div>
+    <div class="section-title">💰 Costo Laura → presupuesto cliente</div>
+    <div class="cost-strip">
+        <label>Laura</label>
+        <input type="number" id="m-tarifa" min="0" step="100" placeholder="8000" oninput="calcCosto('m')">
+        <span class="cost-sep">×</span>
+        <input type="number" id="m-qty" min="1" value="1" style="width:50px" oninput="calcCosto('m')">
+        <span class="cost-sep">piezas =</span>
+        <span id="m-total-laura" class="cost-laura">—</span>
+        <span class="cost-sep">· margen</span>
+        <input type="number" id="m-margen" min="0" max="500" placeholder="20" oninput="calcCosto('m')">
+        <span class="cost-sep">%</span>
+        <span id="m-total-cliente" class="cost-presupuesto">—</span>
     </div>
     <button class="generate-btn" onclick="generateBrief('musica')">✨ Generar brief para Laura</button>
     <div class="output-wrap" id="output-musica">
@@ -582,32 +545,18 @@
         <input type="hidden" id="v-prioridad" value="Normal (3–5 días)">
     </div>
     <div class="field"><label>Notas adicionales</label><textarea id="v-notas" placeholder="Cualquier indicación especial, referencias de estilo, videos similares que le gusten al cliente..."></textarea></div>
-    <div class="section-title">💰 Desglose para presupuesto del cliente</div>
-    <div class="cost-card">
-        <div class="cost-line">
-            <div class="cost-field">
-                <label>Tarifa Laura (USD)</label>
-                <div class="cost-input-wrap"><span class="cost-currency">$</span><input type="number" id="v-tarifa" min="0" step="5" placeholder="120" oninput="calcCosto('v')"></div>
-            </div>
-            <div class="cost-field">
-                <label>Cantidad de videos</label>
-                <input type="number" id="v-qty" min="1" value="1" oninput="calcCosto('v')">
-            </div>
-            <div class="cost-field">
-                <label>Margen gestión (%)</label>
-                <input type="number" id="v-margen" min="0" max="500" placeholder="20" oninput="calcCosto('v')">
-            </div>
-        </div>
-        <div class="cost-result">
-            <div class="cost-result-item">
-                <span>Total a pagar a Laura</span>
-                <strong id="v-total-laura" class="cost-laura">—</strong>
-            </div>
-            <div class="cost-result-item highlight">
-                <span>▶ Línea en presupuesto del cliente</span>
-                <strong id="v-total-cliente" class="cost-presupuesto">—</strong>
-            </div>
-        </div>
+    <div class="section-title">💰 Costo Laura → presupuesto cliente</div>
+    <div class="cost-strip">
+        <label>Laura</label>
+        <input type="number" id="v-tarifa" min="0" step="1000" placeholder="15000" oninput="calcCosto('v')">
+        <span class="cost-sep">×</span>
+        <input type="number" id="v-qty" min="1" value="1" style="width:50px" oninput="calcCosto('v')">
+        <span class="cost-sep">videos =</span>
+        <span id="v-total-laura" class="cost-laura">—</span>
+        <span class="cost-sep">· margen</span>
+        <input type="number" id="v-margen" min="0" max="500" placeholder="20" oninput="calcCosto('v')">
+        <span class="cost-sep">%</span>
+        <span id="v-total-cliente" class="cost-presupuesto">—</span>
     </div>
     <button class="generate-btn" onclick="generateBrief('video')">✨ Generar brief para Laura</button>
     <div class="output-wrap" id="output-video">
@@ -692,32 +641,18 @@
         <input type="hidden" id="g-prioridad" value="Normal (3–5 días)">
     </div>
     <div class="field"><label>Notas adicionales</label><textarea id="g-notas" placeholder="Cualquier indicación extra..."></textarea></div>
-    <div class="section-title">💰 Desglose para presupuesto del cliente</div>
-    <div class="cost-card">
-        <div class="cost-line">
-            <div class="cost-field">
-                <label>Tarifa Laura (USD / pieza)</label>
-                <div class="cost-input-wrap"><span class="cost-currency">$</span><input type="number" id="g-tarifa" min="0" step="5" placeholder="15" oninput="calcCosto('g')"></div>
-            </div>
-            <div class="cost-field">
-                <label>Cantidad de piezas</label>
-                <input type="number" id="g-qty" min="1" value="5" oninput="calcCosto('g')">
-            </div>
-            <div class="cost-field">
-                <label>Margen gestión (%)</label>
-                <input type="number" id="g-margen" min="0" max="500" placeholder="20" oninput="calcCosto('g')">
-            </div>
-        </div>
-        <div class="cost-result">
-            <div class="cost-result-item">
-                <span>Total a pagar a Laura</span>
-                <strong id="g-total-laura" class="cost-laura">—</strong>
-            </div>
-            <div class="cost-result-item highlight">
-                <span>▶ Línea en presupuesto del cliente</span>
-                <strong id="g-total-cliente" class="cost-presupuesto">—</strong>
-            </div>
-        </div>
+    <div class="section-title">💰 Costo Laura → presupuesto cliente</div>
+    <div class="cost-strip">
+        <label>Laura</label>
+        <input type="number" id="g-tarifa" min="0" step="500" placeholder="2000" oninput="calcCosto('g')">
+        <span class="cost-sep">×</span>
+        <input type="number" id="g-qty" min="1" value="5" style="width:50px" oninput="calcCosto('g')">
+        <span class="cost-sep">piezas =</span>
+        <span id="g-total-laura" class="cost-laura">—</span>
+        <span class="cost-sep">· margen</span>
+        <input type="number" id="g-margen" min="0" max="500" placeholder="20" oninput="calcCosto('g')">
+        <span class="cost-sep">%</span>
+        <span id="g-total-cliente" class="cost-presupuesto">—</span>
     </div>
     <button class="generate-btn" onclick="generateBrief('graficos')">✨ Generar brief para Laura</button>
     <div class="output-wrap" id="output-graficos">
@@ -795,34 +730,19 @@
         <input type="hidden" id="p-prioridad" value="Normal (3–5 días)">
     </div>
     <div class="field"><label>Notas finales</label><textarea id="p-notas" placeholder="Todo lo que Laura necesita saber que no entró en los campos anteriores..."></textarea></div>
-    <div class="section-title">💰 Desglose para presupuesto del cliente</div>
-    <div class="cost-card">
-        <div class="cost-line">
-            <div class="cost-field">
-                <label>Costo total acordado con Laura</label>
-                <div class="cost-input-wrap"><span class="cost-currency">$</span><input type="number" id="p-tarifa" min="0" step="10" placeholder="350" oninput="calcCosto('p')"></div>
-            </div>
-            <div class="cost-field" style="display:none"><input type="number" id="p-qty" value="1"></div>
-            <div class="cost-field">
-                <label>Margen gestión (%)</label>
-                <input type="number" id="p-margen" min="0" max="500" placeholder="20" oninput="calcCosto('p')">
-            </div>
-            <div class="cost-field">
-                <label>Notas de pago</label>
-                <input type="text" id="p-pago-notas" placeholder="Ej: 50% anticipo, 50% entrega" style="width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,0.12);border-radius:10px;font-size:13px;font-family:inherit;background:rgba(255,255,255,0.07);color:white;">
-            </div>
-        </div>
-        <div class="cost-result">
-            <div class="cost-result-item">
-                <span>Total a pagar a Laura</span>
-                <strong id="p-total-laura" class="cost-laura">—</strong>
-            </div>
-            <div class="cost-result-item highlight">
-                <span>▶ Línea en presupuesto del cliente</span>
-                <strong id="p-total-cliente" class="cost-presupuesto">—</strong>
-            </div>
-        </div>
+    <div class="section-title">💰 Costo Laura → presupuesto cliente</div>
+    <div class="cost-strip">
+        <label>Pack total Laura</label>
+        <input type="number" id="p-tarifa" min="0" step="1000" placeholder="50000" oninput="calcCosto('p')">
+        <input type="number" id="p-qty" value="1" style="display:none">
+        <span class="cost-sep">=</span>
+        <span id="p-total-laura" class="cost-laura">—</span>
+        <span class="cost-sep">· margen</span>
+        <input type="number" id="p-margen" min="0" max="500" placeholder="20" oninput="calcCosto('p')">
+        <span class="cost-sep">%</span>
+        <span id="p-total-cliente" class="cost-presupuesto">—</span>
     </div>
+    <div class="field"><label>Condiciones de pago a Laura <span>(opcional)</span></label><input type="text" id="p-pago-notas" placeholder="Ej: 50% anticipo, 50% al entregar"></div>
     <button class="generate-btn" onclick="generateBrief('pack')">✨ Generar brief completo para Laura</button>
     <div class="output-wrap" id="output-pack">
         <div class="output-header">
@@ -874,7 +794,7 @@
     // ── TARIFAS ──
     function saveTarifa(key, v) { localStorage.setItem('lt-' + key, v); }
     function loadTarifas() {
-        const defaults = { musica: '80', video: '120', graficos: '15', margen: '20' };
+        const defaults = { musica: '8000', video: '15000', graficos: '2000', margen: '20' };
         ['musica','video','graficos','margen'].forEach(k => {
             const stored = localStorage.getItem('lt-' + k) || defaults[k];
             const cfgEl = document.getElementById(k === 'margen' ? 'cfg-margen' : 'cfg-tarifa-' + k);
