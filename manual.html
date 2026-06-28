@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Operativo — PulsoIA</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7C6FFF">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --purple: #7C6FFF;
+            --teal: #00D4AA;
+            --navy: #0F1224;
+            --navy-mid: #1A1F4C;
+            --text: #1A1F3C;
+            --muted: #6B7280;
+            --bg: #F5F7FF;
+            --white: #FFFFFF;
+            --amber: #F59E0B;
+            --rose: #F43F5E;
+            --green: #10B981;
+            --radius: 16px;
+
+            --e0: #9CA3AF;
+            --e1: #F59E0B;
+            --e2: #F43F5E;
+            --e3: #7C6FFF;
+            --e4-a: #7C6FFF;
+            --e4-b: #00D4AA;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAV */
+        .nav-wrap { background: var(--navy); padding: 0 24px; }
+        .nav {
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 960px; margin: 0 auto; padding: 18px 0;
+        }
+        .logo { font-size: 20px; font-weight: 800; color: white; text-decoration: none; letter-spacing: -0.5px; }
+        .logo span { color: var(--purple); }
+        .logo em { font-style: normal; color: var(--teal); }
+        .nav-link { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; font-weight: 500; }
+        .nav-link:hover { color: white; }
+
+        /* PORTADA */
+        .cover {
+            background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 60%, #2D1B69 100%);
+            color: white;
+            padding: 64px 24px 72px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cover::before {
+            content: ''; position: absolute; top: -80px; right: -80px;
+            width: 360px; height: 360px;
+            background: radial-gradient(circle, rgba(124,111,255,0.15), transparent 70%);
+            pointer-events: none;
+        }
+        .cover-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(0,212,170,0.12); border: 1px solid rgba(0,212,170,0.3);
+            color: var(--teal); padding: 7px 16px; border-radius: 50px;
+            font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+            text-transform: uppercase; margin-bottom: 24px;
+        }
+        .cover h1 {
+            font-size: clamp(26px, 5vw, 44px); font-weight: 800;
+            line-height: 1.15; letter-spacing: -1px; max-width: 640px;
+            margin: 0 auto 16px;
+        }
+        .cover h1 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--purple), var(--teal));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .cover-sub {
+            font-size: 16px; opacity: 0.7; max-width: 480px;
+            margin: 0 auto 36px; line-height: 1.7;
+        }
+        .cover-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .cover-pill {
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.8); padding: 8px 18px; border-radius: 50px;
+            font-size: 13px; font-weight: 600;
+        }
+
+        /* LAYOUT */
+        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+        /* TOC */
+        .toc-section { background: var(--white); border-bottom: 1px solid rgba(0,0,0,0.06); }
+        .toc { padding: 32px 0; }
+        .toc-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+        .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+        .toc-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; border-radius: 10px;
+            background: var(--bg); text-decoration: none; color: var(--text);
+            font-size: 13px; font-weight: 600; transition: background 0.15s;
+        }
+        .toc-item:hover { background: rgba(124,111,255,0.08); }
+        .toc-num {
+            width: 24px; height: 24px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 800; flex-shrink: 0;
+            color: white;
+        }
+
+        /* SECTION HEADERS */
+        .stage-header {
+            padding: 56px 0 32px;
+            border-bottom: 2px solid rgba(0,0,0,0.06);
+            margin-bottom: 32px;
+        }
+        .stage-meta {
+            display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
+        }
+        .stage-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 16px; border-radius: 50px;
+            font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+        }
+        .stage-icon-big { font-size: 48px; }
+        .stage-title { font-size: clamp(22px, 4vw, 32px); font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+        .stage-desc { font-size: 15px; color: var(--muted); max-width: 600px; line-height: 1.7; }
+        .stage-score {
+            font-size: 13px; font-weight: 700; color: var(--muted);
+            background: var(--bg); padding: 6px 14px; border-radius: 50px;
+        }
+        .stage-timeline {
+            font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 50px;
+            background: rgba(0,212,170,0.1); color: #059669;
+        }
+
+        /* CONTENT BLOCKS */
+        .block { margin-bottom: 32px; }
+        .block-title {
+            font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+            text-transform: uppercase; color: var(--muted);
+            margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+        }
+        .block-title::after {
+            content: ''; flex: 1; height: 1px; background: rgba(0,0,0,0.08);
+        }
+
+        /* INTAKE TABLE */
+        .intake-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .intake-table th {
+            text-align: left; padding: 10px 14px; background: var(--navy);
+            color: white; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+        }
+        .intake-table th:first-child { border-radius: 10px 0 0 0; }
+        .intake-table th:last-child  { border-radius: 0 10px 0 0; }
+        .intake-table td { padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+        .intake-table tr:last-child td { border-bottom: none; }
+        .intake-table tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+        .intake-table .category { font-weight: 700; color: var(--purple); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .intake-table .field { font-weight: 600; }
+        .intake-table .note { color: var(--muted); font-size: 13px; font-style: italic; }
+
+        /* STEPS */
+        .steps { display: flex; flex-direction: column; gap: 12px; }
+        .step {
+            display: flex; gap: 16px; align-items: flex-start;
+            background: var(--white); border-radius: 14px; padding: 18px 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05);
+        }
+        .step-num {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: var(--purple); color: white;
+            font-size: 13px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-body { flex: 1; }
+        .step-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+        .step-tools {
+            display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;
+        }
+        .step-tool {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: var(--bg); border: 1px solid rgba(0,0,0,0.08);
+            padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;
+            color: var(--text);
+        }
+        .step-tool.ai { background: rgba(124,111,255,0.08); border-color: rgba(124,111,255,0.2); color: var(--purple); }
+        .step-tool.free { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.2); color: #059669; }
+        .step-zone {
+            display: inline-flex; align-items: center; gap: 5px;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+            padding: 3px 10px; border-radius: 20px; margin-top: 8px;
+        }
+        .zone-ia   { background: rgba(0,212,170,0.1); color: #059669; }
+        .zone-cli  { background: rgba(245,158,11,0.1); color: #D97706; }
+        .zone-cons { background: rgba(124,111,255,0.1); color: var(--purple); }
+
+        /* TOOLS GRID */
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+        .tool-card {
+            background: var(--white); border-radius: 14px; padding: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05);
+        }
+        .tool-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .tool-name { font-size: 14px; font-weight: 800; }
+        .tool-category { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .tool-price {
+            font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+        }
+        .price-free { background: rgba(16,185,129,0.1); color: #059669; }
+        .price-low  { background: rgba(245,158,11,0.1); color: #D97706; }
+        .price-mid  { background: rgba(244,63,94,0.1); color: #E11D48; }
+        .tool-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+        .tool-url { font-size: 12px; color: var(--purple); text-decoration: none; margin-top: 6px; display: inline-block; }
+
+        /* COST BOX */
+        .cost-box {
+            background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+            border-radius: 16px; padding: 24px 28px; color: white;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 16px;
+        }
+        .cost-left { flex: 1; min-width: 200px; }
+        .cost-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; opacity: 0.6; margin-bottom: 6px; }
+        .cost-amount { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+        .cost-amount span { font-size: 14px; opacity: 0.6; font-weight: 500; }
+        .cost-note { font-size: 13px; opacity: 0.6; margin-top: 4px; line-height: 1.5; }
+        .cost-items { display: flex; flex-direction: column; gap: 6px; min-width: 200px; }
+        .cost-item { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; }
+        .cost-item-name { opacity: 0.7; }
+        .cost-item-val { font-weight: 700; }
+
+        /* CLIENT DATA BOX */
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+        .data-card {
+            background: var(--white); border-radius: 12px; padding: 14px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.06);
+        }
+        .data-card-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .data-card-field { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.5; }
+        .data-card-hint { font-size: 12px; color: var(--muted); margin-top: 4px; font-style: italic; }
+
+        /* ALERT BOX */
+        .alert {
+            display: flex; gap: 12px; padding: 14px 18px;
+            border-radius: 12px; font-size: 14px; line-height: 1.6;
+            margin: 20px 0;
+        }
+        .alert.info  { background: rgba(124,111,255,0.07); border: 1px solid rgba(124,111,255,0.2); color: var(--text); }
+        .alert.warn  { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2); color: var(--text); }
+        .alert.tip   { background: rgba(0,212,170,0.07); border: 1px solid rgba(0,212,170,0.2); color: var(--text); }
+        .alert-icon { font-size: 20px; flex-shrink: 0; }
+
+        /* DIVIDER */
+        .stage-divider {
+            height: 8px; border-radius: 0;
+            margin: 0 -24px;
+        }
+
+        /* SUMMARY TABLE */
+        .summary-table { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+        .summary-table th { background: var(--navy); color: white; padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+        .summary-table td { padding: 12px 16px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: middle; }
+        .summary-table tr:last-child td { border-bottom: none; }
+        .summary-table .etapa-name { font-weight: 700; }
+        .summary-table .time { font-size: 13px; color: var(--muted); }
+
+        /* PRINT */
+        @media print {
+            .nav-wrap, .cover-pills { display: none; }
+            .cover { padding: 40px 24px; }
+            body { background: white; }
+            .step, .tool-card, .data-card { box-shadow: none; border: 1px solid #E5E7EB; }
+            .cost-box { background: #1A1F3C; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        @media (max-width: 600px) {
+            .tools-grid { grid-template-columns: 1fr 1fr; }
+            .cost-box { flex-direction: column; }
+            .intake-table { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav-wrap">
+    <nav class="nav">
+        <a href="index.html" class="logo">Pulso<span>IA</span><em>.</em></a>
+        <div style="display:flex;gap:16px;align-items:center;">
+            <a href="servicios.html" class="nav-link">Servicios</a>
+            <a href="diagnostico.html" class="nav-link">Diagnóstico</a>
+        </div>
+    </nav>
+</div>
+
+<!-- PORTADA -->
+<section class="cover">
+    <div class="cover-tag">Manual Operativo v1.0</div>
+    <h1>De cero a <em>dominante</em>:<br>el manual de ejecución</h1>
+    <p class="cover-sub">Todo lo que necesitás para ejecutar cada etapa: pasos, datos del cliente, herramientas de IA y costos. Diseñado para que cualquier persona capacitada pueda implementarlo.</p>
+    <div class="cover-pills">
+        <div class="cover-pill">📋 Intake completo</div>
+        <div class="cover-pill">🪜 5 etapas paso a paso</div>
+        <div class="cover-pill">🤖 Herramientas de IA por etapa</div>
+        <div class="cover-pill">💰 Costos reales</div>
+        <div class="cover-pill">⏱️ Tiempos estimados</div>
+        <div class="cover-pill">🎯 Zonas de responsabilidad</div>
+    </div>
+</section>
+
+<!-- TABLA DE CONTENIDOS -->
+<div class="toc-section">
+    <div class="container">
+        <div class="toc">
+            <div class="toc-title">Contenido del manual</div>
+            <div class="toc-grid">
+                <a href="#intake" class="toc-item"><div class="toc-num" style="background:#374151">📝</div> Intake del cliente</a>
+                <a href="#etapa0" class="toc-item"><div class="toc-num" style="background:var(--e0)">0</div> Invisible → Identidad</a>
+                <a href="#etapa1" class="toc-item"><div class="toc-num" style="background:var(--e1)">1</div> Presente → Presencia</a>
+                <a href="#etapa2" class="toc-item"><div class="toc-num" style="background:var(--e2)">2</div> Activo → Captación</a>
+                <a href="#etapa3" class="toc-item"><div class="toc-num" style="background:var(--e3)">3</div> Escalable → Sistemas</a>
+                <a href="#etapa4" class="toc-item"><div class="toc-num" style="background:var(--purple)">4</div> Dominante → Innovación</a>
+                <a href="#resumen" class="toc-item"><div class="toc-num" style="background:var(--teal)">Σ</div> Resumen de costos</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  INTAKE                                                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="intake" style="background:var(--white)">
+<div class="container">
+<div class="stage-header">
+    <div class="stage-meta">
+        <div class="stage-badge" style="background:rgba(55,65,81,0.1);color:#374151">📋 Paso 0</div>
+        <div class="stage-score">Antes de empezar</div>
+    </div>
+    <div class="stage-icon-big">📝</div>
+    <h2 class="stage-title">Intake del cliente</h2>
+    <p class="stage-desc">Todo lo que necesitás recolectar antes de tocar una sola herramienta. Sin esta información, trabajás a ciegas. Completar esto en la consulta estratégica inicial (1 hora).</p>
+</div>
+
+<div class="block">
+    <div class="block-title">Datos básicos del negocio</div>
+    <div class="data-grid">
+        <div class="data-card"><div class="data-card-label">Nombre del negocio</div><div class="data-card-field">Nombre actual o propuesto</div><div class="data-card-hint">¿Tiene logo? ¿Le gusta el nombre?</div></div>
+        <div class="data-card"><div class="data-card-label">Rubro / Industria</div><div class="data-card-field">¿Qué hace exactamente?</div><div class="data-card-hint">Ser específico: no "ropa" sino "ropa deportiva femenina"</div></div>
+        <div class="data-card"><div class="data-card-label">Ciudad y zona</div><div class="data-card-field">Dónde opera / atiende</div><div class="data-card-hint">¿Solo local o también online?</div></div>
+        <div class="data-card"><div class="data-card-label">Años en el rubro</div><div class="data-card-field">¿Es nuevo o ya tiene historia?</div><div class="data-card-hint">Experiencia previa relevante</div></div>
+        <div class="data-card"><div class="data-card-label">Nombre del dueño/a</div><div class="data-card-field">Quién toma decisiones</div><div class="data-card-hint">¿Trabaja solo/a o tiene equipo?</div></div>
+        <div class="data-card"><div class="data-card-label">WhatsApp de atención</div><div class="data-card-field">El número que usan para clientes</div><div class="data-card-hint">Va a linkear con chatbot después</div></div>
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-title">Identidad y marca</div>
+    <div class="data-grid">
+        <div class="data-card"><div class="data-card-label">¿Tiene logo?</div><div class="data-card-field">Sí / No / Hay algo pero no me gusta</div><div class="data-card-hint">Si tiene, pedir archivo en alta calidad</div></div>
+        <div class="data-card"><div class="data-card-label">Colores que le gustan</div><div class="data-card-field">Referencias visuales o marcas que admira</div><div class="data-card-hint">Pedirle 3 ejemplos de negocios con estética que le gusta</div></div>
+        <div class="data-card"><div class="data-card-label">Personalidad del negocio</div><div class="data-card-field">Elegante / Fresco / Moderno / Cálido / Serio</div><div class="data-card-hint">Puede elegir varios adjetivos</div></div>
+        <div class="data-card"><div class="data-card-label">Música o sonido</div><div class="data-card-field">¿Tiene? ¿Qué estilo musical le gusta?</div><div class="data-card-hint">Para la identidad sonora con IA</div></div>
+        <div class="data-card"><div class="data-card-label">Frase o slogan</div><div class="data-card-field">¿Tiene o quiere uno?</div><div class="data-card-hint">La propuesta de valor en una frase</div></div>
+        <div class="data-card"><div class="data-card-label">Historia del negocio</div><div class="data-card-field">¿Por qué lo empezó? ¿Qué lo diferencia?</div><div class="data-card-hint">Material para el "por qué" del contenido</div></div>
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-title">Cliente ideal</div>
+    <div class="data-grid">
+        <div class="data-card"><div class="data-card-label">Quién es su cliente ideal</div><div class="data-card-field">Descripción detallada</div><div class="data-card-hint">Edad, género, situación, valores</div></div>
+        <div class="data-card"><div class="data-card-label">Problema que resuelve</div><div class="data-card-field">¿Qué le duele al cliente antes de comprar?</div><div class="data-card-hint">El "antes" y el "después" de trabajar con el negocio</div></div>
+        <div class="data-card"><div class="data-card-label">¿Dónde está el cliente?</div><div class="data-card-field">Instagram / TikTok / Google / Boca en boca</div><div class="data-card-hint">Dónde busca soluciones como la suya</div></div>
+        <div class="data-card"><div class="data-card-label">Competencia directa</div><div class="data-card-field">3 competidores locales o del rubro</div><div class="data-card-hint">Analizar qué hacen bien y qué mal</div></div>
+        <div class="data-card"><div class="data-card-label">Ticket promedio</div><div class="data-card-field">¿Cuánto paga un cliente típico?</div><div class="data-card-hint">Para calibrar inversión en ads</div></div>
+        <div class="data-card"><div class="data-card-label">Frecuencia de compra</div><div class="data-card-field">¿Compra una vez o vuelve?</div><div class="data-card-hint">Define estrategia de fidelización</div></div>
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-title">Presencia digital actual</div>
+    <table class="intake-table">
+        <thead>
+            <tr>
+                <th>Canal</th>
+                <th>¿Lo tiene?</th>
+                <th>Usuario / URL</th>
+                <th>Estado actual</th>
+                <th>¿Tiene contraseña lista?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="field">Instagram</td><td>Sí / No</td><td>@usuario</td><td>Activo / Abandonado / Vacío</td><td>Sí / No (crear acceso)</td></tr>
+            <tr><td class="field">Facebook / Fan Page</td><td>Sí / No</td><td>URL</td><td>Activo / Abandonado / Vacío</td><td>Sí / No</td></tr>
+            <tr><td class="field">TikTok</td><td>Sí / No</td><td>@usuario</td><td>Activo / Abandonado / Vacío</td><td>Sí / No</td></tr>
+            <tr><td class="field">Google My Business</td><td>Sí / No</td><td>Nombre exacto</td><td>Verificado / No verificado</td><td>Email de Google</td></tr>
+            <tr><td class="field">Página web</td><td>Sí / No</td><td>URL</td><td>Activa / Caída / Sin actualizar</td><td>Acceso al hosting</td></tr>
+            <tr><td class="field">WhatsApp Business</td><td>Sí / No</td><td>Número</td><td>Tiene catálogo / Solo mensajes</td><td>Acceso al teléfono</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="block">
+    <div class="block-title">Recursos y objetivos</div>
+    <div class="data-grid">
+        <div class="data-card"><div class="data-card-label">Presupuesto mensual en herramientas</div><div class="data-card-field">¿Cuánto puede invertir por mes?</div><div class="data-card-hint">Ayuda a priorizar qué contratar</div></div>
+        <div class="data-card"><div class="data-card-label">Presupuesto en publicidad</div><div class="data-card-field">¿Cuánto para ads por mes?</div><div class="data-card-hint">Mínimo recomendado: $30 USD/mes</div></div>
+        <div class="data-card"><div class="data-card-label">Tiempo disponible</div><div class="data-card-field">¿Cuántas horas por semana para el negocio digital?</div><div class="data-card-hint">Define cuánto se puede automatizar</div></div>
+        <div class="data-card"><div class="data-card-label">¿Puede hacer fotos/videos?</div><div class="data-card-field">Sí / A veces / No tiene tiempo</div><div class="data-card-hint">Si no puede, hay que plantear una sesión mensual</div></div>
+        <div class="data-card"><div class="data-card-label">Objetivo principal</div><div class="data-card-field">Más clientes / Más visibilidad / Automatizar / Todo</div><div class="data-card-hint">Define el orden de ejecución</div></div>
+        <div class="data-card"><div class="data-card-label">Plazo esperado</div><div class="data-card-field">¿Cuándo quiere ver resultados?</div><div class="data-card-hint">Calibrar expectativas desde el inicio</div></div>
+    </div>
+</div>
+
+<div class="alert info">
+    <span class="alert-icon">💡</span>
+    <div><strong>Tip de ejecución:</strong> Enviá un formulario de Google Forms con todas estas preguntas antes de la reunión de intake. Así llegás con los datos cargados y usás la hora para validar, profundizar y diseñar el plan — no para hacer preguntas básicas.</div>
+</div>
+
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  ETAPA 0 — IDENTIDAD                                    -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="stage-divider" style="background:var(--e0)"></div>
+<div id="etapa0" style="background:var(--bg)">
+<div class="container">
+<div class="stage-header">
+    <div class="stage-meta">
+        <div class="stage-badge" style="background:rgba(156,163,175,0.15);color:#6B7280">Etapa 0</div>
+        <div class="stage-score">Score 0–25</div>
+        <div class="stage-timeline">⏱️ 1–2 semanas</div>
+    </div>
+    <div class="stage-icon-big">👻 → 🎨</div>
+    <h2 class="stage-title">De Invisible a Identidad</h2>
+    <p class="stage-desc">El negocio no tiene presencia o lo que tiene no representa quién es. El objetivo es crear la base de identidad desde cero: nombre, visual, sonido y voz.</p>
+</div>
+
+<div class="block">
+    <div class="block-title">Pasos de ejecución</div>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+                <div class="step-title">Brief de marca</div>
+                <div class="step-desc">Con el intake completo, generá un brief de marca usando IA. Incluye: propósito, personalidad, público objetivo, propuesta de valor y diferencial. Este documento guía TODO lo demás.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">ChatGPT / Claude</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+                <div class="step-title">Naming y slogan (si no tiene)</div>
+                <div class="step-desc">Generá 10 opciones de nombre con IA basadas en el brief. Filtrar por disponibilidad de usuario en redes. Elegir con el cliente. Definir slogan o tagline.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">ChatGPT / Claude</span>
+                    <span class="step-tool free">Búsqueda manual en Instagram</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Estrategia: consultora — Decisión: cliente</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+                <div class="step-title">Paleta de colores y tipografía</div>
+                <div class="step-desc">Definir 2 colores principales + 1 acento. Elegir 2 tipografías (título y cuerpo). Usar referencias del cliente como punto de partida.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">ChatGPT</span>
+                    <span class="step-tool free">Coolors.co (gratuito)</span>
+                    <span class="step-tool free">Google Fonts (gratuito)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+                <div class="step-title">Logo e identidad visual</div>
+                <div class="step-desc">Generar 3–5 conceptos de logo con IA usando el brief y la paleta. Presentar al cliente. Refinar el elegido. Exportar en todos los formatos (PNG, SVG, fondo blanco, fondo transparente, versión oscura).</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Ideogram.ai</span>
+                    <span class="step-tool ai">Adobe Firefly</span>
+                    <span class="step-tool ai">Canva IA</span>
+                    <span class="step-tool ai">DALL-E 3</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+                <div class="step-title">Identidad sonora</div>
+                <div class="step-desc">Generar un jingle corto o melodía instrumental de 15–30 segundos que represente el negocio. Usar para videos, stories, llamadas en espera.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Suno AI</span>
+                    <span class="step-tool ai">Udio</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora con input del cliente</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">6</div>
+            <div class="step-body">
+                <div class="step-title">Tono de voz y banco de copies</div>
+                <div class="step-desc">Definir cómo habla el negocio: formal / informal, tuteo / ustedeo, emojis sí/no, longitud de textos. Generar 20 copies tipo (bienvenida, descripción, CTA, bio) para que el cliente use como base.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">ChatGPT / Claude</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">7</div>
+            <div class="step-body">
+                <div class="step-title">Kit de marca entregable</div>
+                <div class="step-desc">Compilar todo en una carpeta organizada: logo (formatos), paleta (códigos HEX), tipografías, jingle, guía de tono. Entregar al cliente en Google Drive o Notion.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Google Drive</span>
+                    <span class="step-tool free">Notion (free)</span>
+                    <span class="step-tool ai">Canva Pro (carpeta de marca)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo arma la consultora</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-title">Herramientas y costos — Etapa 0</div>
+    <div class="tools-grid">
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">IA de texto</div><div class="tool-name">ChatGPT Plus</div></div><div class="tool-price price-mid">$20/mes</div></div>
+            <div class="tool-desc">Brief, naming, tono de voz, copies. Imprescindible para todo el proceso.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">IA de texto</div><div class="tool-name">Claude Pro</div></div><div class="tool-price price-mid">$20/mes</div></div>
+            <div class="tool-desc">Alternativa o complemento a ChatGPT. Mejor para documentos largos.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">IA de imágenes</div><div class="tool-name">Ideogram.ai</div></div><div class="tool-price price-low">$8/mes</div></div>
+            <div class="tool-desc">Excelente para logos con texto. Genera tipografía dentro de imágenes.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">IA de imágenes</div><div class="tool-name">Adobe Firefly</div></div><div class="tool-price price-low">$10/mes</div></div>
+            <div class="tool-desc">Imágenes con licencia comercial. Parte de Adobe Express.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Diseño</div><div class="tool-name">Canva Pro</div></div><div class="tool-price price-low">$13/mes</div></div>
+            <div class="tool-desc">Templates, marca personalizada, fondo removido, carpetas de cliente.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Música IA</div><div class="tool-name">Suno AI</div></div><div class="tool-price price-low">$8/mes</div></div>
+            <div class="tool-desc">Genera canciones y jingles con IA. Plan Pro = uso comercial.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Paletas</div><div class="tool-name">Coolors.co</div></div><div class="tool-price price-free">Gratis</div></div>
+            <div class="tool-desc">Generador de paletas de color. Versión gratuita suficiente.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Tipografías</div><div class="tool-name">Google Fonts</div></div><div class="tool-price price-free">Gratis</div></div>
+            <div class="tool-desc">Biblioteca de tipografías gratuitas para uso comercial.</div>
+        </div>
+    </div>
+
+    <div class="cost-box" style="margin-top:16px">
+        <div class="cost-left">
+            <div class="cost-label">Costo mensual en herramientas</div>
+            <div class="cost-amount">$41–$61 <span>USD/mes</span></div>
+            <div class="cost-note">ChatGPT o Claude (no los dos) + Ideogram + Canva + Suno.<br>Una vez creada la marca, Ideogram y Suno se pueden cancelar.</div>
+        </div>
+        <div class="cost-items">
+            <div class="cost-item"><span class="cost-item-name">ChatGPT Plus</span><span class="cost-item-val">$20</span></div>
+            <div class="cost-item"><span class="cost-item-name">Ideogram.ai</span><span class="cost-item-val">$8</span></div>
+            <div class="cost-item"><span class="cost-item-name">Canva Pro</span><span class="cost-item-val">$13</span></div>
+            <div class="cost-item"><span class="cost-item-name">Suno AI</span><span class="cost-item-val">$8</span></div>
+            <div class="cost-item" style="border-top:1px solid rgba(255,255,255,0.15);padding-top:6px;margin-top:6px"><span class="cost-item-name">Gratis (Coolors, Fonts)</span><span class="cost-item-val">$0</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="alert tip">
+    <span class="alert-icon">✅</span>
+    <div><strong>Entregable de la etapa:</strong> Kit de marca completo (logo en todos los formatos, paleta, tipografías, jingle, banco de 20 copies). El cliente aprueba todo antes de pasar a la Etapa 1.</div>
+</div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  ETAPA 1 — PRESENCIA                                    -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="stage-divider" style="background:var(--e1)"></div>
+<div id="etapa1" style="background:var(--white)">
+<div class="container">
+<div class="stage-header">
+    <div class="stage-meta">
+        <div class="stage-badge" style="background:rgba(245,158,11,0.1);color:#D97706">Etapa 1</div>
+        <div class="stage-score">Score 26–45</div>
+        <div class="stage-timeline">⏱️ 1–2 semanas</div>
+    </div>
+    <div class="stage-icon-big">📍 → 🌐</div>
+    <h2 class="stage-title">De Presente a Presencia</h2>
+    <p class="stage-desc">El negocio ya existe pero no convierte ni genera confianza online. El objetivo es construir una presencia digital profesional y coherente en todos los canales relevantes.</p>
+</div>
+
+<div class="block">
+    <div class="block-title">Pasos de ejecución</div>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+                <div class="step-title">Auditoría de lo que existe</div>
+                <div class="step-desc">Revisar todas las cuentas actuales. Listar qué está bien, qué está mal, qué hay que borrar. Tomar captura de pantalla como "antes".</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Manual (30 minutos)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+                <div class="step-title">Optimizar Instagram / Facebook</div>
+                <div class="step-desc">Foto de perfil con logo, bio optimizada con palabras clave + CTA + emoji, link a WhatsApp o web, categoría correcta, highlights organizados (Servicios, Trabajos, Opiniones).</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Meta Business Suite</span>
+                    <span class="step-tool ai">ChatGPT (bio)</span>
+                    <span class="step-tool ai">Canva (highlights covers)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+                <div class="step-title">Google My Business</div>
+                <div class="step-desc">Crear o reclamar el perfil. Completar TODA la información: horario, servicios, fotos (mínimo 10), descripción con palabras clave, categorías. Verificar si no está verificado.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Google Business Profile (gratis)</span>
+                    <span class="step-tool ai">ChatGPT (descripción)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Consultora + cliente (para verificación)</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+                <div class="step-title">Bio link (Linktree / Beacons)</div>
+                <div class="step-desc">Crear una página con todos los links del negocio: WhatsApp, web, reservas, redes, menú de servicios. Es el hub central de todo el tráfico del perfil.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Linktree (plan free)</span>
+                    <span class="step-tool free">Beacons.ai (free)</span>
+                    <span class="step-tool free">Carrd.co ($9/año)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+                <div class="step-title">WhatsApp Business configurado</div>
+                <div class="step-desc">Mensaje de bienvenida automático, mensaje de ausencia, catálogo de servicios con precios o descripción, estado actualizado, foto de perfil con logo.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">WhatsApp Business (gratis)</span>
+                    <span class="step-tool ai">ChatGPT (mensajes)</span>
+                </div>
+                <span class="step-zone zone-cli">🧑‍💼 El cliente lo instala — la consultora configura</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">6</div>
+            <div class="step-body">
+                <div class="step-title">Página web básica (si no tiene)</div>
+                <div class="step-desc">Una página simple con: servicios, fotos, historia breve, testimonios, botón de contacto. No necesita ser compleja — necesita ser profesional.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Canva Websites (gratis)</span>
+                    <span class="step-tool ai">Wix AI Website</span>
+                    <span class="step-tool ai">Framer AI</span>
+                    <span class="step-tool free">WordPress (hosting $5/mes)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">7</div>
+            <div class="step-body">
+                <div class="step-title">Primeras 9 publicaciones (feed de arranque)</div>
+                <div class="step-desc">Diseñar y publicar el primer feed: presentación del negocio, servicios, una historia personal. El objetivo es que cuando alguien llegue al perfil, lo encuentre profesional y activo.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Canva Pro</span>
+                    <span class="step-tool ai">ChatGPT (captions)</span>
+                    <span class="step-tool ai">CapCut (si hay video)</span>
+                </div>
+                <span class="step-zone zone-cli">🧑‍💼 Fotos reales: cliente — Diseño y copy: consultora</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-title">Herramientas y costos — Etapa 1</div>
+    <div class="tools-grid">
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Diseño</div><div class="tool-name">Canva Pro</div></div><div class="tool-price price-low">$13/mes</div></div>
+            <div class="tool-desc">Templates, publicaciones, stories, highlights. Imprescindible para velocidad.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">IA de texto</div><div class="tool-name">ChatGPT Plus</div></div><div class="tool-price price-mid">$20/mes</div></div>
+            <div class="tool-desc">Bio, descripciones, captions, mensajes automáticos.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Presencia</div><div class="tool-name">Google Business</div></div><div class="tool-price price-free">Gratis</div></div>
+            <div class="tool-desc">El perfil de Google es gratis. Solo requiere tiempo para configurarlo bien.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Bio Link</div><div class="tool-name">Linktree / Beacons</div></div><div class="tool-price price-free">Gratis</div></div>
+            <div class="tool-desc">Plan gratuito suficiente para comenzar. Upgrade si necesita analytics.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Web básica</div><div class="tool-name">Canva Websites</div></div><div class="tool-price price-free">Gratis</div></div>
+            <div class="tool-desc">Si ya tienen Canva Pro, pueden publicar web sin costo adicional.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Video</div><div class="tool-name">CapCut</div></div><div class="tool-price price-free">Gratis</div></div>
+            <div class="tool-desc">Editor de video con IA, templates virales, captions automáticos.</div>
+        </div>
+    </div>
+
+    <div class="cost-box" style="margin-top:16px">
+        <div class="cost-left">
+            <div class="cost-label">Costo mensual en herramientas</div>
+            <div class="cost-amount">$33 <span>USD/mes</span></div>
+            <div class="cost-note">Solo Canva Pro + ChatGPT. El resto es gratis.<br>Si ya se contrataron en la Etapa 0, no hay costo adicional.</div>
+        </div>
+        <div class="cost-items">
+            <div class="cost-item"><span class="cost-item-name">Canva Pro</span><span class="cost-item-val">$13</span></div>
+            <div class="cost-item"><span class="cost-item-name">ChatGPT Plus</span><span class="cost-item-val">$20</span></div>
+            <div class="cost-item"><span class="cost-item-name">Google Business, WhatsApp, Linktree</span><span class="cost-item-val">$0</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="alert tip">
+    <span class="alert-icon">✅</span>
+    <div><strong>Entregable de la etapa:</strong> Perfiles optimizados en todas las plataformas relevantes, Google My Business activo, bio link funcionando, WhatsApp Business configurado y primeras 9 publicaciones.</div>
+</div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  ETAPA 2 — CAPTACIÓN                                    -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="stage-divider" style="background:var(--e2)"></div>
+<div id="etapa2" style="background:var(--bg)">
+<div class="container">
+<div class="stage-header">
+    <div class="stage-meta">
+        <div class="stage-badge" style="background:rgba(244,63,94,0.1);color:#E11D48">Etapa 2</div>
+        <div class="stage-score">Score 46–65</div>
+        <div class="stage-timeline">⏱️ 2–4 semanas</div>
+    </div>
+    <div class="stage-icon-big">🧲 → 📣</div>
+    <h2 class="stage-title">De Activo a Captación</h2>
+    <p class="stage-desc">El negocio tiene presencia pero no llega gente nueva de manera predecible. El objetivo es construir un sistema de captación constante: contenido + publicidad + seguimiento.</p>
+</div>
+
+<div class="block">
+    <div class="block-title">Pasos de ejecución</div>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+                <div class="step-title">Estrategia de contenido (30 días)</div>
+                <div class="step-desc">Definir los pilares de contenido del negocio (máx. 4 temas). Crear un calendario de 30 días con tipo de post, tema y caption. Mezcla de: educativo, emocional, testimonios, entretenimiento, oferta.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">ChatGPT / Claude</span>
+                    <span class="step-tool free">Google Sheets / Notion</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+                <div class="step-title">Producción de contenido semanal</div>
+                <div class="step-desc">Diseñar los posts de la semana. Para video: filmar con el cliente (o guiarlos) + editar con IA. Para estáticos: diseñar en Canva. Incluir siempre subtítulos y texto en pantalla.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Canva Pro</span>
+                    <span class="step-tool ai">CapCut (subtítulos automáticos)</span>
+                    <span class="step-tool ai">InVideo AI</span>
+                    <span class="step-tool ai">ChatGPT (captions y hashtags)</span>
+                </div>
+                <span class="step-zone zone-cli">🧑‍💼 Contenido real: cliente — Edición y diseño: consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+                <div class="step-title">Programar y automatizar publicaciones</div>
+                <div class="step-desc">Subir todo el contenido de la semana de una vez. Programar horarios óptimos según la audiencia. El cliente no tiene que pensar en "cuándo publicar".</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Metricool (plan gratis)</span>
+                    <span class="step-tool ai">Later</span>
+                    <span class="step-tool free">Meta Business Suite (gratis)</span>
+                </div>
+                <span class="step-zone zone-ia">🤖 100% automatizado una vez programado</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+                <div class="step-title">Primera campaña de Meta Ads</div>
+                <div class="step-desc">Campaña de reconocimiento o tráfico para empezar. Público: radio de 15–30km de la ciudad, intereses relacionados al rubro. Creativos: 2–3 variantes de imagen/video. Presupuesto mínimo: $5 USD/día. Durar mínimo 7 días para que el algoritmo aprenda.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Meta Ads Manager (plataforma gratis)</span>
+                    <span class="step-tool ai">ChatGPT (copy del anuncio)</span>
+                    <span class="step-tool ai">Canva (creativos)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Configuración: consultora — Presupuesto: cliente</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+                <div class="step-title">Sistema de seguimiento de leads</div>
+                <div class="step-desc">Definir cómo responder a los que contactan: plantillas de respuesta rápida en WhatsApp, un flujo simple (recibe mensaje → responde → agenda / cotiza → seguimiento). Sin CRM todavía — alcanza con una hoja de cálculo.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Google Sheets (gratis)</span>
+                    <span class="step-tool ai">ChatGPT (plantillas)</span>
+                    <span class="step-tool free">WhatsApp Business</span>
+                </div>
+                <span class="step-zone zone-cli">🧑‍💼 El cliente ejecuta el seguimiento (con guía)</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">6</div>
+            <div class="step-body">
+                <div class="step-title">Análisis semanal de métricas</div>
+                <div class="step-desc">Revisar: alcance, interacciones, clics, mensajes nuevos, costo por resultado de ads. Ajustar lo que no funciona. Documentar lo que sí.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Metricool (reportes gratis)</span>
+                    <span class="step-tool free">Meta Ads Manager</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo hace la consultora — Comparte reporte semanal</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-title">Herramientas y costos — Etapa 2</div>
+    <div class="tools-grid">
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Video IA</div><div class="tool-name">CapCut Pro</div></div><div class="tool-price price-low">$8/mes</div></div>
+            <div class="tool-desc">Subtítulos automáticos, efectos, templates virales. Versión gratuita sirve para empezar.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Video IA</div><div class="tool-name">InVideo AI</div></div><div class="tool-price price-low">$20/mes</div></div>
+            <div class="tool-desc">Genera videos completos desde un texto. Ideal para contenido sin necesidad de filmar.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Programación</div><div class="tool-name">Metricool</div></div><div class="tool-price price-free">Gratis / $18/mes</div></div>
+            <div class="tool-desc">Programar posts, analíticas, reportes. Plan gratis alcanza para 1 perfil por red.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Ads</div><div class="tool-name">Meta Ads Manager</div></div><div class="tool-price price-free">Gratis (+ presupuesto)</div></div>
+            <div class="tool-desc">Plataforma gratis. El costo es el presupuesto de la campaña (mínimo $30 USD/mes).</div>
+        </div>
+    </div>
+
+    <div class="cost-box" style="margin-top:16px">
+        <div class="cost-left">
+            <div class="cost-label">Costo mensual en herramientas + ads</div>
+            <div class="cost-amount">$91–$141 <span>USD/mes</span></div>
+            <div class="cost-note">Incluye presupuesto mínimo de ads ($30–$60).<br>Sin ads: $33 USD/mes en herramientas.</div>
+        </div>
+        <div class="cost-items">
+            <div class="cost-item"><span class="cost-item-name">Canva Pro + ChatGPT</span><span class="cost-item-val">$33</span></div>
+            <div class="cost-item"><span class="cost-item-name">CapCut Pro</span><span class="cost-item-val">$8</span></div>
+            <div class="cost-item"><span class="cost-item-name">Metricool</span><span class="cost-item-val">$0–18</span></div>
+            <div class="cost-item"><span class="cost-item-name">Presupuesto Meta Ads</span><span class="cost-item-val">$30–60</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="alert warn">
+    <span class="alert-icon">⚠️</span>
+    <div><strong>Dependencia crítica del cliente:</strong> En esta etapa el cliente tiene que proveer material original (fotos/videos de su trabajo) al menos 1 vez por semana. Sin contenido real, la estrategia pierde fuerza. Acordarlo desde el inicio.</div>
+</div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  ETAPA 3 — SISTEMAS                                     -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="stage-divider" style="background:var(--e3)"></div>
+<div id="etapa3" style="background:var(--white)">
+<div class="container">
+<div class="stage-header">
+    <div class="stage-meta">
+        <div class="stage-badge" style="background:rgba(124,111,255,0.1);color:var(--purple)">Etapa 3</div>
+        <div class="stage-score">Score 66–80</div>
+        <div class="stage-timeline">⏱️ 3–6 semanas</div>
+    </div>
+    <div class="stage-icon-big">⚙️ → 🚀</div>
+    <h2 class="stage-title">De Escalable a Sistemas</h2>
+    <p class="stage-desc">El negocio tiene presencia y recibe clientes, pero el dueño es el cuello de botella. El objetivo es que el negocio funcione aunque el dueño no esté: automatizaciones, CRM y fidelización.</p>
+</div>
+
+<div class="block">
+    <div class="block-title">Pasos de ejecución</div>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+                <div class="step-title">Mapear todos los procesos repetitivos</div>
+                <div class="step-desc">Listar todo lo que el dueño hace manualmente y se repite. Ejemplos: responder las mismas preguntas, recordar turno, enviar presupuesto, hacer seguimiento de quien no compró. Cada uno se convierte en una automatización.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Reunión + Google Docs</span>
+                    <span class="step-tool ai">ChatGPT (identificar oportunidades)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Consultora mapea — cliente valida</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+                <div class="step-title">Chatbot de WhatsApp con IA</div>
+                <div class="step-desc">Crear un bot que responda preguntas frecuentes, clasifique el tipo de consulta, pida datos y agende la cita o derive al humano. El cliente solo interviene cuando el bot no puede resolver.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">ManyChat</span>
+                    <span class="step-tool ai">Tidio</span>
+                    <span class="step-tool ai">WATI</span>
+                    <span class="step-tool ai">ChatGPT API (avanzado)</span>
+                </div>
+                <span class="step-zone zone-ia">🤖 Opera 24/7 automáticamente</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+                <div class="step-title">Sistema de agenda / reservas online</div>
+                <div class="step-desc">El cliente agenda solo, sin necesidad de escribir por WhatsApp para preguntar disponibilidad. Envía confirmación automática y recordatorio 24h antes. Reduce no-shows a casi cero.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Calendly (free)</span>
+                    <span class="step-tool ai">Cal.com (open source, gratis)</span>
+                    <span class="step-tool ai">Acuity Scheduling</span>
+                    <span class="step-tool ai">Reservio</span>
+                </div>
+                <span class="step-zone zone-ia">🤖 100% automatizado</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+                <div class="step-title">CRM simple</div>
+                <div class="step-desc">Registrar cada cliente: qué compró, cuándo fue la última vez, cuánto gastó, si está activo o inactivo. Esto permite saber a quién llamar, a quién felicitar y a quién recuperar.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">HubSpot CRM (free)</span>
+                    <span class="step-tool free">Notion (free)</span>
+                    <span class="step-tool free">Google Sheets (gratis)</span>
+                    <span class="step-tool ai">Zoho CRM (free)</span>
+                </div>
+                <span class="step-zone zone-cli">🧑‍💼 El cliente debe cargar datos — consultora configura</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+                <div class="step-title">Automatización de fidelización</div>
+                <div class="step-desc">Secuencia automática post-compra: mensaje de gracias + encuesta de satisfacción (día 1) → consejo útil relacionado al servicio (día 3) → oferta de segundo servicio (día 7) → solicitud de reseña en Google (día 14).</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Make (Integromat)</span>
+                    <span class="step-tool ai">Zapier</span>
+                    <span class="step-tool ai">ManyChat</span>
+                    <span class="step-tool ai">Mailchimp (email)</span>
+                </div>
+                <span class="step-zone zone-ia">🤖 Se activa automáticamente con cada venta nueva</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">6</div>
+            <div class="step-body">
+                <div class="step-title">Dashboard de métricas del negocio</div>
+                <div class="step-desc">Un panel simple donde el dueño ve en 5 minutos: cuántos clientes nuevos esta semana, cuánto facturó, cómo está el costo de ads, qué contenido funcionó más.</div>
+                <div class="step-tools">
+                    <span class="step-tool free">Google Looker Studio (gratis)</span>
+                    <span class="step-tool ai">Make (conecta fuentes)</span>
+                    <span class="step-tool free">Metricool (reportes)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Diseño: consultora — Revisión: cliente</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-title">Herramientas y costos — Etapa 3</div>
+    <div class="tools-grid">
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Automatización</div><div class="tool-name">Make (Integromat)</div></div><div class="tool-price price-low">$9–$29/mes</div></div>
+            <div class="tool-desc">Conecta cualquier app con cualquier app. 1.000 operaciones/mes gratis.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Chatbot</div><div class="tool-name">ManyChat</div></div><div class="tool-price price-low">$15/mes</div></div>
+            <div class="tool-desc">Chatbot para Instagram DMs y WhatsApp. Plan free tiene funciones básicas.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Agenda</div><div class="tool-name">Calendly</div></div><div class="tool-price price-free">Gratis / $10/mes</div></div>
+            <div class="tool-desc">Reservas online con confirmaciones automáticas. Plan gratis funciona bien.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">CRM</div><div class="tool-name">HubSpot CRM</div></div><div class="tool-price price-free">Gratis</div></div>
+            <div class="tool-desc">CRM completo y gratuito. Contactos, deals, emails, seguimiento.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Email</div><div class="tool-name">Mailchimp</div></div><div class="tool-price price-free">Gratis / $13/mes</div></div>
+            <div class="tool-desc">Hasta 500 contactos gratis. Automatizaciones básicas incluidas.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Dashboard</div><div class="tool-name">Google Looker Studio</div></div><div class="tool-price price-free">Gratis</div></div>
+            <div class="tool-desc">Conecta Google Ads, Analytics, Sheets. Panel de métricas visual y gratis.</div>
+        </div>
+    </div>
+
+    <div class="cost-box" style="margin-top:16px">
+        <div class="cost-left">
+            <div class="cost-label">Costo mensual en herramientas</div>
+            <div class="cost-amount">$57–$95 <span>USD/mes</span></div>
+            <div class="cost-note">Make + ManyChat + herramientas anteriores.<br>HubSpot, Calendly y Looker Studio son gratuitos.</div>
+        </div>
+        <div class="cost-items">
+            <div class="cost-item"><span class="cost-item-name">Herramientas etapas 0–2</span><span class="cost-item-val">$33</span></div>
+            <div class="cost-item"><span class="cost-item-name">Make (Integromat)</span><span class="cost-item-val">$9–29</span></div>
+            <div class="cost-item"><span class="cost-item-name">ManyChat</span><span class="cost-item-val">$15</span></div>
+            <div class="cost-item"><span class="cost-item-name">HubSpot, Calendly, Looker</span><span class="cost-item-val">$0</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="alert info">
+    <span class="alert-icon">💡</span>
+    <div><strong>Clave de esta etapa:</strong> El cliente tiene que comprometerse a usar el CRM y cargar los datos. Sin datos, no hay automatización. Esta es la etapa donde más depende de la disciplina del cliente para que funcione.</div>
+</div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  ETAPA 4 — INNOVACIÓN                                   -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="stage-divider" style="background:linear-gradient(90deg,var(--purple),var(--teal))"></div>
+<div id="etapa4" style="background:var(--bg)">
+<div class="container">
+<div class="stage-header">
+    <div class="stage-meta">
+        <div class="stage-badge" style="background:linear-gradient(135deg,rgba(124,111,255,0.15),rgba(0,212,170,0.15));color:var(--purple)">Etapa 4</div>
+        <div class="stage-score">Score 81–100</div>
+        <div class="stage-timeline">⏱️ Continuo</div>
+    </div>
+    <div class="stage-icon-big">👑 → ✨</div>
+    <h2 class="stage-title">Dominante → Innovación</h2>
+    <p class="stage-desc">El negocio tiene base sólida y funciona bien. El siguiente paso es crear ventajas competitivas que la competencia no puede copiar fácilmente: herramientas únicas, IA aplicada y experiencias excepcionales.</p>
+</div>
+
+<div class="alert info" style="margin-bottom:24px">
+    <span class="alert-icon">⚡</span>
+    <div><strong>Esta etapa no tiene pasos fijos.</strong> Cada negocio en Etapa 4 tiene una necesidad diferente. Lo que sigue son las posibilidades más comunes — se elige según el negocio específico.</div>
+</div>
+
+<div class="block">
+    <div class="block-title">Posibilidades de innovación</div>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">A</div>
+            <div class="step-body">
+                <div class="step-title">App propia del negocio</div>
+                <div class="step-desc">Una app (sin programar) que los clientes instalan: agenda, programa de puntos, acceso a contenido exclusivo, pedidos directos. Da diferenciación inmediata.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Glide Apps (no-code)</span>
+                    <span class="step-tool ai">Adalo</span>
+                    <span class="step-tool ai">Bubble</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Diseño y construcción: consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">B</div>
+            <div class="step-body">
+                <div class="step-title">IA conversacional personalizada</div>
+                <div class="step-desc">Un asistente de IA entrenado con el conocimiento del negocio: responde consultas complejas, hace recomendaciones personalizadas, vende con conocimiento del catálogo completo.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Claude API / OpenAI API</span>
+                    <span class="step-tool ai">Voiceflow</span>
+                    <span class="step-tool ai">Botpress</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Lo construye la consultora</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">C</div>
+            <div class="step-body">
+                <div class="step-title">Sistema de membresía / comunidad</div>
+                <div class="step-desc">Los mejores clientes entran a un círculo con beneficios: descuentos, acceso anticipado, contenido exclusivo. Convierte compradores ocasionales en fans con ingreso recurrente.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Whop.com</span>
+                    <span class="step-tool ai">Hotmart</span>
+                    <span class="step-tool ai">Circle.so</span>
+                    <span class="step-tool free">Grupo privado Instagram/Telegram</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 Diseño: consultora — Contenido: cliente</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">D</div>
+            <div class="step-body">
+                <div class="step-title">Automatización avanzada con IA</div>
+                <div class="step-desc">Flujos complejos que conectan múltiples sistemas: cuando alguien compra → IA genera una propuesta de próximo servicio personalizada → la envía por email → si no responde en 3 días → retargeting automático.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Make (flujos complejos)</span>
+                    <span class="step-tool ai">Claude API / GPT-4 API</span>
+                    <span class="step-tool ai">Zapier Premium</span>
+                </div>
+                <span class="step-zone zone-ia">🤖 Opera completamente solo</span>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">E</div>
+            <div class="step-body">
+                <div class="step-title">Herramienta propia a medida</div>
+                <div class="step-desc">Algo que solo ese negocio tiene: un configurador de producto, un test de diagnóstico propio, un comparador, una calculadora. Algo que justifica visitar el sitio web y que ningún competidor tiene.</div>
+                <div class="step-tools">
+                    <span class="step-tool ai">Cursor AI (código)</span>
+                    <span class="step-tool ai">Claude (código)</span>
+                    <span class="step-tool ai">Glide / Bubble (no-code)</span>
+                </div>
+                <span class="step-zone zone-cons">🎯 100% la consultora — es la parte creativa más importante</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-title">Herramientas y costos — Etapa 4</div>
+    <div class="tools-grid">
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">No-code apps</div><div class="tool-name">Glide Apps</div></div><div class="tool-price price-low">$25/mes</div></div>
+            <div class="tool-desc">Apps móviles sin código. Conecta con Google Sheets como base de datos.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">IA API</div><div class="tool-name">Claude / OpenAI API</div></div><div class="tool-price price-low">$5–50/mes</div></div>
+            <div class="tool-desc">Pago por uso. Para un negocio pequeño, $5–15/mes es suficiente para un asistente activo.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Chatbot avanzado</div><div class="tool-name">Voiceflow</div></div><div class="tool-price price-free">Gratis / $50/mes</div></div>
+            <div class="tool-desc">Diseñar conversaciones complejas con IA. Plan gratuito útil para prototipos.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Membresía</div><div class="tool-name">Hotmart</div></div><div class="tool-price price-free">Gratis (% ventas)</div></div>
+            <div class="tool-desc">Sin costo fijo. Cobra un % sobre las ventas realizadas.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Código con IA</div><div class="tool-name">Cursor AI</div></div><div class="tool-price price-low">$20/mes</div></div>
+            <div class="tool-desc">Editor de código con IA. Permite crear herramientas a medida sin saber programar.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">No-code avanzado</div><div class="tool-name">Bubble</div></div><div class="tool-price price-free">Gratis / $29/mes</div></div>
+            <div class="tool-desc">Apps web complejas sin código. Curva de aprendizaje media.</div>
+        </div>
+    </div>
+
+    <div class="cost-box" style="margin-top:16px">
+        <div class="cost-left">
+            <div class="cost-label">Costo mensual en herramientas</div>
+            <div class="cost-amount">$100–$180 <span>USD/mes</span></div>
+            <div class="cost-note">Varía mucho según el proyecto.<br>Las APIs de IA se pagan por uso y suelen ser baratas.</div>
+        </div>
+        <div class="cost-items">
+            <div class="cost-item"><span class="cost-item-name">Stack previo (etapas 0–3)</span><span class="cost-item-val">$57</span></div>
+            <div class="cost-item"><span class="cost-item-name">Herramientas de innovación</span><span class="cost-item-val">$25–80</span></div>
+            <div class="cost-item"><span class="cost-item-name">APIs de IA (por uso)</span><span class="cost-item-val">$5–30</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="alert tip">
+    <span class="alert-icon">✅</span>
+    <div><strong>La regla de la Etapa 4:</strong> Si ya existe la herramienta, la usamos. Si no existe, la inventamos. La IA y las herramientas no-code hacen posible en días lo que antes requería meses y un equipo de desarrollo.</div>
+</div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  RESUMEN DE COSTOS                                       -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="stage-divider" style="background:var(--teal)"></div>
+<div id="resumen" style="background:var(--white)">
+<div class="container">
+<div class="stage-header">
+    <div class="stage-meta">
+        <div class="stage-badge" style="background:rgba(0,212,170,0.1);color:#059669">Resumen</div>
+    </div>
+    <div class="stage-icon-big">💰</div>
+    <h2 class="stage-title">Costos totales por etapa</h2>
+    <p class="stage-desc">Referencia rápida para presupuestar el trabajo con cada cliente. Todos los valores en USD/mes. Las herramientas se acumulan de etapa en etapa.</p>
+</div>
+
+<div class="block">
+    <table class="summary-table">
+        <thead>
+            <tr>
+                <th>Etapa</th>
+                <th>Herramientas clave</th>
+                <th>Costo herramientas</th>
+                <th>Inversión en ads</th>
+                <th>Total estimado</th>
+                <th>Tiempo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="etapa-name">0 — Identidad</span></td>
+                <td>ChatGPT, Ideogram, Canva, Suno</td>
+                <td>$41–61</td>
+                <td>$0</td>
+                <td style="font-weight:800;color:var(--e0)">$41–61/mes</td>
+                <td class="time">1–2 semanas</td>
+            </tr>
+            <tr>
+                <td><span class="etapa-name">1 — Presencia</span></td>
+                <td>ChatGPT, Canva (resto gratis)</td>
+                <td>$33</td>
+                <td>$0</td>
+                <td style="font-weight:800;color:var(--e1)">$33/mes</td>
+                <td class="time">1–2 semanas</td>
+            </tr>
+            <tr>
+                <td><span class="etapa-name">2 — Captación</span></td>
+                <td>CapCut, Metricool + ads</td>
+                <td>$41–51</td>
+                <td>$30–60</td>
+                <td style="font-weight:800;color:var(--e2)">$71–111/mes</td>
+                <td class="time">2–4 semanas</td>
+            </tr>
+            <tr>
+                <td><span class="etapa-name">3 — Sistemas</span></td>
+                <td>Make, ManyChat (resto gratis)</td>
+                <td>$24–44</td>
+                <td>$30–100</td>
+                <td style="font-weight:800;color:var(--e3)">$54–144/mes</td>
+                <td class="time">3–6 semanas</td>
+            </tr>
+            <tr>
+                <td><span class="etapa-name">4 — Innovación</span></td>
+                <td>Variable según proyecto</td>
+                <td>$25–80</td>
+                <td>$50–200+</td>
+                <td style="font-weight:800;color:var(--purple)">$75–280+/mes</td>
+                <td class="time">Continuo</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="block">
+    <div class="block-title">Stack mínimo recomendado (aplica a todos)</div>
+    <div class="tools-grid">
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">IA texto</div><div class="tool-name">ChatGPT Plus</div></div><div class="tool-price price-mid">$20/mes</div></div>
+            <div class="tool-desc">El cerebro de todo. Sin esto, el trabajo se multiplica por 3.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Diseño</div><div class="tool-name">Canva Pro</div></div><div class="tool-price price-low">$13/mes</div></div>
+            <div class="tool-desc">Para todo el material visual. Imprescindible.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Video</div><div class="tool-name">CapCut</div></div><div class="tool-price price-free">Gratis</div></div>
+            <div class="tool-desc">Edición de video rápida con IA. Versión gratuita alcanza.</div>
+        </div>
+        <div class="tool-card">
+            <div class="tool-card-top"><div><div class="tool-category">Analytics</div><div class="tool-name">Metricool</div></div><div class="tool-price price-free">Gratis</div></div>
+            <div class="tool-desc">Programación + métricas de redes. Plan free funciona.</div>
+        </div>
+    </div>
+</div>
+
+<div class="alert tip" style="margin-bottom:48px">
+    <span class="alert-icon">💡</span>
+    <div><strong>Importante:</strong> Los costos en USD se actualizan según el tipo de cambio. Para Argentina y LatAm, siempre aclarar al cliente que son herramientas con pago en dólares y pueden requerir tarjeta de crédito internacional o cuenta Wise/PayPal.</div>
+</div>
+
+</div>
+</div>
+
+<!-- CTA -->
+<section style="background:linear-gradient(145deg,var(--navy),var(--navy-mid));padding:72px 24px;text-align:center;color:white;">
+    <div style="max-width:600px;margin:0 auto;">
+        <div style="font-size:40px;margin-bottom:16px">🚀</div>
+        <h2 style="font-size:clamp(22px,4vw,34px);font-weight:800;letter-spacing:-0.5px;margin-bottom:12px;line-height:1.2">¿Por dónde empieza tu cliente?</h2>
+        <p style="font-size:15px;opacity:0.7;margin-bottom:32px;line-height:1.7">El diagnóstico detecta la etapa en 10 minutos y genera el reporte personalizado. Es el primer paso de todo el proceso.</p>
+        <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;">
+            <a href="diagnostico.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:white;padding:15px 28px;border-radius:50px;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(124,111,255,0.4);">
+                Hacer el diagnóstico gratis →
+            </a>
+            <a href="servicios.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:white;padding:15px 28px;border-radius:50px;font-size:15px;font-weight:700;text-decoration:none;">
+                Ver mapa de servicios
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer style="background:var(--navy);color:rgba(255,255,255,0.4);text-align:center;padding:20px;font-size:12px;">
+    PulsoIA · Manual Operativo v1.0 · Uso interno y equipos de ejecución
+</footer>
+
+</body>
+</html>
