@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Servicios — PulsoIA</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7C6FFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="description" content="De invisible a dominante: el mapa completo de lo que podemos construir juntos para tu negocio.">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --purple: #7C6FFF;
+            --purple-dark: #5A4FCC;
+            --teal: #00D4AA;
+            --navy: #0F1224;
+            --navy-mid: #1A1F4C;
+            --text: #1A1F3C;
+            --muted: #6B7280;
+            --bg: #F5F7FF;
+            --white: #FFFFFF;
+            --radius: 20px;
+            --amber: #FBB024;
+            --rose: #FF6B8A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== NAV ===== */
+        .nav-wrap {
+            background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 55%, #2D1B69 100%);
+            padding: 0 24px;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: white;
+            text-decoration: none;
+        }
+        .logo span { color: var(--purple); }
+        .logo em { font-style: normal; color: var(--teal); }
+        .nav-links { display: flex; gap: 12px; align-items: center; }
+        .nav-link {
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-link:hover { color: white; }
+        .nav-cta {
+            background: rgba(124,111,255,0.2);
+            border: 1px solid rgba(124,111,255,0.4);
+            color: white;
+            padding: 9px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .nav-cta:hover { background: rgba(124,111,255,0.35); }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 55%, #2D1B69 100%);
+            color: white;
+            padding: 60px 24px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 320px; height: 320px;
+            background: radial-gradient(circle, rgba(124,111,255,0.15), transparent 70%);
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: -40px;
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, rgba(0,212,170,0.1), transparent 70%);
+            pointer-events: none;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,212,170,0.12);
+            border: 1px solid rgba(0,212,170,0.3);
+            color: var(--teal);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 28px;
+        }
+        .badge-dot {
+            width: 7px; height: 7px;
+            background: var(--teal);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity:1; transform:scale(1); }
+            50%       { opacity:0.5; transform:scale(0.8); }
+        }
+        .hero h1 {
+            font-size: clamp(28px, 6vw, 48px);
+            font-weight: 800;
+            line-height: 1.15;
+            max-width: 680px;
+            margin: 0 auto 20px;
+            letter-spacing: -1px;
+        }
+        .hero h1 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--purple), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 17px;
+            opacity: 0.75;
+            max-width: 520px;
+            margin: 0 auto 0;
+            line-height: 1.7;
+        }
+
+        /* ===== SECTION WRAPPER ===== */
+        .section {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 72px 24px;
+        }
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--purple);
+            margin-bottom: 12px;
+        }
+        .section-label::before {
+            content: '';
+            display: block;
+            width: 20px; height: 2px;
+            background: var(--purple);
+            border-radius: 2px;
+        }
+        .section-title {
+            font-size: clamp(24px, 4vw, 36px);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+        .section-sub {
+            font-size: 16px;
+            color: var(--muted);
+            max-width: 560px;
+            line-height: 1.7;
+            margin-bottom: 48px;
+        }
+
+        /* ===== ESCALERA DE VALOR ===== */
+        .ladder {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+        .ladder::before {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 40px;
+            bottom: 40px;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(124,111,255,0.1), var(--purple), var(--teal), rgba(0,212,170,0.2));
+        }
+        .ladder-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            padding: 20px 0;
+            position: relative;
+        }
+        .ladder-dot {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            border: 3px solid white;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .ladder-dot.free   { background: rgba(107,114,128,0.12); font-size: 15px; font-weight: 800; color: var(--muted); border-color: #E5E7EB; }
+        .ladder-dot.l1     { background: rgba(124,111,255,0.12); border-color: rgba(124,111,255,0.3); }
+        .ladder-dot.l2     { background: rgba(124,111,255,0.2); border-color: rgba(124,111,255,0.5); }
+        .ladder-dot.l3     { background: linear-gradient(135deg, rgba(124,111,255,0.3), rgba(0,212,170,0.2)); border-color: var(--purple); }
+        .ladder-dot.l4     { background: linear-gradient(135deg, var(--purple), var(--teal)); border-color: var(--teal); }
+        .ladder-body { flex: 1; padding-top: 8px; }
+        .ladder-price {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        .ladder-name {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .ladder-desc {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+        .ladder-tag {
+            display: inline-block;
+            background: rgba(0,212,170,0.1);
+            color: var(--teal);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 3px 10px;
+            border-radius: 50px;
+            margin-top: 8px;
+        }
+        .ladder-tag.purple { background: rgba(124,111,255,0.1); color: var(--purple); }
+        .ladder-tag.amber  { background: rgba(251,176,36,0.1); color: #D97706; }
+
+        /* ===== ETAPAS ===== */
+        .etapas-bg { background: var(--white); }
+        .etapas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+        }
+        .etapa {
+            background: var(--bg);
+            border-radius: 16px;
+            padding: 20px 16px;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            cursor: default;
+        }
+        .etapa::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+        }
+        .etapa.e0::before { background: #9CA3AF; }
+        .etapa.e1::before { background: var(--amber); }
+        .etapa.e2::before { background: var(--rose); }
+        .etapa.e3::before { background: var(--purple); }
+        .etapa.e4::before { background: linear-gradient(90deg, var(--purple), var(--teal)); }
+        .etapa:hover { border-color: rgba(124,111,255,0.25); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+        .etapa-num {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .etapa-score {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .etapa-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+        .etapa-name {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .etapa-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        .etapa-items {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .etapa-item {
+            font-size: 12px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .etapa-item::before {
+            content: '→';
+            color: var(--purple);
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        /* ===== 3 ZONAS ===== */
+        .zonas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .zona {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            box-shadow: 0 4px 24px rgba(15,18,36,0.06);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        .zona::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+        }
+        .zona.ia::before   { background: linear-gradient(90deg, var(--teal), #00A88A); }
+        .zona.cli::before  { background: linear-gradient(90deg, var(--amber), #E59000); }
+        .zona.cons::before { background: linear-gradient(90deg, var(--purple), var(--purple-dark)); }
+        .zona-icon { font-size: 32px; margin-bottom: 14px; display: block; }
+        .zona-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+        .zona-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+        .zona-note {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+        .zona-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .zona-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.4;
+        }
+        .zona-item-dot {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .ia .zona-item-dot   { background: rgba(0,212,170,0.12); color: var(--teal); }
+        .cli .zona-item-dot  { background: rgba(251,176,36,0.12); color: #D97706; }
+        .cons .zona-item-dot { background: rgba(124,111,255,0.12); color: var(--purple); }
+
+        /* ===== UNIVERSO DE SERVICIOS ===== */
+        .clusters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .cluster {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            box-shadow: 0 4px 24px rgba(15,18,36,0.06);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .cluster-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .cluster-icon {
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        .cluster-icon.c1 { background: rgba(124,111,255,0.1); }
+        .cluster-icon.c2 { background: rgba(0,212,170,0.1); }
+        .cluster-icon.c3 { background: rgba(251,176,36,0.1); }
+        .cluster-icon.c4 { background: rgba(255,107,138,0.1); }
+        .cluster-icon.c5 { background: linear-gradient(135deg, rgba(124,111,255,0.1), rgba(0,212,170,0.1)); }
+        .cluster-title { font-size: 17px; font-weight: 800; }
+        .cluster-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .service-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            transition: background 0.15s;
+        }
+        .service-item:hover { background: var(--bg); }
+        .service-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .c1 .service-dot { background: var(--purple); }
+        .c2 .service-dot { background: var(--teal); }
+        .c3 .service-dot { background: var(--amber); }
+        .c4 .service-dot { background: var(--rose); }
+        .c5 .service-dot { background: linear-gradient(135deg, var(--purple), var(--teal)); }
+        .service-em {
+            font-size: 12px;
+            color: var(--muted);
+            margin-left: auto;
+            background: var(--bg);
+            padding: 2px 8px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        /* ===== INFINITE TAG ===== */
+        .infinite-box {
+            background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            color: white;
+            text-align: center;
+            margin-top: 28px;
+        }
+        .infinite-box h3 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .infinite-box h3 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--purple), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .infinite-box p {
+            font-size: 15px;
+            opacity: 0.7;
+            line-height: 1.7;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* ===== CTA FINAL ===== */
+        .cta-section {
+            background: linear-gradient(145deg, var(--navy), var(--navy-mid));
+            padding: 80px 24px;
+            text-align: center;
+            color: white;
+        }
+        .cta-section h2 {
+            font-size: clamp(24px, 5vw, 38px);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            max-width: 600px;
+            margin: 0 auto 16px;
+            line-height: 1.2;
+        }
+        .cta-section h2 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--purple), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .cta-section p {
+            font-size: 16px;
+            opacity: 0.7;
+            margin-bottom: 36px;
+            max-width: 440px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+        .cta-group { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+        .cta-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--purple);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 8px 28px rgba(124,111,255,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(124,111,255,0.5); }
+        .cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,212,170,0.15);
+            border: 1px solid rgba(0,212,170,0.35);
+            color: var(--teal);
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .cta-secondary:hover { background: rgba(0,212,170,0.25); }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--navy);
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            padding: 24px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .etapas { grid-template-columns: 1fr 1fr; }
+            .ladder::before { left: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav-wrap">
+    <nav class="nav">
+        <a href="index.html" class="logo">Pulso<span>IA</span><em>.</em></a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Inicio</a>
+            <a href="diagnostico.html" class="nav-cta">Hacer diagnóstico →</a>
+        </div>
+    </nav>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="badge"><span class="badge-dot"></span> Metodología PulsoIA</div>
+    <h1>El mapa completo de lo que<br>podemos <em>construir juntos</em></h1>
+    <p>Desde cero hasta dominante. Un camino claro, en el menor tiempo posible, usando todo el poder de la inteligencia artificial.</p>
+</section>
+
+<!-- ESCALERA DE VALOR -->
+<div style="background: var(--bg);">
+<div class="section">
+    <div class="section-label">Cómo trabajamos</div>
+    <h2 class="section-title">La escalera de valor</h2>
+    <p class="section-sub">Cada empresa empieza donde puede. La escalera garantiza que siempre hay un siguiente paso — y que cada uno vale más que el anterior.</p>
+
+    <div class="ladder">
+
+        <div class="ladder-item">
+            <div class="ladder-dot free">★</div>
+            <div class="ladder-body">
+                <div class="ladder-price">Gratuito</div>
+                <div class="ladder-name">Diagnóstico PulsoIA</div>
+                <div class="ladder-desc">10 minutos. Análisis de los 5 módulos clave de tu negocio. Reporte personalizado con score y puntos de mejora.</div>
+                <span class="ladder-tag">Entrada al ecosistema</span>
+            </div>
+        </div>
+
+        <div class="ladder-item">
+            <div class="ladder-dot l1">💬</div>
+            <div class="ladder-body">
+                <div class="ladder-price">Primer paso</div>
+                <div class="ladder-name">Consulta Estratégica (1h)</div>
+                <div class="ladder-desc">Revisamos el diagnóstico juntos, priorizamos las oportunidades más rentables y diseñamos el plan de acción específico para tu negocio.</div>
+                <span class="ladder-tag purple">Confirma el camino</span>
+            </div>
+        </div>
+
+        <div class="ladder-item">
+            <div class="ladder-dot l2">⚡</div>
+            <div class="ladder-body">
+                <div class="ladder-price">Resultados en 30 días</div>
+                <div class="ladder-name">Sprint de Transformación</div>
+                <div class="ladder-desc">Ejecutamos las mejoras de mayor impacto: presencia, captación, primeras automatizaciones. Resultados visibles antes de que termine el mes.</div>
+                <span class="ladder-tag amber">Quick wins garantizados</span>
+            </div>
+        </div>
+
+        <div class="ladder-item">
+            <div class="ladder-dot l3">🚀</div>
+            <div class="ladder-body">
+                <div class="ladder-price">Transformación completa</div>
+                <div class="ladder-name">Programa 60–90 días</div>
+                <div class="ladder-desc">Rebuild completo: identidad, sistemas, automatizaciones, campañas. El negocio rediseñado para funcionar y crecer sin depender de una sola persona.</div>
+                <span class="ladder-tag">Sistema completo</span>
+            </div>
+        </div>
+
+        <div class="ladder-item">
+            <div class="ladder-dot l4">♾️</div>
+            <div class="ladder-body">
+                <div class="ladder-price">Sin techo</div>
+                <div class="ladder-name">Retainer Mensual + Innovación</div>
+                <div class="ladder-desc">Para negocios que ya tienen base sólida y quieren seguir creciendo. Gestión continua, nuevas herramientas, ventajas competitivas que otros no tienen — y todo lo que haga falta inventar.</div>
+                <span class="ladder-tag">Crecimiento continuo</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<!-- LAS 5 ETAPAS -->
+<div class="etapas-bg">
+<div class="section">
+    <div class="section-label">Dónde está tu negocio</div>
+    <h2 class="section-title">Las 5 etapas</h2>
+    <p class="section-sub">El diagnóstico detecta en qué etapa estás. Cada etapa tiene acciones específicas — no hay atajos, pero sí formas de acelerar.</p>
+
+    <div class="etapas">
+
+        <div class="etapa e0">
+            <div class="etapa-num">Etapa 0</div>
+            <span class="etapa-icon">👻</span>
+            <div class="etapa-name">Invisible</div>
+            <div class="etapa-score">Score 0–25</div>
+            <div class="etapa-desc">No existe digitalmente o la presencia es tan débil que no genera nada.</div>
+            <div class="etapa-items">
+                <div class="etapa-item">Crear identidad desde cero</div>
+                <div class="etapa-item">Montar perfiles básicos</div>
+                <div class="etapa-item">Primeras fotos y descripción</div>
+            </div>
+        </div>
+
+        <div class="etapa e1">
+            <span class="etapa-icon">📍</span>
+            <div class="etapa-num">Etapa 1</div>
+            <div class="etapa-name">Presente</div>
+            <div class="etapa-score">Score 26–45</div>
+            <div class="etapa-desc">Se puede encontrar pero no convierte ni genera confianza.</div>
+            <div class="etapa-items">
+                <div class="etapa-item">Optimizar perfil y bio</div>
+                <div class="etapa-item">Estrategia de contenido</div>
+                <div class="etapa-item">Google My Business activo</div>
+            </div>
+        </div>
+
+        <div class="etapa e2">
+            <span class="etapa-icon">🧲</span>
+            <div class="etapa-num">Etapa 2</div>
+            <div class="etapa-name">Activo</div>
+            <div class="etapa-score">Score 46–65</div>
+            <div class="etapa-desc">Genera leads pero el proceso de venta y seguimiento es manual y caótico.</div>
+            <div class="etapa-items">
+                <div class="etapa-item">Funnel de captación</div>
+                <div class="etapa-item">Primeras campañas de ads</div>
+                <div class="etapa-item">CRM simple + seguimiento</div>
+            </div>
+        </div>
+
+        <div class="etapa e3">
+            <span class="etapa-icon">⚙️</span>
+            <div class="etapa-num">Etapa 3</div>
+            <div class="etapa-name">Escalable</div>
+            <div class="etapa-score">Score 66–80</div>
+            <div class="etapa-desc">Tiene sistemas funcionando pero todavía depende demasiado del dueño.</div>
+            <div class="etapa-items">
+                <div class="etapa-item">Automatizaciones avanzadas</div>
+                <div class="etapa-item">Fidelización sistematizada</div>
+                <div class="etapa-item">Dashboard de métricas</div>
+            </div>
+        </div>
+
+        <div class="etapa e4">
+            <span class="etapa-icon">👑</span>
+            <div class="etapa-num">Etapa 4</div>
+            <div class="etapa-name">Dominante</div>
+            <div class="etapa-score">Score 81–100</div>
+            <div class="etapa-desc">Base sólida. El siguiente paso es crear ventajas que la competencia no puede copiar.</div>
+            <div class="etapa-items">
+                <div class="etapa-item">Herramientas únicas a medida</div>
+                <div class="etapa-item">IA aplicada al negocio</div>
+                <div class="etapa-item">Innovación constante</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<!-- 3 ZONAS -->
+<div style="background: var(--bg);">
+<div class="section">
+    <div class="section-label">Quién hace qué</div>
+    <h2 class="section-title">Las 3 zonas de trabajo</h2>
+    <p class="section-sub">Claridad total desde el día uno: saber quién es responsable de qué evita frustraciones y hace que todo avance más rápido.</p>
+
+    <div class="zonas">
+
+        <div class="zona ia">
+            <span class="zona-icon">🤖</span>
+            <div class="zona-label">Zona 1</div>
+            <div class="zona-title">La IA y las herramientas</div>
+            <div class="zona-note">"Todo lo que se puede sistematizar, se sistematiza. Escala infinita, costo marginal cero."</div>
+            <div class="zona-list">
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Generación de logos, imágenes y branding
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Música e identidad sonora del negocio
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Programación y publicación de contenido
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Chatbots, respuestas automáticas y FAQ
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Ads con optimización automática
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Flujos de fidelización y seguimiento
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Todo el backend (Make, Zapier, CRM)
+                </div>
+            </div>
+        </div>
+
+        <div class="zona cli">
+            <span class="zona-icon">🧑‍💼</span>
+            <div class="zona-label">Zona 2</div>
+            <div class="zona-title">El cliente (vos)</div>
+            <div class="zona-note">"Nadie puede fingir tu cara ni tu voz. Esta zona es irremplazable — y es lo más valioso que tenés."</div>
+            <div class="zona-list">
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Fotos y videos reales de tu negocio
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Responder a tu comunidad (con tu voz)
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Contar tu historia y tu proceso
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Tomar decisiones sobre tu negocio
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Ser consistente con el plan acordado
+                </div>
+            </div>
+        </div>
+
+        <div class="zona cons">
+            <span class="zona-icon">🎯</span>
+            <div class="zona-label">Zona 3</div>
+            <div class="zona-title">La consultora (yo)</div>
+            <div class="zona-note">"La estrategia, la creatividad y la invención no se delegan. Es lo que hace que todo lo demás funcione."</div>
+            <div class="zona-list">
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Leer el negocio y diseñar la estrategia
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Dirección creativa y gusto estético
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Elegir y conectar las herramientas correctas
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Optimizar campañas y medir resultados
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Inventar lo que no existe todavía
+                </div>
+                <div class="zona-item">
+                    <div class="zona-item-dot">✓</div>
+                    Hacer que todo encaje y tenga sentido
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<!-- UNIVERSO DE SERVICIOS -->
+<div class="etapas-bg">
+<div class="section">
+    <div class="section-label">El universo completo</div>
+    <h2 class="section-title">Todo lo que podemos construir</h2>
+    <p class="section-sub">Organizado en 5 clusters. Cada negocio necesita una combinación diferente — y siempre hay más por agregar.</p>
+
+    <div class="clusters">
+
+        <div class="cluster">
+            <div class="cluster-header">
+                <div class="cluster-icon c1">🎨</div>
+                <div>
+                    <div class="cluster-title">Identidad</div>
+                    <div class="cluster-sub">El negocio existe y tiene personalidad</div>
+                </div>
+            </div>
+            <div class="service-list c1">
+                <div class="service-item"><span class="service-dot"></span>Naming y concepto de marca</div>
+                <div class="service-item"><span class="service-dot"></span>Logo e identidad visual completa</div>
+                <div class="service-item"><span class="service-dot"></span>Paleta de colores y tipografía</div>
+                <div class="service-item"><span class="service-dot"></span>Música oficial del negocio (IA)</div>
+                <div class="service-item"><span class="service-dot"></span>Tono de voz y bio estratégica</div>
+                <div class="service-item"><span class="service-dot"></span>Kit de marca completo</div>
+            </div>
+        </div>
+
+        <div class="cluster">
+            <div class="cluster-header">
+                <div class="cluster-icon c2">🌐</div>
+                <div>
+                    <div class="cluster-title">Presencia</div>
+                    <div class="cluster-sub">El negocio se puede encontrar</div>
+                </div>
+            </div>
+            <div class="service-list c2">
+                <div class="service-item"><span class="service-dot"></span>Montaje de redes sociales</div>
+                <div class="service-item"><span class="service-dot"></span>Google My Business optimizado</div>
+                <div class="service-item"><span class="service-dot"></span>Página web profesional</div>
+                <div class="service-item"><span class="service-dot"></span>Sistema de reservas / agenda</div>
+                <div class="service-item"><span class="service-dot"></span>Linktr.ee / bio link personalizado</div>
+                <div class="service-item"><span class="service-dot"></span>SEO local básico</div>
+            </div>
+        </div>
+
+        <div class="cluster">
+            <div class="cluster-header">
+                <div class="cluster-icon c3">📣</div>
+                <div>
+                    <div class="cluster-title">Captación</div>
+                    <div class="cluster-sub">El negocio atrae nuevos clientes</div>
+                </div>
+            </div>
+            <div class="service-list c3">
+                <div class="service-item"><span class="service-dot"></span>Estrategia de contenido</div>
+                <div class="service-item"><span class="service-dot"></span>Edición de videos con IA</div>
+                <div class="service-item"><span class="service-dot"></span>Campañas Meta Ads</div>
+                <div class="service-item"><span class="service-dot"></span>Campañas Google Ads</div>
+                <div class="service-item"><span class="service-dot"></span>Funnel de ventas</div>
+                <div class="service-item"><span class="service-dot"></span>Automatización de publicaciones</div>
+            </div>
+        </div>
+
+        <div class="cluster">
+            <div class="cluster-header">
+                <div class="cluster-icon c4">⚙️</div>
+                <div>
+                    <div class="cluster-title">Sistemas</div>
+                    <div class="cluster-sub">El negocio funciona solo</div>
+                </div>
+            </div>
+            <div class="service-list c4">
+                <div class="service-item"><span class="service-dot"></span>Chatbot con IA en WhatsApp</div>
+                <div class="service-item"><span class="service-dot"></span>CRM simple de clientes</div>
+                <div class="service-item"><span class="service-dot"></span>Automatizaciones (Make/Zapier)</div>
+                <div class="service-item"><span class="service-dot"></span>Sistema de fidelización</div>
+                <div class="service-item"><span class="service-dot"></span>Emails automáticos</div>
+                <div class="service-item"><span class="service-dot"></span>Dashboard de métricas</div>
+            </div>
+        </div>
+
+        <div class="cluster">
+            <div class="cluster-header">
+                <div class="cluster-icon c5">✨</div>
+                <div>
+                    <div class="cluster-title">Innovación</div>
+                    <div class="cluster-sub">El negocio sorprende y lidera</div>
+                </div>
+            </div>
+            <div class="service-list c5">
+                <div class="service-item"><span class="service-dot"></span>Herramientas únicas a medida</div>
+                <div class="service-item"><span class="service-dot"></span>IA aplicada al negocio específico</div>
+                <div class="service-item"><span class="service-dot"></span>Apps o sistemas propios</div>
+                <div class="service-item"><span class="service-dot"></span>Experiencias de cliente únicas</div>
+                <div class="service-item"><span class="service-dot"></span>Automatizaciones avanzadas</div>
+                <div class="service-item"><span class="service-dot"></span>Lo que no existe → lo inventamos</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="infinite-box">
+        <h3>El único límite es la <em>imaginación</em></h3>
+        <p>Cada negocio tiene necesidades únicas. Muchas veces la solución que mejor funciona todavía no existe — y eso es exactamente lo más interesante de hacer. La IA abrió un universo de posibilidades que antes requería equipos grandes y presupuestos enormes. Hoy lo podemos construir juntos, rápido y a medida.</p>
+    </div>
+
+</div>
+</div>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+    <h2>¿En qué etapa estás?<br><em>Descubrilo en 10 minutos.</em></h2>
+    <p>El diagnóstico es gratuito y te dice exactamente qué necesita tu negocio — y en qué orden atacarlo.</p>
+    <div class="cta-group">
+        <a href="diagnostico.html" class="cta-primary">
+            Hacer el diagnóstico gratis
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+        <a href="https://wa.me/5493571419788?text=Hola%2C%20vi%20el%20mapa%20de%20servicios%20de%20PulsoIA%20y%20quiero%20saber%20más" class="cta-secondary" target="_blank">
+            💬 Hablemos por WhatsApp
+        </a>
+    </div>
+</section>
+
+<footer>
+    © 2025 PulsoIA · Transformación digital para negocios reales
+</footer>
+
+</body>
+</html>

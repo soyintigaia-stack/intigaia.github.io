@@ -1,5 +1,5 @@
-const CACHE = 'pulsoia-v1';
-const ASSETS = ['/', '/index.html', '/diagnostico.html', '/manifest.json'];
+const CACHE = 'pulsoia-v2';
+const ASSETS = ['/', '/index.html', '/diagnostico.html', '/servicios.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
     e.waitUntil(
