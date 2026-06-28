@@ -87,6 +87,51 @@
             padding-top: 60px;
         }
         .screen.active { display: block; }
+        .screen.fade-in { animation: screenFadeIn 0.32s ease forwards; }
+
+        @keyframes screenFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(52px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-52px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideOutLeft {
+            from { opacity: 1; transform: translateX(0); }
+            to   { opacity: 0; transform: translateX(-52px); }
+        }
+        @keyframes slideOutRight {
+            from { opacity: 1; transform: translateX(0); }
+            to   { opacity: 0; transform: translateX(52px); }
+        }
+        .q-in-right  { animation: slideInRight  0.26s ease forwards; }
+        .q-in-left   { animation: slideInLeft   0.26s ease forwards; }
+        .q-out-left  { animation: slideOutLeft  0.20s ease forwards; pointer-events: none; }
+        .q-out-right { animation: slideOutRight 0.20s ease forwards; pointer-events: none; }
+
+        /* Back button */
+        .back-btn {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: 2px solid #E5E7EB;
+            color: var(--muted);
+            padding: 9px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            margin-bottom: 24px;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .back-btn:hover { border-color: var(--purple); color: var(--purple); }
 
         /* ==================== INTRO ==================== */
         #screen-intro {
@@ -610,6 +655,7 @@
 
 <!-- ========== QUESTION ========== -->
 <div class="screen" id="screen-question">
+    <button class="back-btn" id="backBtn" onclick="goBack()">← Anterior</button>
     <div class="module-tag" id="moduleTag">Módulo</div>
     <div class="question-card">
         <div class="question-text" id="questionText">Pregunta</div>
@@ -920,8 +966,11 @@ let state = {
 // NAVIGATION HELPERS
 // ============================================================
 function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active', 'fade-in'));
+    const target = document.getElementById(id);
+    target.classList.add('active');
+    void target.offsetWidth; // force reflow
+    target.classList.add('fade-in');
     window.scrollTo(0, 0);
 }
 
@@ -960,7 +1009,7 @@ function startDiagnostico() {
 // ============================================================
 // QUESTIONS
 // ============================================================
-function renderQuestion() {
+function renderQuestion(dir = 'forward') {
     const q = QUESTIONS[state.currentQ];
     const mod = MODULES[q.mod];
 
@@ -981,10 +1030,20 @@ function renderQuestion() {
         btn.onclick = () => selectOption(i, opt.pts, btn);
         container.appendChild(btn);
     });
+
+    // Slide-in animation
+    const card = document.querySelector('.question-card');
+    const animIn = dir === 'back' ? 'q-in-left' : 'q-in-right';
+    card.classList.remove('q-out-left', 'q-out-right', 'q-in-right', 'q-in-left');
+    card.classList.add(animIn);
+    card.addEventListener('animationend', () => card.classList.remove(animIn), { once: true });
+
+    // Back button visibility
+    const backBtn = document.getElementById('backBtn');
+    backBtn.style.display = state.currentQ > 0 ? 'flex' : 'none';
 }
 
 function selectOption(idx, pts, el) {
-    // Prevent double click
     if (document.querySelector('.option.selected')) return;
 
     el.classList.add('selected');
@@ -993,16 +1052,36 @@ function selectOption(idx, pts, el) {
     state.modScores[q.mod] += pts;
     state.answers.push({ q: state.currentQ, chosen: idx, pts });
 
+    // Slide out current card
+    const card = document.querySelector('.question-card');
+    card.classList.add('q-out-left');
+
     setTimeout(() => {
         state.currentQ++;
         updateProgress();
-
         if (state.currentQ >= QUESTIONS.length) {
             showLoading();
         } else {
-            renderQuestion();
+            renderQuestion('forward');
         }
-    }, 420);
+    }, 220);
+}
+
+function goBack() {
+    if (state.currentQ <= 0) return;
+
+    // Revert last answer
+    const last = state.answers.pop();
+    if (last) state.modScores[QUESTIONS[last.q].mod] -= last.pts;
+
+    const card = document.querySelector('.question-card');
+    card.classList.add('q-out-right');
+
+    setTimeout(() => {
+        state.currentQ--;
+        updateProgress();
+        renderQuestion('back');
+    }, 220);
 }
 
 // ============================================================
