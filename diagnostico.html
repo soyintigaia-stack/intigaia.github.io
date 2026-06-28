@@ -160,6 +160,39 @@
             pointer-events: none;
         }
 
+        /* Autocomplete ciudad */
+        .autocomplete-wrap { position: relative; width: 100%; }
+        .autocomplete-list {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0; right: 0;
+            background: var(--white);
+            border: 2px solid var(--purple);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            z-index: 200;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+        .autocomplete-list.hidden { display: none; }
+        .autocomplete-item {
+            padding: 13px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #F0F0F8;
+            transition: background 0.15s;
+        }
+        .autocomplete-item:last-child { border-bottom: none; }
+        .autocomplete-item:hover, .autocomplete-item.active { background: rgba(124,111,255,0.07); }
+        .autocomplete-item-main { font-size: 15px; font-weight: 600; color: var(--text); }
+        .autocomplete-item-sub  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .autocomplete-loading {
+            padding: 14px 16px;
+            font-size: 14px;
+            color: var(--muted);
+            text-align: center;
+        }
+
         .btn-primary {
             width: 100%;
             max-width: 420px;
@@ -564,7 +597,12 @@
     </div>
     <div class="form-group">
         <label>Ciudad / Zona</label>
-        <input type="text" id="inputCiudad" placeholder="Ej: Almafuerte, Córdoba" autocomplete="address-level2">
+        <div class="autocomplete-wrap">
+            <input type="text" id="inputCiudad" placeholder="Ej: Almafuerte" autocomplete="off"
+                oninput="onCiudadInput(this.value)"
+                onkeydown="onCiudadKeydown(event)">
+            <div class="autocomplete-list hidden" id="ciudadDropdown"></div>
+        </div>
     </div>
 
     <button class="btn-primary" onclick="startDiagnostico()">Comenzar diagnóstico →</button>
@@ -1126,6 +1164,109 @@ function retryDiagnostico() {
     document.getElementById('progressLabel').textContent = '0/15';
     showScreen('screen-intro');
 }
+
+// ============================================================
+// AUTOCOMPLETE CIUDAD (OpenStreetMap Nominatim)
+// ============================================================
+let _ciudadTimer = null;
+let _ciudadResults = [];
+let _ciudadIndex = -1;
+
+function onCiudadInput(val) {
+    clearTimeout(_ciudadTimer);
+    _ciudadIndex = -1;
+    const drop = document.getElementById('ciudadDropdown');
+
+    if (val.trim().length < 2) {
+        drop.classList.add('hidden');
+        drop.innerHTML = '';
+        return;
+    }
+
+    drop.innerHTML = '<div class="autocomplete-loading">Buscando...</div>';
+    drop.classList.remove('hidden');
+
+    _ciudadTimer = setTimeout(() => fetchCiudades(val.trim()), 350);
+}
+
+async function fetchCiudades(q) {
+    const drop = document.getElementById('ciudadDropdown');
+    try {
+        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&addressdetails=1&limit=6&featuretype=city,town,village,suburb`;
+        const res = await fetch(url, { headers: { 'Accept-Language': 'es' } });
+        const data = await res.json();
+
+        _ciudadResults = data
+            .filter(r => r.address && (r.address.city || r.address.town || r.address.village || r.address.suburb || r.address.municipality))
+            .slice(0, 5)
+            .map(r => {
+                const a = r.address;
+                const city = a.city || a.town || a.village || a.suburb || a.municipality || '';
+                const state = a.state || a.region || '';
+                const country = a.country || '';
+                return {
+                    main: city,
+                    sub: [state, country].filter(Boolean).join(', '),
+                    full: [city, state, country].filter(Boolean).join(', '),
+                };
+            });
+
+        if (_ciudadResults.length === 0) {
+            drop.innerHTML = '<div class="autocomplete-loading">Sin resultados — escribí el nombre completo</div>';
+            return;
+        }
+
+        drop.innerHTML = _ciudadResults.map((r, i) => `
+            <div class="autocomplete-item" data-idx="${i}" onmousedown="selectCiudad(${i})">
+                <div class="autocomplete-item-main">${r.main}</div>
+                <div class="autocomplete-item-sub">${r.sub}</div>
+            </div>
+        `).join('');
+    } catch {
+        drop.innerHTML = '<div class="autocomplete-loading">Error de red — escribí la ubicación manualmente</div>';
+    }
+}
+
+function selectCiudad(idx) {
+    const r = _ciudadResults[idx];
+    if (!r) return;
+    document.getElementById('inputCiudad').value = r.full;
+    const drop = document.getElementById('ciudadDropdown');
+    drop.classList.add('hidden');
+    drop.innerHTML = '';
+    _ciudadIndex = -1;
+}
+
+function onCiudadKeydown(e) {
+    const drop = document.getElementById('ciudadDropdown');
+    const items = drop.querySelectorAll('.autocomplete-item');
+    if (!items.length) return;
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        _ciudadIndex = Math.min(_ciudadIndex + 1, items.length - 1);
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        _ciudadIndex = Math.max(_ciudadIndex - 1, 0);
+    } else if (e.key === 'Enter' && _ciudadIndex >= 0) {
+        e.preventDefault();
+        selectCiudad(_ciudadIndex);
+        return;
+    } else if (e.key === 'Escape') {
+        drop.classList.add('hidden');
+        return;
+    } else return;
+
+    items.forEach((el, i) => el.classList.toggle('active', i === _ciudadIndex));
+}
+
+// Cerrar dropdown al hacer clic fuera
+document.addEventListener('click', e => {
+    if (!e.target.closest('.autocomplete-wrap')) {
+        const drop = document.getElementById('ciudadDropdown');
+        if (drop) drop.classList.add('hidden');
+    }
+});
 
 // PWA
 if ('serviceWorker' in navigator) {
