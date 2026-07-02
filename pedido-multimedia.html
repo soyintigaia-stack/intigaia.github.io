@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos a Lara — PulsoIA</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --purple: #7C6FFF;
+            --teal: #00D4AA;
+            --navy: #0F1224;
+            --navy-mid: #1A1F4C;
+            --text: #1A1F3C;
+            --muted: #6B7280;
+            --bg: #F5F7FF;
+            --white: #FFFFFF;
+            --amber: #F59E0B;
+            --rose: #F43F5E;
+            --green: #10B981;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        .nav-wrap { background: var(--navy); padding: 0 24px; }
+        .nav { display: flex; justify-content: space-between; align-items: center; max-width: 780px; margin: 0 auto; padding: 16px 0; }
+        .logo { font-size: 18px; font-weight: 800; color: white; text-decoration: none; }
+        .logo span { color: var(--purple); }
+        .logo em { font-style: normal; color: var(--teal); }
+        .nav-sub { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+            color: white; padding: 32px 24px; text-align: center;
+        }
+        .header h1 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+        .header p { font-size: 14px; opacity: 0.6; }
+
+        /* TABS */
+        .tabs-wrap { background: var(--white); border-bottom: 1px solid rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+        .tabs { display: flex; max-width: 780px; margin: 0 auto; padding: 0 16px; overflow-x: auto; gap: 4px; }
+        .tab {
+            padding: 14px 20px; font-size: 13px; font-weight: 700;
+            color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent;
+            white-space: nowrap; transition: color 0.2s, border-color 0.2s;
+            background: none; border-top: none; border-left: none; border-right: none;
+            font-family: inherit;
+        }
+        .tab:hover { color: var(--purple); }
+        .tab.active { color: var(--purple); border-bottom-color: var(--purple); }
+
+        /* FORM */
+        .page { display: none; max-width: 780px; margin: 0 auto; padding: 28px 20px 100px; }
+        .page.active { display: block; }
+
+        .section-title {
+            font-size: 11px; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase; color: var(--muted);
+            margin: 28px 0 14px; display: flex; align-items: center; gap: 8px;
+        }
+        .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(0,0,0,0.08); }
+
+        .field { margin-bottom: 16px; }
+        .field label {
+            display: block; font-size: 13px; font-weight: 700;
+            margin-bottom: 6px; color: var(--text);
+        }
+        .field label span { font-weight: 400; color: var(--muted); font-size: 12px; }
+        .field input, .field select, .field textarea {
+            width: 100%; padding: 12px 14px;
+            border: 2px solid #E5E7EB; border-radius: 12px;
+            font-size: 14px; font-family: inherit; color: var(--text);
+            background: var(--white); transition: border-color 0.2s;
+        }
+        .field input:focus, .field select:focus, .field textarea:focus {
+            outline: none; border-color: var(--purple);
+            box-shadow: 0 0 0 3px rgba(124,111,255,0.1);
+        }
+        .field textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+        /* CHIPS */
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .chip {
+            padding: 7px 14px; border-radius: 50px; font-size: 13px; font-weight: 600;
+            border: 2px solid #E5E7EB; cursor: pointer; transition: all 0.15s;
+            background: var(--white); color: var(--muted); user-select: none;
+        }
+        .chip:hover { border-color: var(--purple); color: var(--purple); }
+        .chip.selected { background: var(--purple); border-color: var(--purple); color: white; }
+        .chip.multi.selected { background: rgba(124,111,255,0.1); border-color: var(--purple); color: var(--purple); }
+
+        /* PRIORITY */
+        .priority-chips { display: flex; gap: 8px; }
+        .priority-chip {
+            flex: 1; padding: 10px; border-radius: 12px; font-size: 13px; font-weight: 700;
+            border: 2px solid #E5E7EB; cursor: pointer; text-align: center;
+            transition: all 0.15s; background: var(--white); color: var(--muted);
+        }
+        .priority-chip.urgent.selected { background: rgba(244,63,94,0.08); border-color: var(--rose); color: var(--rose); }
+        .priority-chip.normal.selected { background: rgba(16,185,129,0.08); border-color: var(--green); color: var(--green); }
+        .priority-chip.low.selected { background: rgba(107,114,128,0.08); border-color: var(--muted); color: var(--muted); }
+
+        /* GENERATE BUTTON */
+        .generate-btn {
+            width: 100%; padding: 16px; background: var(--purple); color: white;
+            border: none; border-radius: 14px; font-size: 16px; font-weight: 700;
+            font-family: inherit; cursor: pointer; margin-top: 12px;
+            box-shadow: 0 4px 20px rgba(124,111,255,0.35);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .generate-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(124,111,255,0.45); }
+
+        /* OUTPUT */
+        .output-wrap {
+            display: none; margin-top: 24px;
+            background: var(--white); border-radius: 16px;
+            border: 2px solid rgba(124,111,255,0.2);
+            overflow: hidden;
+        }
+        .output-wrap.visible { display: block; }
+        .output-header {
+            background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+            color: white; padding: 16px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .output-header-title { font-size: 13px; font-weight: 700; }
+        .output-header-sub { font-size: 12px; opacity: 0.6; }
+        .output-actions { display: flex; gap: 8px; }
+        .output-btn {
+            padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700;
+            cursor: pointer; border: none; font-family: inherit; transition: background 0.15s;
+        }
+        .output-btn.copy { background: rgba(255,255,255,0.15); color: white; }
+        .output-btn.copy:hover { background: rgba(255,255,255,0.25); }
+        .output-btn.whatsapp { background: #25D366; color: white; }
+        .output-btn.whatsapp:hover { background: #1FB855; }
+        .output-text {
+            padding: 20px; font-size: 14px; line-height: 1.8;
+            white-space: pre-wrap; font-family: 'Courier New', monospace;
+            color: var(--text); max-height: 500px; overflow-y: auto;
+            background: #FAFBFF;
+        }
+        .copied-toast {
+            display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            background: var(--navy); color: white; padding: 10px 20px;
+            border-radius: 50px; font-size: 13px; font-weight: 600;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 999;
+        }
+        .copied-toast.show { display: block; animation: toastIn 0.3s ease; }
+        @keyframes toastIn { from { opacity:0; transform: translateX(-50%) translateY(10px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+
+        /* LAURA CONFIG */
+        .lara-config {
+            background: rgba(0,212,170,0.07); border: 1px solid rgba(0,212,170,0.2);
+            border-radius: 12px; padding: 14px 16px; margin-bottom: 24px;
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+        }
+        .lara-config-icon { font-size: 22px; }
+        .lara-config-text { flex: 1; min-width: 140px; }
+        .lara-config-text strong { font-size: 13px; display: block; margin-bottom: 2px; }
+        .lara-config-text span { font-size: 12px; color: var(--muted); }
+        .lara-config input {
+            border: 2px solid rgba(0,212,170,0.3); border-radius: 10px;
+            padding: 8px 12px; font-size: 13px; font-family: inherit;
+            background: white; color: var(--text); min-width: 160px;
+        }
+        .lara-config input:focus { outline: none; border-color: var(--teal); }
+
+        /* TARIFAS CONFIG */
+        .tarifas-config {
+            background: rgba(0,212,170,0.04);
+            border: 1px solid rgba(0,212,170,0.15);
+            border-radius: 12px; overflow: hidden;
+        }
+        .tarifas-summary {
+            padding: 12px 16px; font-size: 12px; font-weight: 700;
+            color: var(--muted); cursor: pointer; list-style: none;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .tarifas-summary::-webkit-details-marker { display: none; }
+        .tarifas-config[open] .tarifas-summary { border-bottom: 1px solid rgba(0,212,170,0.1); }
+        .tarifas-body { padding: 14px 16px; }
+        .tarifas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .tarifa-col label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .tarifa-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+        .tarifa-row input[type="number"] {
+            flex: 1; max-width: 80px; padding: 8px 10px;
+            border: 1px solid #E5E7EB; border-radius: 8px;
+            font-size: 14px; font-weight: 700; font-family: inherit;
+            color: var(--text); background: white; text-align: right;
+        }
+        .tarifa-row input[type="number"]:focus { outline: none; border-color: var(--teal); }
+
+        /* COST STRIP */
+        .cost-strip {
+            display: flex; align-items: center; flex-wrap: wrap;
+            gap: 10px; padding: 12px 16px; margin-bottom: 16px;
+            background: var(--white); border: 1.5px solid #E5E7EB;
+            border-radius: 12px; font-size: 13px;
+        }
+        .cost-strip label { font-weight: 700; color: var(--muted); white-space: nowrap; }
+        .cost-strip input[type="number"] {
+            width: 70px; padding: 6px 8px; border: 1.5px solid #E5E7EB;
+            border-radius: 8px; font-size: 13px; font-weight: 700;
+            font-family: inherit; color: var(--text); background: var(--bg);
+            text-align: right;
+        }
+        .cost-strip input[type="number"]:focus { outline: none; border-color: var(--purple); }
+        .cost-sep { color: var(--muted); }
+        .cost-lara { color: var(--teal); font-weight: 800; white-space: nowrap; }
+        .cost-presupuesto {
+            margin-left: auto; color: var(--amber); font-weight: 800;
+            white-space: nowrap; font-size: 14px;
+        }
+
+        @media (max-width: 520px) {
+            .field-row, .field-row-3 { grid-template-columns: 1fr; }
+            .cost-line { grid-template-columns: 1fr 1fr; }
+            .tarifas-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="nav-wrap">
+    <nav class="nav">
+        <a href="index.html" class="logo">Pulso<span>IA</span><em>.</em></a>
+        <span class="nav-sub">Pedidos internos → Lara</span>
+    </nav>
+</div>
+
+<div class="header">
+    <h1>🎬 Generador de pedidos creativos</h1>
+    <p>Completá el formulario y generá el brief listo para enviarle a Lara</p>
+</div>
+
+<div class="tabs-wrap">
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('musica')">🎵 Música / Jingle</button>
+        <button class="tab" onclick="showTab('video')">🎬 Video / Reels</button>
+        <button class="tab" onclick="showTab('graficos')">🖼️ Gráficos / Posts</button>
+        <button class="tab" onclick="showTab('pack')">📦 Pack completo</button>
+    </div>
+</div>
+
+<!-- LAURA CONFIG (global) -->
+<div style="max-width:780px;margin:16px auto 0;padding:0 20px;">
+    <div class="lara-config">
+        <div class="lara-config-icon">📱</div>
+        <div class="lara-config-text">
+            <strong>WhatsApp de Lara</strong>
+            <span>Se usa para el botón de envío directo</span>
+        </div>
+        <input type="text" id="laraPhone" placeholder="54911..." value="" oninput="saveLara(this.value)">
+    </div>
+</div>
+
+<!-- TARIFAS CONFIG -->
+<div style="max-width:780px;margin:10px auto 0;padding:0 20px 4px;">
+    <details class="tarifas-config" id="tarifas-config">
+        <summary class="tarifas-summary">⚙️ Tarifas base de Lara — configurar precios de referencia</summary>
+        <div class="tarifas-body">
+            <div class="tarifas-grid">
+                <div class="tarifa-col">
+                    <label>🎵 Música / Audio</label>
+                    <div class="tarifa-row"><input type="number" id="cfg-tarifa-musica" placeholder="8000" min="0" step="500" oninput="saveTarifa('musica',this.value)"><span>/ pieza</span></div>
+                </div>
+                <div class="tarifa-col">
+                    <label>🎬 Video / Reel</label>
+                    <div class="tarifa-row"><input type="number" id="cfg-tarifa-video" placeholder="15000" min="0" step="1000" oninput="saveTarifa('video',this.value)"><span>/ video</span></div>
+                </div>
+                <div class="tarifa-col">
+                    <label>🖼️ Gráfico / Post</label>
+                    <div class="tarifa-row"><input type="number" id="cfg-tarifa-graficos" placeholder="2000" min="0" step="500" oninput="saveTarifa('graficos',this.value)"><span>/ pieza</span></div>
+                </div>
+                <div class="tarifa-col">
+                    <label>📊 Margen de gestión</label>
+                    <div class="tarifa-row"><input type="number" id="cfg-margen" placeholder="20" min="0" max="500" step="5" oninput="saveTarifa('margen',this.value)"><span>% sobre costo Lara</span></div>
+                </div>
+            </div>
+        </div>
+    </details>
+</div>
+
+<!-- ═══ MÚSICA ═══ -->
+<div class="page active" id="page-musica">
+
+    <div class="section-title">Datos del cliente</div>
+    <div class="field-row">
+        <div class="field"><label>Nombre del negocio</label><input type="text" id="m-negocio" placeholder="Ej: Kaizen Studio"></div>
+        <div class="field"><label>Rubro <span>(opcional)</span></label><input type="text" id="m-rubro" placeholder="Ej: Micropigmentación"></div>
+    </div>
+
+    <div class="section-title">Tipo de pieza</div>
+    <div class="field">
+        <label>¿Qué necesitamos? <span>(elegí una)</span></label>
+        <div class="chips" id="m-tipo">
+            <div class="chip selected" onclick="selectChip(this,'m-tipo')">Jingle / música del negocio</div>
+            <div class="chip" onclick="selectChip(this,'m-tipo')">Intro para videos</div>
+            <div class="chip" onclick="selectChip(this,'m-tipo')">Música de fondo (loop)</div>
+            <div class="chip" onclick="selectChip(this,'m-tipo')">Outro / cierre</div>
+            <div class="chip" onclick="selectChip(this,'m-tipo')">Música para stories</div>
+        </div>
+    </div>
+
+    <div class="section-title">Identidad de marca</div>
+    <div class="field">
+        <label>Personalidad del negocio <span>(puede ser más de una)</span></label>
+        <div class="chips" id="m-personalidad">
+            <div class="chip multi" onclick="toggleChip(this)">Elegante</div>
+            <div class="chip multi" onclick="toggleChip(this)">Fresco / juvenil</div>
+            <div class="chip multi" onclick="toggleChip(this)">Cálido / cercano</div>
+            <div class="chip multi" onclick="toggleChip(this)">Profesional / serio</div>
+            <div class="chip multi" onclick="toggleChip(this)">Enérgico / dinámico</div>
+            <div class="chip multi" onclick="toggleChip(this)">Relajante / calmo</div>
+            <div class="chip multi" onclick="toggleChip(this)">Moderno / tech</div>
+            <div class="chip multi" onclick="toggleChip(this)">Lujoso / premium</div>
+        </div>
+    </div>
+    <div class="field-row">
+        <div class="field">
+            <label>Paleta de colores de marca <span>(para referencia de vibe)</span></label>
+            <input type="text" id="m-colores" placeholder="Ej: violeta, dorado, negro">
+        </div>
+        <div class="field">
+            <label>Público objetivo</label>
+            <input type="text" id="m-publico" placeholder="Ej: mujeres 25-45, profesionales">
+        </div>
+    </div>
+
+    <div class="section-title">Especificaciones técnicas</div>
+    <div class="field">
+        <label>Estilo musical <span>(puede ser más de uno)</span></label>
+        <div class="chips" id="m-estilo">
+            <div class="chip multi" onclick="toggleChip(this)">Pop / comercial</div>
+            <div class="chip multi" onclick="toggleChip(this)">Electrónico / moderno</div>
+            <div class="chip multi" onclick="toggleChip(this)">Acústico / orgánico</div>
+            <div class="chip multi" onclick="toggleChip(this)">Corporativo / motivacional</div>
+            <div class="chip multi" onclick="toggleChip(this)">Lofi / ambient</div>
+            <div class="chip multi" onclick="toggleChip(this)">Latin / tropical</div>
+            <div class="chip multi" onclick="toggleChip(this)">Clásico / orquestal</div>
+            <div class="chip multi" onclick="toggleChip(this)">Hip hop / urban</div>
+        </div>
+    </div>
+    <div class="field-row-3">
+        <div class="field">
+            <label>Duración</label>
+            <select id="m-duracion">
+                <option>15 segundos</option>
+                <option>30 segundos</option>
+                <option selected>60 segundos</option>
+                <option>90 segundos</option>
+                <option>Loop sin fin</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Con letra / sin letra</label>
+            <select id="m-letra">
+                <option>Sin letra (instrumental)</option>
+                <option>Con letra en español</option>
+                <option>Con nombre del negocio</option>
+                <option>Solo voz / locutor</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Formato de entrega</label>
+            <select id="m-formato">
+                <option>MP3</option>
+                <option>WAV</option>
+                <option>MP3 + WAV</option>
+            </select>
+        </div>
+    </div>
+    <div class="field">
+        <label>Referencias musicales <span>(artistas, canciones o links que den idea del vibe)</span></label>
+        <input type="text" id="m-refs" placeholder="Ej: similar a Coldplay intro, o como el jingle de tal marca...">
+    </div>
+    <div class="field">
+        <label>Slogan o frase del negocio <span>(para incluir si lleva letra)</span></label>
+        <input type="text" id="m-slogan" placeholder="Ej: 'Transformamos tu negocio con IA'">
+    </div>
+
+    <div class="section-title">Prioridad y notas</div>
+    <div class="field">
+        <label>Urgencia</label>
+        <div class="priority-chips">
+            <div class="priority-chip urgent" onclick="selectPriority(this,'m-prioridad','urgent')">🔴 Urgente (24–48h)</div>
+            <div class="priority-chip normal selected" onclick="selectPriority(this,'m-prioridad','normal')" id="m-prioridad-normal">🟡 Normal (3–5 días)</div>
+            <div class="priority-chip low" onclick="selectPriority(this,'m-prioridad','low')">🟢 Sin apuro (1 semana+)</div>
+        </div>
+        <input type="hidden" id="m-prioridad" value="Normal (3–5 días)">
+    </div>
+    <div class="field">
+        <label>Notas adicionales <span>(cualquier detalle que ayude)</span></label>
+        <textarea id="m-notas" placeholder="Ej: el negocio es muy femenino, los colores son pastel, queremos que suene moderno pero cálido..."></textarea>
+    </div>
+    <div class="section-title">💰 Costo Lara → presupuesto cliente</div>
+    <div class="cost-strip">
+        <label>Lara</label>
+        <input type="number" id="m-tarifa" min="0" step="100" placeholder="8000" oninput="calcCosto('m')">
+        <span class="cost-sep">×</span>
+        <input type="number" id="m-qty" min="1" value="1" style="width:50px" oninput="calcCosto('m')">
+        <span class="cost-sep">piezas =</span>
+        <span id="m-total-lara" class="cost-lara">—</span>
+        <span class="cost-sep">· margen</span>
+        <input type="number" id="m-margen" min="0" max="500" placeholder="20" oninput="calcCosto('m')">
+        <span class="cost-sep">%</span>
+        <span id="m-total-cliente" class="cost-presupuesto">—</span>
+    </div>
+    <button class="generate-btn" onclick="generateBrief('musica')">✨ Generar brief para Lara</button>
+    <div class="output-wrap" id="output-musica">
+        <div class="output-header">
+            <div><div class="output-header-title">Brief listo para enviar</div><div class="output-header-sub">Copiá el texto o mandalo directo por WhatsApp</div></div>
+            <div class="output-actions">
+                <button class="output-btn copy" onclick="copyOutput('output-musica-text')">📋 Copiar</button>
+                <button class="output-btn whatsapp" onclick="sendWhatsApp('output-musica-text')">💬 WhatsApp</button>
+            </div>
+        </div>
+        <div class="output-text" id="output-musica-text"></div>
+    </div>
+</div>
+
+<!-- ═══ VIDEO ═══ -->
+<div class="page" id="page-video">
+
+    <div class="section-title">Datos del cliente</div>
+    <div class="field-row">
+        <div class="field"><label>Nombre del negocio</label><input type="text" id="v-negocio" placeholder="Ej: Kaizen Studio"></div>
+        <div class="field"><label>Rubro</label><input type="text" id="v-rubro" placeholder="Ej: Micropigmentación"></div>
+    </div>
+
+    <div class="section-title">Tipo de video</div>
+    <div class="field">
+        <label>¿Qué tipo de video? <span>(elegí uno)</span></label>
+        <div class="chips" id="v-tipo">
+            <div class="chip selected" onclick="selectChip(this,'v-tipo')">Reel de presentación</div>
+            <div class="chip" onclick="selectChip(this,'v-tipo')">Video de servicio/producto</div>
+            <div class="chip" onclick="selectChip(this,'v-tipo')">Testimonio de cliente</div>
+            <div class="chip" onclick="selectChip(this,'v-tipo')">Video educativo / tip</div>
+            <div class="chip" onclick="selectChip(this,'v-tipo')">Promo / oferta</div>
+            <div class="chip" onclick="selectChip(this,'v-tipo')">Story / 24hs</div>
+            <div class="chip" onclick="selectChip(this,'v-tipo')">Video para ads</div>
+        </div>
+    </div>
+
+    <div class="section-title">Plataforma y specs</div>
+    <div class="field">
+        <label>¿Para qué plataforma? <span>(puede ser más de una)</span></label>
+        <div class="chips" id="v-plataforma">
+            <div class="chip multi" onclick="toggleChip(this)">Instagram Reels</div>
+            <div class="chip multi" onclick="toggleChip(this)">Instagram Feed</div>
+            <div class="chip multi" onclick="toggleChip(this)">Instagram Stories</div>
+            <div class="chip multi" onclick="toggleChip(this)">TikTok</div>
+            <div class="chip multi" onclick="toggleChip(this)">Facebook</div>
+            <div class="chip multi" onclick="toggleChip(this)">YouTube Shorts</div>
+            <div class="chip multi" onclick="toggleChip(this)">WhatsApp Status</div>
+        </div>
+    </div>
+    <div class="field-row-3">
+        <div class="field">
+            <label>Duración del video</label>
+            <select id="v-duracion">
+                <option>7–15 segundos</option>
+                <option selected>15–30 segundos</option>
+                <option>30–60 segundos</option>
+                <option>60–90 segundos</option>
+                <option>+90 segundos</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Orientación</label>
+            <select id="v-orientacion">
+                <option selected>Vertical (9:16) — Reels/TikTok</option>
+                <option>Cuadrado (1:1) — Feed</option>
+                <option>Horizontal (16:9) — YouTube</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Calidad / velocidad</label>
+            <select id="v-calidad">
+                <option selected>Dinámica / ritmo rápido</option>
+                <option>Tranquila / elegante</option>
+                <option>Mixta</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="section-title">Material que se entrega</div>
+    <div class="field">
+        <label>¿Qué material se le manda a Lara? <span>(marcá lo que va adjunto)</span></label>
+        <div class="chips" id="v-material">
+            <div class="chip multi" onclick="toggleChip(this)">Videos del cliente</div>
+            <div class="chip multi" onclick="toggleChip(this)">Fotos del cliente</div>
+            <div class="chip multi" onclick="toggleChip(this)">Logo del negocio</div>
+            <div class="chip multi" onclick="toggleChip(this)">Música / jingle</div>
+            <div class="chip multi" onclick="toggleChip(this)">Kit de marca (colores/fuentes)</div>
+            <div class="chip multi" onclick="toggleChip(this)">Texto / script</div>
+        </div>
+    </div>
+    <div class="field">
+        <label>Descripción del material <span>(qué hay en los videos/fotos que se mandan)</span></label>
+        <textarea id="v-material-desc" placeholder="Ej: 3 videos del proceso de trabajo, 5 fotos del resultado final, 1 video de presentación de la dueña..."></textarea>
+    </div>
+
+    <div class="section-title">Contenido y estilo</div>
+    <div class="field">
+        <label>Estilo visual <span>(puede ser más de uno)</span></label>
+        <div class="chips" id="v-estilo">
+            <div class="chip multi" onclick="toggleChip(this)">Minimalista / limpio</div>
+            <div class="chip multi" onclick="toggleChip(this)">Colorido / vibrante</div>
+            <div class="chip multi" onclick="toggleChip(this)">Oscuro / premium</div>
+            <div class="chip multi" onclick="toggleChip(this)">Natural / orgánico</div>
+            <div class="chip multi" onclick="toggleChip(this)">Corporativo / serio</div>
+            <div class="chip multi" onclick="toggleChip(this)">Tendencia / viral</div>
+        </div>
+    </div>
+    <div class="field"><label>Texto principal / título del video</label><input type="text" id="v-titulo" placeholder="Ej: '¿Sabés cuánto está perdiendo tu negocio?'"></div>
+    <div class="field"><label>Subtítulos <span>(¿incluir captions automáticos?)</span></label>
+        <select id="v-subtitulos">
+            <option selected>Sí, subtítulos automáticos</option>
+            <option>No necesita subtítulos</option>
+            <option>Sí, pero con texto de colores de marca</option>
+        </select>
+    </div>
+    <div class="field"><label>CTA al final <span>(qué debe hacer quien lo ve)</span></label><input type="text" id="v-cta" placeholder="Ej: 'Escribinos por WhatsApp', 'Link en bio', 'Agendá tu turno'"></div>
+    <div class="field"><label>Música <span>(si no van a usar el jingle del negocio)</span></label><input type="text" id="v-musica" placeholder="Ej: usar el jingle que creó Lara / música trending de Instagram / link a canción"></div>
+
+    <div class="section-title">Prioridad y notas</div>
+    <div class="field">
+        <label>Urgencia</label>
+        <div class="priority-chips">
+            <div class="priority-chip urgent" onclick="selectPriority(this,'v-prioridad','urgent')">🔴 Urgente (24–48h)</div>
+            <div class="priority-chip normal selected" onclick="selectPriority(this,'v-prioridad','normal')">🟡 Normal (3–5 días)</div>
+            <div class="priority-chip low" onclick="selectPriority(this,'v-prioridad','low')">🟢 Sin apuro (1 semana+)</div>
+        </div>
+        <input type="hidden" id="v-prioridad" value="Normal (3–5 días)">
+    </div>
+    <div class="field"><label>Notas adicionales</label><textarea id="v-notas" placeholder="Cualquier indicación especial, referencias de estilo, videos similares que le gusten al cliente..."></textarea></div>
+    <div class="section-title">💰 Costo Lara → presupuesto cliente</div>
+    <div class="cost-strip">
+        <label>Lara</label>
+        <input type="number" id="v-tarifa" min="0" step="1000" placeholder="15000" oninput="calcCosto('v')">
+        <span class="cost-sep">×</span>
+        <input type="number" id="v-qty" min="1" value="1" style="width:50px" oninput="calcCosto('v')">
+        <span class="cost-sep">videos =</span>
+        <span id="v-total-lara" class="cost-lara">—</span>
+        <span class="cost-sep">· margen</span>
+        <input type="number" id="v-margen" min="0" max="500" placeholder="20" oninput="calcCosto('v')">
+        <span class="cost-sep">%</span>
+        <span id="v-total-cliente" class="cost-presupuesto">—</span>
+    </div>
+    <button class="generate-btn" onclick="generateBrief('video')">✨ Generar brief para Lara</button>
+    <div class="output-wrap" id="output-video">
+        <div class="output-header">
+            <div><div class="output-header-title">Brief listo para enviar</div><div class="output-header-sub">Copiá el texto o mandalo directo por WhatsApp</div></div>
+            <div class="output-actions">
+                <button class="output-btn copy" onclick="copyOutput('output-video-text')">📋 Copiar</button>
+                <button class="output-btn whatsapp" onclick="sendWhatsApp('output-video-text')">💬 WhatsApp</button>
+            </div>
+        </div>
+        <div class="output-text" id="output-video-text"></div>
+    </div>
+</div>
+
+<!-- ═══ GRÁFICOS ═══ -->
+<div class="page" id="page-graficos">
+
+    <div class="section-title">Datos del cliente</div>
+    <div class="field-row">
+        <div class="field"><label>Nombre del negocio</label><input type="text" id="g-negocio" placeholder="Ej: Kaizen Studio"></div>
+        <div class="field"><label>Rubro</label><input type="text" id="g-rubro" placeholder="Ej: Micropigmentación"></div>
+    </div>
+
+    <div class="section-title">Tipo de pieza gráfica</div>
+    <div class="field">
+        <label>¿Qué piezas necesitamos? <span>(puede ser más de una)</span></label>
+        <div class="chips" id="g-tipo">
+            <div class="chip multi" onclick="toggleChip(this)">Post cuadrado (feed)</div>
+            <div class="chip multi" onclick="toggleChip(this)">Post vertical (reels cover)</div>
+            <div class="chip multi" onclick="toggleChip(this)">Story (9:16)</div>
+            <div class="chip multi" onclick="toggleChip(this)">Portada de destacados</div>
+            <div class="chip multi" onclick="toggleChip(this)">Flyer de promoción</div>
+            <div class="chip multi" onclick="toggleChip(this)">Carrusel (múltiples slides)</div>
+            <div class="chip multi" onclick="toggleChip(this)">Banner para web</div>
+            <div class="chip multi" onclick="toggleChip(this)">Miniatura YouTube</div>
+        </div>
+    </div>
+    <div class="field">
+        <label>¿Cuántas piezas en total?</label>
+        <select id="g-cantidad">
+            <option>1 pieza</option>
+            <option>2–3 piezas</option>
+            <option selected>4–6 piezas</option>
+            <option>7–10 piezas</option>
+            <option>Pack completo del mes</option>
+        </select>
+    </div>
+
+    <div class="section-title">Identidad de marca</div>
+    <div class="field-row">
+        <div class="field"><label>Colores principales <span>(HEX o descripción)</span></label><input type="text" id="g-colores" placeholder="Ej: #7C6FFF, #00D4AA, fondo blanco"></div>
+        <div class="field"><label>Tipografía / fuente</label><input type="text" id="g-fuente" placeholder="Ej: Poppins Bold para títulos, Roboto para texto"></div>
+    </div>
+    <div class="field"><label>¿Tiene kit de marca? <span>(logo, fuentes, paleta)</span></label>
+        <select id="g-kit">
+            <option selected>Sí — se lo mando adjunto</option>
+            <option>No todavía — usar referencias que indico</option>
+            <option>Sí, ya lo tiene Lara de otro pedido</option>
+        </select>
+    </div>
+
+    <div class="section-title">Contenido de las piezas</div>
+    <div class="field"><label>Tema / mensaje principal</label><textarea id="g-mensaje" placeholder="Ej: 'Promoción 20% descuento en servicio X', 'Presentación del negocio', 'Beneficios del producto Y'..."></textarea></div>
+    <div class="field"><label>Textos exactos a incluir <span>(títulos, subtítulos, precios si aplica)</span></label><textarea id="g-textos" placeholder="Título: ...\nSubtítulo: ...\nCTA: ...\nPrecio / dato: ..."></textarea></div>
+    <div class="field"><label>¿Incluye fotos del cliente?</label>
+        <select id="g-fotos">
+            <option selected>Sí — se las mando adjunto</option>
+            <option>No — usar imágenes de stock o ilustración</option>
+            <option>Mixto (foto + elementos gráficos)</option>
+        </select>
+    </div>
+    <div class="field"><label>Referencias visuales <span>(links, capturas o descripciones de lo que le gusta al cliente)</span></label><textarea id="g-refs" placeholder="Ej: 'Estilo similar al perfil de @marcaX', 'Colores oscuros y elegantes', 'Minimalista con mucho espacio blanco'..."></textarea></div>
+
+    <div class="section-title">Prioridad y notas</div>
+    <div class="field">
+        <label>Urgencia</label>
+        <div class="priority-chips">
+            <div class="priority-chip urgent" onclick="selectPriority(this,'g-prioridad','urgent')">🔴 Urgente (24–48h)</div>
+            <div class="priority-chip normal selected" onclick="selectPriority(this,'g-prioridad','normal')">🟡 Normal (3–5 días)</div>
+            <div class="priority-chip low" onclick="selectPriority(this,'g-prioridad','low')">🟢 Sin apuro (1 semana+)</div>
+        </div>
+        <input type="hidden" id="g-prioridad" value="Normal (3–5 días)">
+    </div>
+    <div class="field"><label>Notas adicionales</label><textarea id="g-notas" placeholder="Cualquier indicación extra..."></textarea></div>
+    <div class="section-title">💰 Costo Lara → presupuesto cliente</div>
+    <div class="cost-strip">
+        <label>Lara</label>
+        <input type="number" id="g-tarifa" min="0" step="500" placeholder="2000" oninput="calcCosto('g')">
+        <span class="cost-sep">×</span>
+        <input type="number" id="g-qty" min="1" value="5" style="width:50px" oninput="calcCosto('g')">
+        <span class="cost-sep">piezas =</span>
+        <span id="g-total-lara" class="cost-lara">—</span>
+        <span class="cost-sep">· margen</span>
+        <input type="number" id="g-margen" min="0" max="500" placeholder="20" oninput="calcCosto('g')">
+        <span class="cost-sep">%</span>
+        <span id="g-total-cliente" class="cost-presupuesto">—</span>
+    </div>
+    <button class="generate-btn" onclick="generateBrief('graficos')">✨ Generar brief para Lara</button>
+    <div class="output-wrap" id="output-graficos">
+        <div class="output-header">
+            <div><div class="output-header-title">Brief listo para enviar</div><div class="output-header-sub">Copiá el texto o mandalo directo por WhatsApp</div></div>
+            <div class="output-actions">
+                <button class="output-btn copy" onclick="copyOutput('output-graficos-text')">📋 Copiar</button>
+                <button class="output-btn whatsapp" onclick="sendWhatsApp('output-graficos-text')">💬 WhatsApp</button>
+            </div>
+        </div>
+        <div class="output-text" id="output-graficos-text"></div>
+    </div>
+</div>
+
+<!-- ═══ PACK COMPLETO ═══ -->
+<div class="page" id="page-pack">
+
+    <div class="section-title">Datos del cliente</div>
+    <div class="field-row">
+        <div class="field"><label>Nombre del negocio</label><input type="text" id="p-negocio" placeholder="Ej: Kaizen Studio"></div>
+        <div class="field"><label>Rubro</label><input type="text" id="p-rubro" placeholder="Ej: Micropigmentación"></div>
+    </div>
+    <div class="field-row">
+        <div class="field"><label>Ciudad</label><input type="text" id="p-ciudad" placeholder="Ej: Rosario, Santa Fe"></div>
+        <div class="field"><label>Etapa del proceso</label>
+            <select id="p-etapa">
+                <option>Etapa 0 — Identidad (kit de marca completo)</option>
+                <option>Etapa 1 — Presencia (setup de perfiles)</option>
+                <option>Etapa 2 — Captación (contenido + ads)</option>
+                <option>Etapa 3 — Sistemas</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="section-title">Kit de marca (completar lo que ya tenés definido)</div>
+    <div class="field-row">
+        <div class="field"><label>Colores principales <span>(HEX o nombre)</span></label><input type="text" id="p-colores" placeholder="Ej: violeta #7C6FFF, teal #00D4AA"></div>
+        <div class="field"><label>Tipografía</label><input type="text" id="p-fuente" placeholder="Ej: Poppins / Montserrat"></div>
+    </div>
+    <div class="field-row">
+        <div class="field"><label>Personalidad de marca</label><input type="text" id="p-personalidad" placeholder="Ej: elegante, moderno, femenino"></div>
+        <div class="field"><label>Público objetivo</label><input type="text" id="p-publico" placeholder="Ej: mujeres 25-45, profesionales"></div>
+    </div>
+    <div class="field"><label>Slogan / frase clave</label><input type="text" id="p-slogan" placeholder="Ej: 'Transformamos tu negocio con IA'"></div>
+
+    <div class="section-title">¿Qué necesitamos en este pedido?</div>
+    <div class="field">
+        <label>Piezas requeridas <span>(marcá todas las que aplican)</span></label>
+        <div class="chips" id="p-piezas">
+            <div class="chip multi" onclick="toggleChip(this)">Jingle / música del negocio</div>
+            <div class="chip multi" onclick="toggleChip(this)">Intro para videos</div>
+            <div class="chip multi" onclick="toggleChip(this)">Música de fondo</div>
+            <div class="chip multi" onclick="toggleChip(this)">Reel de presentación</div>
+            <div class="chip multi" onclick="toggleChip(this)">Pack de 9 posts iniciales</div>
+            <div class="chip multi" onclick="toggleChip(this)">Portadas de destacados</div>
+            <div class="chip multi" onclick="toggleChip(this)">Stories template</div>
+            <div class="chip multi" onclick="toggleChip(this)">Flyer de servicios</div>
+            <div class="chip multi" onclick="toggleChip(this)">Video de servicio/proceso</div>
+        </div>
+    </div>
+    <div class="field"><label>Material adjunto que se manda</label>
+        <textarea id="p-material" placeholder="Ej: 10 fotos del proceso de trabajo, 3 videos del resultado, logo en PNG, colores en archivo Canva..."></textarea>
+    </div>
+    <div class="field"><label>Referencias de estilo <span>(marcas, perfiles o videos que le gusten al cliente)</span></label>
+        <textarea id="p-refs" placeholder="Ej: 'Quiere algo similar al estilo de @marca_referencia, elegante y femenino, con predominio del violeta'"></textarea>
+    </div>
+
+    <div class="section-title">Prioridad</div>
+    <div class="field">
+        <div class="priority-chips">
+            <div class="priority-chip urgent" onclick="selectPriority(this,'p-prioridad','urgent')">🔴 Urgente (24–48h)</div>
+            <div class="priority-chip normal selected" onclick="selectPriority(this,'p-prioridad','normal')">🟡 Normal (3–5 días)</div>
+            <div class="priority-chip low" onclick="selectPriority(this,'p-prioridad','low')">🟢 Sin apuro (1 semana+)</div>
+        </div>
+        <input type="hidden" id="p-prioridad" value="Normal (3–5 días)">
+    </div>
+    <div class="field"><label>Notas finales</label><textarea id="p-notas" placeholder="Todo lo que Lara necesita saber que no entró en los campos anteriores..."></textarea></div>
+    <div class="section-title">💰 Costo Lara → presupuesto cliente</div>
+    <div class="cost-strip">
+        <label>Pack total Lara</label>
+        <input type="number" id="p-tarifa" min="0" step="1000" placeholder="50000" oninput="calcCosto('p')">
+        <input type="number" id="p-qty" value="1" style="display:none">
+        <span class="cost-sep">=</span>
+        <span id="p-total-lara" class="cost-lara">—</span>
+        <span class="cost-sep">· margen</span>
+        <input type="number" id="p-margen" min="0" max="500" placeholder="20" oninput="calcCosto('p')">
+        <span class="cost-sep">%</span>
+        <span id="p-total-cliente" class="cost-presupuesto">—</span>
+    </div>
+    <div class="field"><label>Condiciones de pago a Lara <span>(opcional)</span></label><input type="text" id="p-pago-notas" placeholder="Ej: 50% anticipo, 50% al entregar"></div>
+    <button class="generate-btn" onclick="generateBrief('pack')">✨ Generar brief completo para Lara</button>
+    <div class="output-wrap" id="output-pack">
+        <div class="output-header">
+            <div><div class="output-header-title">Brief completo listo para enviar</div><div class="output-header-sub">Copiá el texto o mandalo directo por WhatsApp</div></div>
+            <div class="output-actions">
+                <button class="output-btn copy" onclick="copyOutput('output-pack-text')">📋 Copiar</button>
+                <button class="output-btn whatsapp" onclick="sendWhatsApp('output-pack-text')">💬 WhatsApp</button>
+            </div>
+        </div>
+        <div class="output-text" id="output-pack-text"></div>
+    </div>
+</div>
+
+<div class="copied-toast" id="toast">✅ Copiado al portapapeles</div>
+
+<script>
+    // ── TAB NAVIGATION ──
+    function showTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById('page-' + tab).classList.add('active');
+    }
+
+    // ── CHIP LOGIC ──
+    function selectChip(el, groupId) {
+        document.querySelectorAll(`#${groupId} .chip`).forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+    function toggleChip(el) {
+        el.classList.toggle('selected');
+    }
+    function getSelectedChips(groupId) {
+        return Array.from(document.querySelectorAll(`#${groupId} .chip.selected`)).map(c => c.textContent.trim());
+    }
+
+    // ── PRIORITY ──
+    function selectPriority(el, hiddenId, type) {
+        const parent = el.parentElement;
+        parent.querySelectorAll('.priority-chip').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        const labels = { urgent: '🔴 Urgente (24–48hs)', normal: '🟡 Normal (3–5 días)', low: '🟢 Sin apuro (1 semana+)' };
+        document.getElementById(hiddenId).value = labels[type];
+    }
+
+    // ── LAURA PHONE ──
+    function saveLara(val) { localStorage.setItem('laraPhone', val); }
+
+    // ── TARIFAS ──
+    function saveTarifa(key, v) { localStorage.setItem('lt-' + key, v); }
+    function loadTarifas() {
+        const defaults = { musica: '8000', video: '15000', graficos: '2000', margen: '20' };
+        ['musica','video','graficos','margen'].forEach(k => {
+            const stored = localStorage.getItem('lt-' + k) || defaults[k];
+            const cfgEl = document.getElementById(k === 'margen' ? 'cfg-margen' : 'cfg-tarifa-' + k);
+            if (cfgEl) cfgEl.value = stored;
+        });
+        const applyTab = (prefix, category) => {
+            const t = document.getElementById(prefix + '-tarifa');
+            const mg = document.getElementById(prefix + '-margen');
+            if (t) t.value = localStorage.getItem('lt-' + category) || defaults[category];
+            if (mg) mg.value = localStorage.getItem('lt-margen') || defaults.margen;
+        };
+        applyTab('m', 'musica');
+        applyTab('v', 'video');
+        applyTab('g', 'graficos');
+        const pMg = document.getElementById('p-margen');
+        if (pMg) pMg.value = localStorage.getItem('lt-margen') || defaults.margen;
+        ['m','v','g','p'].forEach(calcCosto);
+    }
+    function calcCosto(prefix) {
+        const tarifa = parseFloat(document.getElementById(prefix + '-tarifa')?.value) || 0;
+        const qty = parseFloat(document.getElementById(prefix + '-qty')?.value) || 1;
+        const margen = parseFloat(document.getElementById(prefix + '-margen')?.value) || 0;
+        const totalLara = tarifa * qty;
+        const totalCliente = totalLara * (1 + margen / 100);
+        const fmt = n => n > 0 ? '$' + n.toFixed(2) + ' USD' : '—';
+        const lEl = document.getElementById(prefix + '-total-lara');
+        const cEl = document.getElementById(prefix + '-total-cliente');
+        if (lEl) lEl.textContent = fmt(totalLara);
+        if (cEl) cEl.textContent = fmt(totalCliente);
+    }
+
+    window.addEventListener('load', () => {
+        const saved = localStorage.getItem('laraPhone');
+        if (saved) document.getElementById('laraPhone').value = saved;
+        loadTarifas();
+    });
+
+    // ── GET VAL ──
+    function val(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+    // ── COPY ──
+    function copyOutput(id) {
+        const text = document.getElementById(id).textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            const t = document.getElementById('toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
+        });
+    }
+
+    // ── WHATSAPP ──
+    function sendWhatsApp(textId) {
+        const phone = document.getElementById('laraPhone').value.replace(/\D/g,'');
+        if (!phone) { alert('Primero ingresá el número de WhatsApp de Lara arriba.'); return; }
+        const text = document.getElementById(textId).textContent;
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    // ── DATE ──
+    function today() {
+        return new Date().toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' });
+    }
+
+    // ══════════════════════════════════════════
+    //  GENERADORES DE BRIEF
+    // ══════════════════════════════════════════
+    function generateBrief(type) {
+        let text = '';
+        const sep = '─'.repeat(38);
+
+        if (type === 'musica') {
+            const negocio    = val('m-negocio') || '(sin nombre)';
+            const rubro      = val('m-rubro');
+            const tipo       = getSelectedChips('m-tipo').join(', ') || '—';
+            const personal   = getSelectedChips('m-personalidad').join(', ') || '—';
+            const colores    = val('m-colores') || '—';
+            const publico    = val('m-publico') || '—';
+            const estilo     = getSelectedChips('m-estilo').join(', ') || '—';
+            const duracion   = val('m-duracion');
+            const letra      = val('m-letra');
+            const formato    = val('m-formato');
+            const refs       = val('m-refs') || '—';
+            const slogan     = val('m-slogan') || '—';
+            const prioridad  = val('m-prioridad');
+            const notas      = val('m-notas') || '—';
+
+            const mTarifa = parseFloat(document.getElementById('m-tarifa')?.value) || 0;
+            const mQty    = parseFloat(document.getElementById('m-qty')?.value) || 1;
+            const mMargen = parseFloat(document.getElementById('m-margen')?.value) || 0;
+            const mTotalL = mTarifa * mQty;
+            const mTotalC = mTotalL * (1 + mMargen / 100);
+            const mCosto  = mTarifa > 0
+                ? `\n💰 PRESUPUESTO MULTIMEDIA
+${sep}
+Producción: ${tipo}
+Tarifa Lara: $${mTarifa.toFixed(2)} USD × ${mQty} pieza/s = $${mTotalL.toFixed(2)} USD
+Margen gestión (${mMargen}%): $${(mTotalC - mTotalL).toFixed(2)} USD
+─────────────────────────────────────
+▶ LÍNEA EN PRESUPUESTO CLIENTE: $${mTotalC.toFixed(2)} USD
+  (Ítem: "Producción multimedia — Audio/Jingle")\n` : '';
+
+            text = `🎵 PEDIDO DE MÚSICA / AUDIO
+${sep}
+📅 Fecha: ${today()}
+⚡ Prioridad: ${prioridad}
+${sep}
+
+🏢 CLIENTE
+Negocio: ${negocio}${rubro ? `\nRubro: ${rubro}` : ''}
+
+🎯 QUÉ NECESITAMOS
+Tipo de pieza: ${tipo}
+Duración: ${duracion}
+Letra / voz: ${letra}
+Formato de entrega: ${formato}
+
+🎨 IDENTIDAD DE MARCA
+Personalidad: ${personal}
+Colores de referencia: ${colores}
+Público objetivo: ${publico}
+Slogan / frase: ${slogan}
+
+🎼 ESTILO MUSICAL
+Géneros / referencias: ${estilo}
+Referencias concretas: ${refs}
+
+📝 NOTAS ADICIONALES
+${notas}
+${mCosto}${sep}
+Generado con PulsoIA · pedido-multimedia`;
+        }
+
+        if (type === 'video') {
+            const negocio    = val('v-negocio') || '(sin nombre)';
+            const rubro      = val('v-rubro');
+            const tipo       = getSelectedChips('v-tipo').join(', ') || '—';
+            const plataforma = getSelectedChips('v-plataforma').join(', ') || '—';
+            const duracion   = val('v-duracion');
+            const orientacion= val('v-orientacion');
+            const calidad    = val('v-calidad');
+            const material   = getSelectedChips('v-material').join(', ') || '—';
+            const matDesc    = val('v-material-desc') || '—';
+            const estilo     = getSelectedChips('v-estilo').join(', ') || '—';
+            const titulo     = val('v-titulo') || '—';
+            const subtitulos = val('v-subtitulos');
+            const cta        = val('v-cta') || '—';
+            const musica     = val('v-musica') || 'Usar jingle del negocio';
+            const prioridad  = val('v-prioridad');
+            const notas      = val('v-notas') || '—';
+
+            const vTarifa = parseFloat(document.getElementById('v-tarifa')?.value) || 0;
+            const vQty    = parseFloat(document.getElementById('v-qty')?.value) || 1;
+            const vMargen = parseFloat(document.getElementById('v-margen')?.value) || 0;
+            const vTotalL = vTarifa * vQty;
+            const vTotalC = vTotalL * (1 + vMargen / 100);
+            const vCosto  = vTarifa > 0
+                ? `\n💰 PRESUPUESTO MULTIMEDIA
+${sep}
+Producción: ${tipo}
+Tarifa Lara: $${vTarifa.toFixed(2)} USD × ${vQty} video/s = $${vTotalL.toFixed(2)} USD
+Margen gestión (${vMargen}%): $${(vTotalC - vTotalL).toFixed(2)} USD
+─────────────────────────────────────
+▶ LÍNEA EN PRESUPUESTO CLIENTE: $${vTotalC.toFixed(2)} USD
+  (Ítem: "Producción multimedia — Video/Reels")\n` : '';
+
+            text = `🎬 PEDIDO DE VIDEO / REELS
+${sep}
+📅 Fecha: ${today()}
+⚡ Prioridad: ${prioridad}
+${sep}
+
+🏢 CLIENTE
+Negocio: ${negocio}${rubro ? `\nRubro: ${rubro}` : ''}
+
+🎯 QUÉ NECESITAMOS
+Tipo de video: ${tipo}
+Plataforma/s: ${plataforma}
+Duración: ${duracion}
+Orientación: ${orientacion}
+Ritmo/velocidad: ${calidad}
+
+📦 MATERIAL ADJUNTO
+Qué se manda: ${material}
+Descripción del material: ${matDesc}
+
+🎨 ESTILO Y CONTENIDO
+Estilo visual: ${estilo}
+Título / texto principal: ${titulo}
+Subtítulos: ${subtitulos}
+CTA al final: ${cta}
+Música: ${musica}
+
+📝 NOTAS ADICIONALES
+${notas}
+${vCosto}${sep}
+Generado con PulsoIA · pedido-multimedia`;
+        }
+
+        if (type === 'graficos') {
+            const negocio  = val('g-negocio') || '(sin nombre)';
+            const rubro    = val('g-rubro');
+            const tipo     = getSelectedChips('g-tipo').join(', ') || '—';
+            const cantidad = val('g-cantidad');
+            const colores  = val('g-colores') || '—';
+            const fuente   = val('g-fuente') || '—';
+            const kit      = val('g-kit');
+            const mensaje  = val('g-mensaje') || '—';
+            const textos   = val('g-textos') || '—';
+            const fotos    = val('g-fotos');
+            const refs     = val('g-refs') || '—';
+            const prioridad= val('g-prioridad');
+            const notas    = val('g-notas') || '—';
+
+            const gTarifa = parseFloat(document.getElementById('g-tarifa')?.value) || 0;
+            const gQty    = parseFloat(document.getElementById('g-qty')?.value) || 1;
+            const gMargen = parseFloat(document.getElementById('g-margen')?.value) || 0;
+            const gTotalL = gTarifa * gQty;
+            const gTotalC = gTotalL * (1 + gMargen / 100);
+            const gCosto  = gTarifa > 0
+                ? `\n💰 PRESUPUESTO MULTIMEDIA
+${sep}
+Producción: ${tipo}
+Tarifa Lara: $${gTarifa.toFixed(2)} USD × ${gQty} pieza/s = $${gTotalL.toFixed(2)} USD
+Margen gestión (${gMargen}%): $${(gTotalC - gTotalL).toFixed(2)} USD
+─────────────────────────────────────
+▶ LÍNEA EN PRESUPUESTO CLIENTE: $${gTotalC.toFixed(2)} USD
+  (Ítem: "Producción multimedia — Gráficos/Posts")\n` : '';
+
+            text = `🖼️ PEDIDO DE GRÁFICOS / POSTS
+${sep}
+📅 Fecha: ${today()}
+⚡ Prioridad: ${prioridad}
+${sep}
+
+🏢 CLIENTE
+Negocio: ${negocio}${rubro ? `\nRubro: ${rubro}` : ''}
+
+🎯 QUÉ NECESITAMOS
+Piezas: ${tipo}
+Cantidad: ${cantidad}
+
+🎨 IDENTIDAD DE MARCA
+Colores: ${colores}
+Tipografía: ${fuente}
+Kit de marca: ${kit}
+
+✍️ CONTENIDO
+Tema / mensaje: ${mensaje}
+Textos a incluir:
+${textos}
+Fotos del cliente: ${fotos}
+Referencias visuales: ${refs}
+
+📝 NOTAS ADICIONALES
+${notas}
+${gCosto}${sep}
+Generado con PulsoIA · pedido-multimedia`;
+        }
+
+        if (type === 'pack') {
+            const negocio    = val('p-negocio') || '(sin nombre)';
+            const rubro      = val('p-rubro');
+            const ciudad     = val('p-ciudad');
+            const etapa      = val('p-etapa');
+            const colores    = val('p-colores') || '—';
+            const fuente     = val('p-fuente') || '—';
+            const personal   = val('p-personalidad') || '—';
+            const publico    = val('p-publico') || '—';
+            const slogan     = val('p-slogan') || '—';
+            const piezas     = getSelectedChips('p-piezas').join('\n  • ') || '—';
+            const material   = val('p-material') || '—';
+            const refs       = val('p-refs') || '—';
+            const prioridad  = val('p-prioridad');
+            const notas      = val('p-notas') || '—';
+
+            const pTarifa = parseFloat(document.getElementById('p-tarifa')?.value) || 0;
+            const pMargen = parseFloat(document.getElementById('p-margen')?.value) || 0;
+            const pTotalL = pTarifa;
+            const pTotalC = pTotalL * (1 + pMargen / 100);
+            const pPagoNotas = val('p-pago-notas');
+            const pCosto  = pTarifa > 0
+                ? `\n💰 PRESUPUESTO MULTIMEDIA
+${sep}
+Pack: ${etapa}
+Piezas incluidas:
+  • ${piezas}
+Costo total Lara: $${pTotalL.toFixed(2)} USD
+Margen gestión (${pMargen}%): $${(pTotalC - pTotalL).toFixed(2)} USD${pPagoNotas ? `\nCondiciones de pago: ${pPagoNotas}` : ''}
+─────────────────────────────────────
+▶ LÍNEA EN PRESUPUESTO CLIENTE: $${pTotalC.toFixed(2)} USD
+  (Ítem: "Producción multimedia — Pack completo")\n` : '';
+
+            text = `📦 PEDIDO PACK COMPLETO
+${sep}
+📅 Fecha: ${today()}
+⚡ Prioridad: ${prioridad}
+${sep}
+
+🏢 CLIENTE
+Negocio: ${negocio}${rubro ? `\nRubro: ${rubro}` : ''}${ciudad ? `\nCiudad: ${ciudad}` : ''}
+Etapa actual: ${etapa}
+
+🎨 KIT DE MARCA
+Colores: ${colores}
+Tipografía: ${fuente}
+Personalidad: ${personal}
+Público objetivo: ${publico}
+Slogan: ${slogan}
+
+🎯 PIEZAS REQUERIDAS
+  • ${piezas}
+
+📦 MATERIAL ADJUNTO
+${material}
+
+🔍 REFERENCIAS DE ESTILO
+${refs}
+
+📝 NOTAS FINALES
+${notas}
+${pCosto}${sep}
+Generado con PulsoIA · pedido-multimedia`;
+        }
+
+        const outputWrap = document.getElementById(`output-${type}`);
+        const outputText = document.getElementById(`output-${type}-text`);
+        outputText.textContent = text;
+        outputWrap.classList.add('visible');
+        outputWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+</script>
+</body>
+</html>
