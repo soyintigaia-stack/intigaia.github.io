@@ -650,7 +650,8 @@
         <div class="autocomplete-wrap">
             <input type="text" id="inputCiudad" placeholder="Ej: Buenos Aires" autocomplete="off"
                 oninput="onCiudadInput(this.value)"
-                onkeydown="onCiudadKeydown(event)">
+                onkeydown="onCiudadKeydown(event)"
+                onblur="onCiudadBlur()">
             <div class="autocomplete-list hidden" id="ciudadDropdown"></div>
         </div>
     </div>
@@ -1363,6 +1364,14 @@ function onCiudadInput(val) {
 }
 
 async function fetchCiudades(q) { /* no-op, kept for compatibility */ }
+
+function onCiudadBlur() {
+    // delay para permitir que el onmousedown de un item se dispare antes de ocultar
+    setTimeout(() => {
+        const drop = document.getElementById('ciudadDropdown');
+        if (drop) { drop.classList.add('hidden'); drop.innerHTML = ''; }
+    }, 200);
+}
 
 function selectCiudad(idx) {
     const r = _ciudadResults[idx];
