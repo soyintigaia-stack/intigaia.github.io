@@ -1211,6 +1211,29 @@ function buildReport() {
     `).join('');
 
     showScreen('screen-report');
+    sendDiagnosticoEmail(state, totalScore, label, normScores);
+}
+
+function sendDiagnosticoEmail(state, totalScore, label, normScores) {
+    const WEB3FORMS_KEY = 'TU_ACCESS_KEY_AQUI';
+    if (WEB3FORMS_KEY === 'TU_ACCESS_KEY_AQUI') return;
+
+    const moduloLineas = MODULES.map((m, i) => `${m.emoji} ${m.name}: ${normScores[i]}/20`).join('\n');
+
+    fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            access_key: WEB3FORMS_KEY,
+            subject: `PulsoIA — Nuevo diagnóstico: ${state.negocio} (${totalScore}/100)`,
+            from_name: 'PulsoIA',
+            negocio: state.negocio,
+            rubro: state.rubro,
+            ciudad: state.ciudad,
+            puntaje: `${totalScore}/100 — ${label}`,
+            modulos: moduloLineas
+        })
+    }).catch(() => {});
 }
 
 function animateNumber(id, from, to, duration) {
