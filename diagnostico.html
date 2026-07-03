@@ -1288,8 +1288,43 @@ function retryDiagnostico() {
 }
 
 // ============================================================
-// AUTOCOMPLETE CIUDAD (OpenStreetMap Nominatim)
+// AUTOCOMPLETE CIUDAD (lista local Argentina)
 // ============================================================
+const CIUDADES_AR = [
+    'Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata',
+    'Salta','Santa Fe','San Juan','Resistencia','Santiago del Estero','Corrientes',
+    'Posadas','Neuquén','San Salvador de Jujuy','Bahía Blanca','Paraná','Formosa',
+    'San Luis','Río Cuarto','Santa Rosa','Comodoro Rivadavia','Rawson','Viedma',
+    'Ushuaia','Río Gallegos','San Fernando del Valle de Catamarca','La Rioja',
+    'Concordia','San Nicolás de los Arroyos','Tandil','Zárate','Junín','Olavarría',
+    'General Roca','Cipolletti','Reconquista','Oberá','Eldorado','Apóstoles',
+    'Villa María','Villa Carlos Paz','Río Tercero','Alta Gracia','Cruz del Eje',
+    'San Rafael','Luján de Cuyo','Godoy Cruz','Maipú','Las Heras','Rivadavia',
+    'San Martín','Guaymallén','Capilla del Monte','Villa Dolores',
+    'Tartagal','General Güemes','Orán','Metán','Cafayate','Tilcara',
+    'Palpalá','El Carmen','Perico','Humahuaca','La Quiaca',
+    'Presidencia Roque Sáenz Peña','Villa Ángela','Barranqueras','Fontana',
+    'Pirané','Clorinda','Las Lomitas','Ingeniero Juárez',
+    'Goya','Curuzú Cuatiá','Mercedes','Paso de los Libres','Ituzaingó',
+    'Oberá','Apóstoles','Leandro N. Alem','Montecarlo','Puerto Iguazú',
+    'San Pedro','General Pico','Santa Rosa','Realicó','Victorica',
+    'Bariloche','Cipolletti','Centenario','Plottier','Cutral Có','Plaza Huincul',
+    'Trelew','Puerto Madryn','Comodoro Rivadavia','Esquel','Rada Tilly',
+    'Caleta Olivia','Puerto Deseado','Perito Moreno','Los Antiguos',
+    'La Quiaca','Chilecito','Aimogasta','Chepes',
+    'Merlo','San Luis','Villa Mercedes',
+    'Venado Tuerto','Rafaela','Santo Tomé','Casilda','Cañada de Gómez',
+    'San Lorenzo','Villa Gobernador Gálvez','Gálvez','Esperanza',
+    'Diamante','Gualeguaychú','Gualeguay','Colón','Villaguay','Federación',
+    'Quilmes','Lanús','Lomas de Zamora','Morón','San Isidro','Vicente López',
+    'Tigre','San Martín','Tres de Febrero','Merlo','Moreno','La Matanza',
+    'Esteban Echeverría','Almirante Brown','Florencio Varela','Berazategui',
+    'Avellaneda','Lomas de Zamora','Longchamps','San Vicente','Cañuelas',
+    'Pilar','Campana','San Pedro','Pergamino','Azul','Necochea','Miramar',
+    'Pinamar','Villa Gesell','Monte Hermoso','Punta Alta','Coronel Rosales',
+    'Tres Arroyos','Benito Juárez','Lobería','Balcarce','General Pueyrredón',
+];
+
 let _ciudadTimer = null;
 let _ciudadResults = [];
 let _ciudadIndex = -1;
@@ -1299,55 +1334,35 @@ function onCiudadInput(val) {
     _ciudadIndex = -1;
     const drop = document.getElementById('ciudadDropdown');
 
-    if (val.trim().length < 2) {
+    const q = val.trim();
+    if (q.length < 2) {
         drop.classList.add('hidden');
         drop.innerHTML = '';
         return;
     }
 
-    drop.innerHTML = '<div class="autocomplete-loading">Buscando...</div>';
-    drop.classList.remove('hidden');
+    const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const qn = norm(q);
+    _ciudadResults = CIUDADES_AR
+        .filter(c => norm(c).includes(qn))
+        .slice(0, 6)
+        .map(c => ({ main: c, full: c }));
 
-    _ciudadTimer = setTimeout(() => fetchCiudades(val.trim()), 350);
-}
-
-async function fetchCiudades(q) {
-    const drop = document.getElementById('ciudadDropdown');
-    try {
-        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&addressdetails=1&limit=6&featuretype=city,town,village,suburb`;
-        const res = await fetch(url, { headers: { 'Accept-Language': 'es' } });
-        const data = await res.json();
-
-        _ciudadResults = data
-            .filter(r => r.address && (r.address.city || r.address.town || r.address.village || r.address.suburb || r.address.municipality))
-            .slice(0, 5)
-            .map(r => {
-                const a = r.address;
-                const city = a.city || a.town || a.village || a.suburb || a.municipality || '';
-                const state = a.state || a.region || '';
-                const country = a.country || '';
-                return {
-                    main: city,
-                    sub: [state, country].filter(Boolean).join(', '),
-                    full: [city, state, country].filter(Boolean).join(', '),
-                };
-            });
-
-        if (_ciudadResults.length === 0) {
-            drop.innerHTML = '<div class="autocomplete-loading">Sin resultados — escribí el nombre completo</div>';
-            return;
-        }
-
-        drop.innerHTML = _ciudadResults.map((r, i) => `
-            <div class="autocomplete-item" data-idx="${i}" onmousedown="selectCiudad(${i})">
-                <div class="autocomplete-item-main">${r.main}</div>
-                <div class="autocomplete-item-sub">${r.sub}</div>
-            </div>
-        `).join('');
-    } catch {
-        drop.innerHTML = '<div class="autocomplete-loading">Error de red — escribí la ubicación manualmente</div>';
+    if (_ciudadResults.length === 0) {
+        drop.innerHTML = '<div class="autocomplete-loading">No encontrada — podés escribir el nombre igual</div>';
+        drop.classList.remove('hidden');
+        return;
     }
+
+    drop.innerHTML = _ciudadResults.map((r, i) => `
+        <div class="autocomplete-item" data-idx="${i}" onmousedown="selectCiudad(${i})">
+            <div class="autocomplete-item-main">${r.main}</div>
+        </div>
+    `).join('');
+    drop.classList.remove('hidden');
 }
+
+async function fetchCiudades(q) { /* no-op, kept for compatibility */ }
 
 function selectCiudad(idx) {
     const r = _ciudadResults[idx];
