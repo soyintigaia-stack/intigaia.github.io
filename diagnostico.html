@@ -1215,7 +1215,7 @@ function buildReport() {
 }
 
 function sendDiagnosticoEmail(state, totalScore, label, normScores) {
-    const WEB3FORMS_KEY = 'TU_ACCESS_KEY_AQUI';
+    const WEB3FORMS_KEY = 'f39c2813-2e00-465e-bdeb-7887af53ef59';
     if (WEB3FORMS_KEY === 'TU_ACCESS_KEY_AQUI') return;
 
     const moduloLineas = MODULES.map((m, i) => `${m.emoji} ${m.name}: ${normScores[i]}/20`).join('\n');
