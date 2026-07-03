@@ -1211,14 +1211,16 @@ function buildReport() {
     `).join('');
 
     showScreen('screen-report');
-    sendDiagnosticoEmail(state, totalScore, label, normScores);
+    const roadmapKey = totalScore < 40 ? 'low' : totalScore < 70 ? 'mid' : 'high';
+    sendDiagnosticoEmail(state, totalScore, label, normScores, ROADMAP_BY_SCORE[roadmapKey]);
 }
 
-function sendDiagnosticoEmail(state, totalScore, label, normScores) {
+function sendDiagnosticoEmail(state, totalScore, label, normScores, roadmap) {
     const WEB3FORMS_KEY = 'f39c2813-2e00-465e-bdeb-7887af53ef59';
     if (WEB3FORMS_KEY === 'TU_ACCESS_KEY_AQUI') return;
 
     const moduloLineas = MODULES.map((m, i) => `${m.emoji} ${m.name}: ${normScores[i]}/20`).join('\n');
+    const roadmapLineas = roadmap.map(r => `${r.mes}: ${r.title}\n${r.desc}`).join('\n\n');
 
     const mensaje = `Negocio: ${state.negocio}
 Rubro: ${state.rubro}
@@ -1226,7 +1228,10 @@ Ciudad: ${state.ciudad}
 Puntaje: ${totalScore}/100 — ${label}
 
 Módulos:
-${moduloLineas}`;
+${moduloLineas}
+
+Propuesta de trabajo:
+${roadmapLineas}`;
 
     fetch('https://api.web3forms.com/submit', {
         method: 'POST',
