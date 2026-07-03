@@ -1220,20 +1220,30 @@ function sendDiagnosticoEmail(state, totalScore, label, normScores) {
 
     const moduloLineas = MODULES.map((m, i) => `${m.emoji} ${m.name}: ${normScores[i]}/20`).join('\n');
 
+    const mensaje = `Negocio: ${state.negocio}
+Rubro: ${state.rubro}
+Ciudad: ${state.ciudad}
+Puntaje: ${totalScore}/100 — ${label}
+
+Módulos:
+${moduloLineas}`;
+
     fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
         body: JSON.stringify({
             access_key: WEB3FORMS_KEY,
-            subject: `PulsoIA — Nuevo diagnóstico: ${state.negocio} (${totalScore}/100)`,
-            from_name: 'PulsoIA',
-            negocio: state.negocio,
-            rubro: state.rubro,
-            ciudad: state.ciudad,
-            puntaje: `${totalScore}/100 — ${label}`,
-            modulos: moduloLineas
+            subject: `PulsoIA — ${state.negocio} · ${totalScore}/100 (${label})`,
+            from_name: 'PulsoIA Diagnóstico',
+            message: mensaje
         })
-    }).catch(() => {});
+    })
+    .then(r => r.json())
+    .then(data => { if (!data.success) console.warn('Web3Forms:', data); })
+    .catch(e => console.warn('Email error:', e));
 }
 
 function animateNumber(id, from, to, duration) {
