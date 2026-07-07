@@ -213,16 +213,16 @@
         /* Autocomplete ciudad */
         .autocomplete-wrap { position: relative; width: 100%; }
         .autocomplete-list {
-            position: absolute;
-            top: calc(100% + 4px);
-            left: 0; right: 0;
+            position: relative;
+            width: 100%;
+            margin-top: 4px;
             background: var(--white);
             border: 2px solid var(--purple);
             border-radius: 14px;
             overflow: hidden;
             box-shadow: 0 8px 24px rgba(0,0,0,0.12);
             z-index: 200;
-            max-height: 240px;
+            max-height: 180px;
             overflow-y: auto;
         }
         .autocomplete-list.hidden { display: none; }
@@ -1212,7 +1212,6 @@ function buildReport() {
     `).join('');
 
     showScreen('screen-report');
-    const roadmapKey = totalScore < 40 ? 'low' : totalScore < 70 ? 'mid' : 'high';
     sendDiagnosticoEmail(state, totalScore, label, normScores, ROADMAP_BY_SCORE[roadmapKey]);
 }
 
@@ -1406,11 +1405,14 @@ function onCiudadKeydown(e) {
     items.forEach((el, i) => el.classList.toggle('active', i === _ciudadIndex));
 }
 
-// Cerrar dropdown al hacer clic fuera
+// Cerrar dropdown al clickear fuera. Se usa 'click' (no 'pointerdown') a
+// propósito: el dropdown ocupa flujo normal (no absolute), así que cerrarlo
+// reacomoda el layout — si lo hiciéramos en pointerdown, el botón de abajo
+// se movería a mitad del gesto de tap y el click fallaría el blanco.
 document.addEventListener('click', e => {
     if (!e.target.closest('.autocomplete-wrap')) {
         const drop = document.getElementById('ciudadDropdown');
-        if (drop) drop.classList.add('hidden');
+        if (drop) { drop.classList.add('hidden'); drop.innerHTML = ''; }
     }
 });
 
