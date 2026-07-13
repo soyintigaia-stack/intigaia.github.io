@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PulsoIA — Tu Diagnóstico</title>
+    <title>Diagnóstico Soledad Cardoni — Tu Diagnóstico</title>
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#7C6FFF">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -744,7 +744,7 @@
         <div class="cta-card">
             <h3>¿Querés implementar este plan?</h3>
             <p>Puedo ayudarte a ejecutar cada paso — desde la presencia digital hasta la automatización completa de tu negocio.</p>
-            <a href="https://wa.me/5493512692890?text=Hola,%20hice%20el%20diagn%C3%B3stico%20PulsoIA%20y%20quiero%20saber%20m%C3%A1s" target="_blank">Agendar consulta gratuita →</a>
+            <a href="https://wa.me/5493512692890?text=Hola,%20hice%20el%20Diagn%C3%B3stico%20Soledad%20Cardoni%20y%20quiero%20saber%20m%C3%A1s" target="_blank">Agendar consulta gratuita →</a>
             <span class="retry-link" onclick="retryDiagnostico()">Volver a hacer el diagnóstico</span>
         </div>
 
@@ -1241,8 +1241,8 @@ ${roadmapLineas}`;
         },
         body: JSON.stringify({
             access_key: WEB3FORMS_KEY,
-            subject: `PulsoIA — ${state.negocio} · ${totalScore}/100 (${label})`,
-            from_name: 'PulsoIA Diagnóstico',
+            subject: `Diagnóstico Soledad Cardoni — ${state.negocio} · ${totalScore}/100 (${label})`,
+            from_name: 'Diagnóstico Soledad Cardoni',
             message: mensaje
         })
     })
@@ -1269,7 +1269,7 @@ function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 function shareReport() {
     if (navigator.share) {
         navigator.share({
-            title: 'Mi reporte PulsoIA — ' + state.negocio,
+            title: 'Mi reporte Diagnóstico Soledad Cardoni — ' + state.negocio,
             text: 'Hice el diagnóstico de eficiencia de mi negocio. ¡Mirá los resultados!',
             url: window.location.href,
         }).catch(() => {});
