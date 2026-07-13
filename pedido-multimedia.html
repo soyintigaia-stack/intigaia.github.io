@@ -7,10 +7,10 @@
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --purple: #7C6FFF;
+            --purple: #C4622D;
             --teal: #00D4AA;
-            --navy: #0F1224;
-            --navy-mid: #1A1F4C;
+            --navy: #0F0F0E;
+            --navy-mid: #1C1C1A;
             --text: #1A1F3C;
             --muted: #6B7280;
             --bg: #F5F7FF;
@@ -81,7 +81,7 @@
         }
         .field input:focus, .field select:focus, .field textarea:focus {
             outline: none; border-color: var(--purple);
-            box-shadow: 0 0 0 3px rgba(124,111,255,0.1);
+            box-shadow: 0 0 0 3px rgba(196,98,45,0.1);
         }
         .field textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
         .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -96,7 +96,7 @@
         }
         .chip:hover { border-color: var(--purple); color: var(--purple); }
         .chip.selected { background: var(--purple); border-color: var(--purple); color: white; }
-        .chip.multi.selected { background: rgba(124,111,255,0.1); border-color: var(--purple); color: var(--purple); }
+        .chip.multi.selected { background: rgba(196,98,45,0.1); border-color: var(--purple); color: var(--purple); }
 
         /* PRIORITY */
         .priority-chips { display: flex; gap: 8px; }
@@ -114,16 +114,16 @@
             width: 100%; padding: 16px; background: var(--purple); color: white;
             border: none; border-radius: 14px; font-size: 16px; font-weight: 700;
             font-family: inherit; cursor: pointer; margin-top: 12px;
-            box-shadow: 0 4px 20px rgba(124,111,255,0.35);
+            box-shadow: 0 4px 20px rgba(196,98,45,0.35);
             transition: transform 0.15s, box-shadow 0.15s;
         }
-        .generate-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(124,111,255,0.45); }
+        .generate-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(196,98,45,0.45); }
 
         /* OUTPUT */
         .output-wrap {
             display: none; margin-top: 24px;
             background: var(--white); border-radius: 16px;
-            border: 2px solid rgba(124,111,255,0.2);
+            border: 2px solid rgba(196,98,45,0.2);
             overflow: hidden;
         }
         .output-wrap.visible { display: block; }
@@ -607,7 +607,7 @@
 
     <div class="section-title">Identidad de marca</div>
     <div class="field-row">
-        <div class="field"><label>Colores principales <span>(HEX o descripción)</span></label><input type="text" id="g-colores" placeholder="Ej: #7C6FFF, #00D4AA, fondo blanco"></div>
+        <div class="field"><label>Colores principales <span>(HEX o descripción)</span></label><input type="text" id="g-colores" placeholder="Ej: #C4622D, #00D4AA, fondo blanco"></div>
         <div class="field"><label>Tipografía / fuente</label><input type="text" id="g-fuente" placeholder="Ej: Poppins Bold para títulos, Roboto para texto"></div>
     </div>
     <div class="field"><label>¿Tiene kit de marca? <span>(logo, fuentes, paleta)</span></label>
@@ -689,7 +689,7 @@
 
     <div class="section-title">Kit de marca (completar lo que ya tenés definido)</div>
     <div class="field-row">
-        <div class="field"><label>Colores principales <span>(HEX o nombre)</span></label><input type="text" id="p-colores" placeholder="Ej: violeta #7C6FFF, teal #00D4AA"></div>
+        <div class="field"><label>Colores principales <span>(HEX o nombre)</span></label><input type="text" id="p-colores" placeholder="Ej: naranja #C4622D, teal #00D4AA"></div>
         <div class="field"><label>Tipografía</label><input type="text" id="p-fuente" placeholder="Ej: Poppins / Montserrat"></div>
     </div>
     <div class="field-row">

@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manual Operativo — Diagnóstico Soledad Cardoni</title>
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#7C6FFF">
+    <meta name="theme-color" content="#0F0F0E">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --purple: #7C6FFF;
+            --purple: #C4622D;
             --teal: #00D4AA;
-            --navy: #0F1224;
-            --navy-mid: #1A1F4C;
+            --navy: #0F0F0E;
+            --navy-mid: #1C1C1A;
             --text: #1A1F3C;
             --muted: #6B7280;
             --bg: #F5F7FF;
@@ -26,9 +26,7 @@
             --e0: #9CA3AF;
             --e1: #F59E0B;
             --e2: #F43F5E;
-            --e3: #7C6FFF;
-            --e4-a: #7C6FFF;
-            --e4-b: #00D4AA;
+            --e3: #3B82F6;
         }
 
         body {
@@ -53,7 +51,7 @@
 
         /* PORTADA */
         .cover {
-            background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 60%, #2D1B69 100%);
+            background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 60%, #1C1C1A 100%);
             color: white;
             padding: 64px 24px 72px;
             text-align: center;
@@ -63,7 +61,7 @@
         .cover::before {
             content: ''; position: absolute; top: -80px; right: -80px;
             width: 360px; height: 360px;
-            background: radial-gradient(circle, rgba(124,111,255,0.15), transparent 70%);
+            background: radial-gradient(circle, rgba(196,98,45,0.15), transparent 70%);
             pointer-events: none;
         }
         .cover-tag {
@@ -109,7 +107,7 @@
             background: var(--bg); text-decoration: none; color: var(--text);
             font-size: 13px; font-weight: 600; transition: background 0.15s;
         }
-        .toc-item:hover { background: rgba(124,111,255,0.08); }
+        .toc-item:hover { background: rgba(196,98,45,0.08); }
         .toc-num {
             width: 24px; height: 24px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
@@ -195,7 +193,7 @@
             padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;
             color: var(--text);
         }
-        .step-tool.ai { background: rgba(124,111,255,0.08); border-color: rgba(124,111,255,0.2); color: var(--purple); }
+        .step-tool.ai { background: rgba(196,98,45,0.08); border-color: rgba(196,98,45,0.2); color: var(--purple); }
         .step-tool.free { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.2); color: #059669; }
         .step-zone {
             display: inline-flex; align-items: center; gap: 5px;
@@ -204,7 +202,7 @@
         }
         .zone-ia   { background: rgba(0,212,170,0.1); color: #059669; }
         .zone-cli  { background: rgba(245,158,11,0.1); color: #D97706; }
-        .zone-cons { background: rgba(124,111,255,0.1); color: var(--purple); }
+        .zone-cons { background: rgba(196,98,45,0.1); color: var(--purple); }
 
         /* TOOLS GRID */
         .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
@@ -257,7 +255,7 @@
             border-radius: 12px; font-size: 14px; line-height: 1.6;
             margin: 20px 0;
         }
-        .alert.info  { background: rgba(124,111,255,0.07); border: 1px solid rgba(124,111,255,0.2); color: var(--text); }
+        .alert.info  { background: rgba(196,98,45,0.07); border: 1px solid rgba(196,98,45,0.2); color: var(--text); }
         .alert.warn  { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2); color: var(--text); }
         .alert.tip   { background: rgba(0,212,170,0.07); border: 1px solid rgba(0,212,170,0.2); color: var(--text); }
         .alert-icon { font-size: 20px; flex-shrink: 0; }
@@ -1112,7 +1110,7 @@
 <div class="container">
 <div class="stage-header">
     <div class="stage-meta">
-        <div class="stage-badge" style="background:rgba(124,111,255,0.1);color:var(--purple)">Etapa 3</div>
+        <div class="stage-badge" style="background:rgba(196,98,45,0.1);color:var(--purple)">Etapa 3</div>
         <div class="stage-score">Score 66–80</div>
         <div class="stage-timeline">⏱️ 3–6 semanas</div>
     </div>
@@ -1282,7 +1280,7 @@
 <div class="container">
 <div class="stage-header">
     <div class="stage-meta">
-        <div class="stage-badge" style="background:linear-gradient(135deg,rgba(124,111,255,0.15),rgba(0,212,170,0.15));color:var(--purple)">Etapa 4</div>
+        <div class="stage-badge" style="background:linear-gradient(135deg,rgba(196,98,45,0.15),rgba(0,212,170,0.15));color:var(--purple)">Etapa 4</div>
         <div class="stage-score">Score 81–100</div>
         <div class="stage-timeline">⏱️ Continuo</div>
     </div>
@@ -1542,7 +1540,7 @@
         <h2 style="font-size:clamp(22px,4vw,34px);font-weight:800;letter-spacing:-0.5px;margin-bottom:12px;line-height:1.2">¿Por dónde empieza tu cliente?</h2>
         <p style="font-size:15px;opacity:0.7;margin-bottom:32px;line-height:1.7">El diagnóstico detecta la etapa en 10 minutos y genera el reporte personalizado. Es el primer paso de todo el proceso.</p>
         <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;">
-            <a href="diagnostico.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:white;padding:15px 28px;border-radius:50px;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(124,111,255,0.4);">
+            <a href="diagnostico.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:white;padding:15px 28px;border-radius:50px;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(196,98,45,0.4);">
                 Hacer el diagnóstico gratis →
             </a>
             <a href="servicios.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:white;padding:15px 28px;border-radius:50px;font-size:15px;font-weight:700;text-decoration:none;">
