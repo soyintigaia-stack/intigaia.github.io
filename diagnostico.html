@@ -514,17 +514,44 @@
         .finding-emoji { font-size: 22px; flex-shrink: 0; }
         .finding-title { font-size: 15px; font-weight: 700; }
         .finding-desc  { font-size: 14px; color: var(--muted); line-height: 1.6; }
+        .report-section-sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: -8px;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+        .finding-module {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--muted);
+            margin-bottom: 3px;
+        }
+        .finding-roi-wrap {
+            margin-top: 14px;
+            background: rgba(0,212,170,0.07);
+            border: 1px solid rgba(0,212,170,0.2);
+            border-radius: 12px;
+            padding: 10px 14px;
+        }
+        .finding-roi-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 4px;
+        }
         .finding-roi {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(0,212,170,0.1);
             color: #059669;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 5px 12px;
-            border-radius: 50px;
-            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 800;
         }
 
         /* Roadmap */
@@ -553,6 +580,16 @@
         }
         .roadmap-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
         .roadmap-content p  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+        .roadmap-footer {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: rgba(196,98,45,0.07);
+            border-radius: 12px;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+            border-left: 3px solid var(--purple);
+        }
 
         /* CTA section */
         .cta-section {
@@ -799,12 +836,14 @@
         <!-- Findings -->
         <div class="report-section">
             <div class="report-section-title">Hallazgos críticos</div>
+            <p class="report-section-sub">Las 3 áreas donde tu negocio tiene más para ganar. Para cada una te mostramos qué está pasando y cuánto podés recuperar al trabajarla.</p>
             <div class="findings" id="findings"></div>
         </div>
 
         <!-- Roadmap -->
         <div class="report-section">
             <div class="report-section-title">Roadmap 90 días</div>
+            <p class="report-section-sub">Tu plan de acción dividido en 3 fases mensuales. Cada mes tiene un objetivo concreto y acciones específicas para ejecutar.</p>
             <div class="roadmap" id="roadmap"></div>
         </div>
 
@@ -1310,10 +1349,16 @@ function buildReport() {
             <div class="finding-card ${insight.level}">
                 <div class="finding-top">
                     <div class="finding-emoji">${MODULES[i].emoji}</div>
-                    <div class="finding-title">${insight.title}</div>
+                    <div>
+                        <div class="finding-module">${MODULES[i].name}</div>
+                        <div class="finding-title">${insight.title}</div>
+                    </div>
                 </div>
                 <div class="finding-desc">${insight.desc}</div>
-                <span class="finding-roi">✦ Potencial: ${insight.roi}</span>
+                <div class="finding-roi-wrap">
+                    <span class="finding-roi-label">Si trabajás esta área podés lograr</span>
+                    <span class="finding-roi">📈 ${insight.roi}</span>
+                </div>
             </div>
         `;
     });
@@ -1329,7 +1374,7 @@ function buildReport() {
                 <p>${r.desc}</p>
             </div>
         </div>
-    `).join('');
+    `).join('') + `<div class="roadmap-footer">💡 <strong>¿Qué significa cada mes?</strong> Cada fase es un bloque de trabajo con objetivos concretos. Si querés implementarlo con acompañamiento, podés arrancar con un proyecto puntual (un mes) o hacer el recorrido completo de 90 días.</div>`;
 
     // Dynamic WhatsApp CTA with score context
     const waMsg = encodeURIComponent(`Hola Soledad, hice el diagnóstico de ${state.negocio} y saqué ${totalScore}/100 (${label}). Me gustaría consultar cómo podemos trabajar juntas.`);
