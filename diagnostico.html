@@ -514,17 +514,44 @@
         .finding-emoji { font-size: 22px; flex-shrink: 0; }
         .finding-title { font-size: 15px; font-weight: 700; }
         .finding-desc  { font-size: 14px; color: var(--muted); line-height: 1.6; }
+        .report-section-sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: -8px;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+        .finding-module {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--muted);
+            margin-bottom: 3px;
+        }
+        .finding-roi-wrap {
+            margin-top: 14px;
+            background: rgba(0,212,170,0.07);
+            border: 1px solid rgba(0,212,170,0.2);
+            border-radius: 12px;
+            padding: 10px 14px;
+        }
+        .finding-roi-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 4px;
+        }
         .finding-roi {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(0,212,170,0.1);
             color: #059669;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 5px 12px;
-            border-radius: 50px;
-            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 800;
         }
 
         /* Roadmap */
@@ -553,37 +580,97 @@
         }
         .roadmap-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
         .roadmap-content p  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+        .roadmap-footer {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: rgba(196,98,45,0.07);
+            border-radius: 12px;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+            border-left: 3px solid var(--purple);
+        }
 
-        /* CTA card */
-        .cta-card {
+        /* CTA section */
+        .cta-section {
             background: linear-gradient(135deg, var(--purple), var(--purple-dark));
             color: white;
             border-radius: 20px;
             padding: 36px 28px;
-            text-align: center;
             box-shadow: 0 8px 32px rgba(196,98,45,0.35);
         }
-        .cta-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
-        .cta-card p  { opacity: 0.8; margin-bottom: 28px; font-size: 15px; line-height: 1.6; }
-        .cta-card a {
-            display: inline-block;
+        .cta-header { text-align: center; margin-bottom: 28px; }
+        .cta-header h3 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+        .cta-header p { opacity: 0.85; font-size: 15px; line-height: 1.6; max-width: 500px; margin: 0 auto; }
+
+        .cta-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+        @media (max-width: 560px) { .cta-options { grid-template-columns: 1fr; } }
+
+        .cta-option {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            padding: 22px 18px;
+            position: relative;
+        }
+        .cta-option--featured {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+        }
+        .cta-option-tag {
+            position: absolute;
+            top: -11px; left: 50%; transform: translateX(-50%);
             background: white;
             color: var(--purple);
-            font-weight: 700;
-            font-size: 16px;
-            padding: 14px 32px;
+            font-size: 11px; font-weight: 700;
+            padding: 3px 12px;
             border-radius: 50px;
-            text-decoration: none;
-            transition: transform 0.15s;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            white-space: nowrap;
         }
-        .cta-card a:hover { transform: translateY(-2px); }
-        .cta-card .retry-link {
+        .cta-option-icon { font-size: 26px; margin-bottom: 10px; }
+        .cta-option h4 { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+        .cta-option > p { font-size: 13px; line-height: 1.5; opacity: 0.85; margin-bottom: 14px; }
+
+        .cta-features { list-style: none; margin-bottom: 18px; }
+        .cta-features li {
+            font-size: 13px; padding: 3px 0 3px 18px;
+            position: relative; opacity: 0.9; line-height: 1.4;
+        }
+        .cta-features li::before {
+            content: '✔'; position: absolute; left: 0;
+            font-size: 11px; color: rgba(255,255,255,0.7);
+        }
+
+        .cta-price-block { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
+        .cta-price { font-size: 22px; font-weight: 800; }
+        .cta-price-unit { font-size: 14px; opacity: 0.7; font-weight: 600; }
+        .cta-price-note { font-size: 11px; opacity: 0.65; line-height: 1.4; }
+
+        .cta-disclaimer {
+            text-align: center; font-size: 13px; opacity: 0.7;
+            margin-bottom: 22px; font-style: italic;
+        }
+        .cta-button {
             display: block;
-            margin-top: 16px;
-            color: rgba(255,255,255,0.6);
-            font-size: 13px;
-            text-decoration: underline;
-            cursor: pointer;
+            background: white; color: var(--purple);
+            font-weight: 700; font-size: 16px;
+            padding: 16px 32px;
+            border-radius: 50px; text-decoration: none; text-align: center;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+        .cta-section .retry-link {
+            display: block; margin-top: 16px;
+            color: rgba(255,255,255,0.6); font-size: 13px;
+            text-decoration: underline; cursor: pointer; text-align: center;
         }
 
         .email-confirmation {
@@ -749,20 +836,66 @@
         <!-- Findings -->
         <div class="report-section">
             <div class="report-section-title">Hallazgos críticos</div>
+            <p class="report-section-sub">Las 3 áreas donde tu negocio tiene más para ganar. Para cada una te mostramos qué está pasando y cuánto podés recuperar al trabajarla.</p>
             <div class="findings" id="findings"></div>
         </div>
 
         <!-- Roadmap -->
         <div class="report-section">
             <div class="report-section-title">Roadmap 90 días</div>
+            <p class="report-section-sub">Tu plan de acción dividido en 3 fases mensuales. Cada mes tiene un objetivo concreto y acciones específicas para ejecutar.</p>
             <div class="roadmap" id="roadmap"></div>
         </div>
 
         <!-- CTA -->
-        <div class="cta-card">
-            <h3>¿Querés implementar este plan?</h3>
-            <p>Puedo ayudarte a ejecutar cada paso — desde la presencia digital hasta la automatización completa de tu negocio.</p>
-            <a href="https://wa.me/5493571541984?text=Hola,%20hice%20el%20Diagn%C3%B3stico%20Soledad%20Cardoni%20y%20quiero%20saber%20m%C3%A1s" target="_blank">Agendar consulta gratuita →</a>
+        <div class="cta-section">
+            <div class="cta-header">
+                <h3>¿Cómo trabajamos juntas?</h3>
+                <p>Cada mes del plan es una fase de trabajo con objetivos concretos. Podés hacer el recorrido completo o arrancar con un solo paso.</p>
+            </div>
+
+            <div class="cta-options">
+                <div class="cta-option cta-option--featured">
+                    <div class="cta-option-tag">Más elegido</div>
+                    <div class="cta-option-icon">🗓️</div>
+                    <h4>Acompañamiento mensual</h4>
+                    <p>Implementamos el plan de 90 días mes a mes. Cada mes tiene objetivos claros, seguimiento y ajustes según los resultados.</p>
+                    <ul class="cta-features">
+                        <li>Reunión semanal de seguimiento</li>
+                        <li>Soporte por WhatsApp durante el mes</li>
+                        <li>Ajuste de estrategia en tiempo real</li>
+                        <li>Reporte de avance al cierre de cada mes</li>
+                    </ul>
+                    <div class="cta-price-block">
+                        <span class="cta-price">desde USD 250</span>
+                        <span class="cta-price-unit">/mes</span>
+                    </div>
+                    <div class="cta-price-note">mínimo 2 meses · ideal para el plan completo de 90 días</div>
+                </div>
+
+                <div class="cta-option">
+                    <div class="cta-option-icon">⚡</div>
+                    <h4>Proyecto puntual</h4>
+                    <p>Arrancamos con el primer paso de tu roadmap y lo implementamos hasta el final. Sin compromiso de continuidad.</p>
+                    <ul class="cta-features">
+                        <li>Un objetivo específico y medible</li>
+                        <li>Duración: 3 a 6 semanas</li>
+                        <li>Entregable concreto al cerrar</li>
+                        <li>Sin renovación automática</li>
+                    </ul>
+                    <div class="cta-price-block">
+                        <span class="cta-price">desde USD 150</span>
+                        <span class="cta-price-unit">/proyecto</span>
+                    </div>
+                    <div class="cta-price-note">un solo paso · vos decidís si continuamos</div>
+                </div>
+            </div>
+
+            <div class="cta-disclaimer">Los precios exactos dependen del tipo de negocio y el alcance del trabajo. La primera consulta es gratuita.</div>
+
+            <a id="ctaWhatsapp" href="https://wa.me/5493571541984" target="_blank" class="cta-button">
+                Escribirme y consultar cuál es para vos →
+            </a>
             <span class="retry-link" onclick="retryDiagnostico()">Volver a hacer el diagnóstico</span>
         </div>
 
@@ -1216,10 +1349,16 @@ function buildReport() {
             <div class="finding-card ${insight.level}">
                 <div class="finding-top">
                     <div class="finding-emoji">${MODULES[i].emoji}</div>
-                    <div class="finding-title">${insight.title}</div>
+                    <div>
+                        <div class="finding-module">${MODULES[i].name}</div>
+                        <div class="finding-title">${insight.title}</div>
+                    </div>
                 </div>
                 <div class="finding-desc">${insight.desc}</div>
-                <span class="finding-roi">✦ Potencial: ${insight.roi}</span>
+                <div class="finding-roi-wrap">
+                    <span class="finding-roi-label">Si trabajás esta área podés lograr</span>
+                    <span class="finding-roi">📈 ${insight.roi}</span>
+                </div>
             </div>
         `;
     });
@@ -1235,7 +1374,12 @@ function buildReport() {
                 <p>${r.desc}</p>
             </div>
         </div>
-    `).join('');
+    `).join('') + `<div class="roadmap-footer">💡 <strong>¿Qué significa cada mes?</strong> Cada fase es un bloque de trabajo con objetivos concretos. Si querés implementarlo con acompañamiento, podés arrancar con un proyecto puntual (un mes) o hacer el recorrido completo de 90 días.</div>`;
+
+    // Dynamic WhatsApp CTA with score context
+    const waMsg = encodeURIComponent(`Hola Soledad, hice el diagnóstico de ${state.negocio} y saqué ${totalScore}/100 (${label}). Me gustaría consultar cómo podemos trabajar juntas.`);
+    const ctaEl = document.getElementById('ctaWhatsapp');
+    if (ctaEl) ctaEl.href = `https://wa.me/5493571541984?text=${waMsg}`;
 
     showScreen('screen-report');
     sendDiagnosticoEmail(state, totalScore, label, normScores, ROADMAP_BY_SCORE[roadmapKey]);
