@@ -1435,10 +1435,10 @@ ${roadmapLineas}`;
 // ============================================================
 // REGISTRO EN NOTION + EMAIL AL CLIENTE (Google Apps Script)
 // ============================================================
-const LOG_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwSg31ATGXtW2AM_z2foTdKV3kh7qlJ5l8XeKglteNhl1agxlMb8sx6zE7JLl7cNyNW/exec';
+const LOG_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyqhb_6JI8YAsggL9WNcse6N1yBO7DrpGB35G-zw26ZMugHEGFncrVvenn2mAmDRzGv/exec';
 
 function logDiagnostico(state, totalScore, label, normScores) {
-    navigator.sendBeacon(LOG_ENDPOINT, JSON.stringify({
+    const data = encodeURIComponent(JSON.stringify({
         negocio: state.negocio,
         rubro:   state.rubro,
         ciudad:  state.ciudad,
@@ -1447,6 +1447,7 @@ function logDiagnostico(state, totalScore, label, normScores) {
         label,
         modScores: normScores,
     }));
+    fetch(LOG_ENDPOINT + '?data=' + data, { mode: 'no-cors' });
 }
 
 function animateNumber(id, from, to, duration) {
