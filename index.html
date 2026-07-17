@@ -524,13 +524,18 @@
       border: none;
     }
 
-    .iframe-fallback {
-      display: none;
-      padding: 3rem 2rem;
-      text-align: center;
+    .diagnostico__fallback {
+      margin-top: 0.9rem;
+      font-size: 0.82rem;
+      color: var(--gris);
     }
 
-    .iframe-shell:has(iframe:not([src])) .iframe-fallback { display: block; }
+    .diagnostico__fallback a {
+      color: var(--acento);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .diagnostico__fallback a:hover { color: var(--acento-dark); }
 
     /* ═══════════════════════════════
        RESPONSIVE — 768px+
@@ -661,13 +666,20 @@
       <p class="diagnostico__intro fade-in">Respondé unas preguntas sobre tu negocio y en minutos tenés un panorama claro de dónde están las oportunidades. Sin costo, sin compromiso.</p>
       <div class="iframe-shell fade-in">
         <iframe
-          src="https://soyintigaia-stack.github.io/intigaia.github.io/"
+          src="./diagnostico.html"
           title="Diagnóstico gratuito — Soledad Cardoni"
           loading="lazy"
           allow="clipboard-write"
-          referrerpolicy="no-referrer-when-downgrade"
         ></iframe>
+        <noscript>
+          <div class="iframe-fallback">
+            <a href="./diagnostico.html" target="_blank" rel="noopener" class="btn-primary">Abrir el diagnóstico →</a>
+          </div>
+        </noscript>
       </div>
+      <p class="diagnostico__fallback fade-in">
+        ¿No carga? <a href="./diagnostico.html" target="_blank" rel="noopener">Abrilo en una nueva pestaña →</a>
+      </p>
     </div>
   </section>
 
