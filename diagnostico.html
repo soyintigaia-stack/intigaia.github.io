@@ -849,7 +849,7 @@
         <!-- CTA -->
         <div class="cta-section">
             <div class="cta-header">
-                <h3>¿Cómo trabajamos juntas?</h3>
+                <h3>¿Cómo trabajamos?</h3>
                 <p>Cada mes del plan es una fase de trabajo con objetivos concretos. Podés hacer el recorrido completo o arrancar con un solo paso.</p>
             </div>
 
@@ -1376,7 +1376,7 @@ function buildReport() {
     `).join('') + `<div class="roadmap-footer">💡 <strong>¿Qué significa cada mes?</strong> Cada fase es un bloque de trabajo con objetivos concretos. Si querés implementarlo con acompañamiento, podés arrancar con un proyecto puntual (un mes) o hacer el recorrido completo de 90 días.</div>`;
 
     // Dynamic WhatsApp CTA with score context
-    const waMsg = encodeURIComponent(`Hola Soledad, hice el diagnóstico de ${state.negocio} y saqué ${totalScore}/100 (${label}). Me gustaría consultar cómo podemos trabajar juntas.`);
+    const waMsg = encodeURIComponent(`Hola Soledad, hice el diagnóstico de ${state.negocio} y saqué ${totalScore}/100 (${label}). Me gustaría consultar cómo podemos trabajar.`);
     const ctaEl = document.getElementById('ctaWhatsapp');
     if (ctaEl) ctaEl.href = `https://wa.me/5493571541984?text=${waMsg}`;
 
