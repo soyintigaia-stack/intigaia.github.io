@@ -7,7 +7,6 @@
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#0F0F0E">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -1384,17 +1383,14 @@ function buildReport() {
     showScreen('screen-report');
     sendDiagnosticoEmail(state, totalScore, label, normScores, ROADMAP_BY_SCORE[roadmapKey]);
     logDiagnostico(state, totalScore, label, normScores);
-    sendClientEmail(state, totalScore, label, normScores, ROADMAP_BY_SCORE[roadmapKey])
-        .then(sent => showEmailConfirmation(sent));
+    showEmailConfirmation(state.email);
 }
 
-function showEmailConfirmation(sent) {
+function showEmailConfirmation(email) {
     const el = document.getElementById('emailConfirmation');
-    if (!el) return;
-    if (sent) {
-        el.textContent = '✅ Te enviamos el reporte a tu email. Revisá tu bandeja de entrada (y spam por las dudas).';
-        el.classList.remove('hidden');
-    }
+    if (!el || !email) return;
+    el.textContent = '✅ Te enviamos el reporte a ' + email + '. Revisá tu bandeja de entrada (y spam por las dudas).';
+    el.classList.remove('hidden');
 }
 
 function sendDiagnosticoEmail(state, totalScore, label, normScores, roadmap) {
@@ -1437,70 +1433,20 @@ ${roadmapLineas}`;
 }
 
 // ============================================================
-// EMAIL AL CLIENTE (EmailJS)
+// REGISTRO EN NOTION + EMAIL AL CLIENTE (Google Apps Script)
 // ============================================================
-// Configuración requerida (ver README / instrucciones de la consultora):
-// 1. Crear cuenta gratuita en https://www.emailjs.com
-// 2. Conectar un servicio de email (ej. Gmail) -> copiar el Service ID
-// 3. Crear un template con las variables usadas abajo -> copiar el Template ID
-// 4. Copiar la Public Key desde Account > General
-const EMAILJS_PUBLIC_KEY  = 'TU_PUBLIC_KEY_AQUI';
-const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID_AQUI';
-const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID_AQUI';
-
-function sendClientEmail(state, totalScore, label, normScores, roadmap) {
-    if (EMAILJS_PUBLIC_KEY === 'TU_PUBLIC_KEY_AQUI') {
-        console.warn('EmailJS no configurado: no se envió el email al cliente.');
-        return Promise.resolve(false);
-    }
-    if (typeof emailjs === 'undefined') {
-        console.warn('SDK de EmailJS no cargado.');
-        return Promise.resolve(false);
-    }
-
-    const moduloLineas = MODULES.map((m, i) => `${m.emoji} ${m.name}: ${normScores[i]}/20`).join('\n');
-    const primerosPasos = roadmap.slice(0, 3).map((r, i) => `${i + 1}. ${r.title} (${r.mes}) — ${r.desc}`).join('\n\n');
-
-    const templateParams = {
-        to_email: state.email,
-        negocio: state.negocio,
-        subject: `Tu diagnóstico de ${state.negocio} — Diagnóstico Soledad Cardoni`,
-        puntaje_total: totalScore,
-        etiqueta: label,
-        modulos: moduloLineas,
-        primeros_pasos: primerosPasos,
-        firma: 'Soledad Cardoni · Estratega de negocios · +54 9 3571 54-1984',
-    };
-
-    return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
-        .then(() => true)
-        .catch(e => { console.warn('EmailJS error:', e); return false; });
-}
-
-// ============================================================
-// REGISTRO EN NOTION (vía función serverless en Vercel)
-// ============================================================
-// Configurar con la URL real una vez desplegada la función (ver instrucciones).
-const LOG_ENDPOINT = 'TU_URL_DE_VERCEL_AQUI/api/log-diagnostico';
+const LOG_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwSg31ATGXtW2AM_z2foTdKV3kh7qlJ5l8XeKglteNhl1agxlMb8sx6zE7JLl7cNyNW/exec';
 
 function logDiagnostico(state, totalScore, label, normScores) {
-    if (LOG_ENDPOINT.startsWith('TU_URL')) {
-        console.warn('Endpoint de registro no configurado: no se guardó en Notion.');
-        return;
-    }
-    fetch(LOG_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            negocio: state.negocio,
-            rubro: state.rubro,
-            ciudad: state.ciudad,
-            email: state.email,
-            totalScore,
-            label,
-            modScores: normScores,
-        }),
-    }).catch(e => console.warn('Error registrando en Notion:', e));
+    navigator.sendBeacon(LOG_ENDPOINT, JSON.stringify({
+        negocio: state.negocio,
+        rubro:   state.rubro,
+        ciudad:  state.ciudad,
+        email:   state.email,
+        totalScore,
+        label,
+        modScores: normScores,
+    }));
 }
 
 function animateNumber(id, from, to, duration) {
