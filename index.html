@@ -489,6 +489,50 @@
     .fade-in:nth-child(3) { transition-delay: 0.2s; }
 
     /* ═══════════════════════════════
+       DIAGNÓSTICO EMBEBIDO
+    ═══════════════════════════════ */
+    .diagnostico {
+      background: var(--base);
+      padding: 5.5rem 1.5rem;
+    }
+
+    .diagnostico .section-inner {
+      max-width: 960px;
+    }
+
+    .diagnostico__intro {
+      font-size: 1rem;
+      color: var(--gris);
+      line-height: 1.7;
+      margin-bottom: 2.2rem;
+      max-width: 560px;
+    }
+
+    .iframe-shell {
+      border: 1px solid rgba(196, 98, 45, 0.25);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--surface);
+      position: relative;
+      min-height: 600px;
+    }
+
+    .iframe-shell iframe {
+      display: block;
+      width: 100%;
+      height: 800px;
+      border: none;
+    }
+
+    .iframe-fallback {
+      display: none;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .iframe-shell:has(iframe:not([src])) .iframe-fallback { display: block; }
+
+    /* ═══════════════════════════════
        RESPONSIVE — 768px+
     ═══════════════════════════════ */
     @media (min-width: 768px) {
@@ -606,6 +650,23 @@
           <div class="step__title">Construyo</div>
           <p class="step__desc">Ejecuto la solución con vos, sin vueltas. Creo sistemas, aplicaciones y herramientas a medida. Resultados medibles.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DIAGNÓSTICO EMBEBIDO ─── -->
+  <section class="diagnostico" aria-labelledby="diag-title">
+    <div class="section-inner">
+      <h2 id="diag-title" class="section-title fade-in">Hacé tu diagnóstico gratuito</h2>
+      <p class="diagnostico__intro fade-in">Respondé unas preguntas sobre tu negocio y en minutos tenés un panorama claro de dónde están las oportunidades. Sin costo, sin compromiso.</p>
+      <div class="iframe-shell fade-in">
+        <iframe
+          src="https://soyintigaia-stack.github.io/intigaia.github.io/"
+          title="Diagnóstico gratuito — Soledad Cardoni"
+          loading="lazy"
+          allow="clipboard-write"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
       </div>
     </div>
   </section>
