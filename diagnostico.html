@@ -1284,6 +1284,8 @@ function buildReport() {
     else if (totalScore < 70) { label = 'Prometedor';      labelBg = 'rgba(251,191,36,0.2)';  circleColor = '#FBBF24'; }
     else if (totalScore < 85) { label = 'Negocio Sólido';  labelBg = 'rgba(0,212,170,0.2)';   circleColor = '#00D4AA'; }
     else                      { label = 'Alto Rendimiento';labelBg = 'rgba(64,192,87,0.2)';   circleColor = '#40C057'; }
+    state.totalScore = totalScore;
+    state.label = label;
 
     // Header
     document.getElementById('reportBusiness').textContent = state.negocio;
@@ -1466,16 +1468,16 @@ function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 // SHARE / RETRY
 // ============================================================
 function shareReport() {
+    const texto = `Hice el diagnóstico de *${state.negocio}* con SISTEMA PULSO y saqué *${state.totalScore}/100* — ${state.label}. ¿Querés hacerlo también?\n👉 ${window.location.href}`;
     if (navigator.share) {
         navigator.share({
             title: 'Mi reporte SISTEMA PULSO — ' + state.negocio,
-            text: 'Hice el diagnóstico de eficiencia de mi negocio. ¡Mirá los resultados!',
-            url: window.location.href,
+            text: texto,
         }).catch(() => {});
     } else {
-        navigator.clipboard.writeText(window.location.href)
-            .then(() => alert('¡Link copiado al portapapeles!'))
-            .catch(() => alert('Copiá la URL de esta página para compartir.'));
+        navigator.clipboard.writeText(texto)
+            .then(() => alert('¡Texto copiado! Pegalo en WhatsApp o donde quieras.'))
+            .catch(() => alert('No se pudo copiar. Tomá captura de pantalla para compartir.'));
     }
 }
 
