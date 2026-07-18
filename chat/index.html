@@ -210,14 +210,14 @@
   <div class="prechat-logo">SISTEMA<span>PULSO</span><em>.</em></div>
   <div class="prechat-avatar">S</div>
   <h2>Hola, soy Sole IA</h2>
-  <p class="prechat-desc">Voy a hacerte algunas preguntas para que Soledad pueda preparar tu análisis personalizado.<br><br>Necesito tu número de WhatsApp para guardar la conversación y enviarte la devolución.</p>
+  <p class="prechat-desc">Voy a hacerte algunas preguntas para que Soledad pueda prepararte un análisis personalizado.<br><br>Ingresá tu número de WhatsApp para guardar tus datos.</p>
   <div class="prechat-field">
     <label>Tu número de WhatsApp</label>
     <input type="tel" id="waInput" placeholder="+54 9 ..." autocomplete="tel"
       onkeydown="if(event.key==='Enter') startChat()">
   </div>
   <button class="prechat-btn" onclick="startChat()">Empezar →</button>
-  <p class="prechat-privacy">Tu número identifica tu conversación. Si salís y volvés, seguís donde dejaste. No se comparte con nadie.</p>
+  <p class="prechat-privacy">Solo se usa para enviarte la devolución de Soledad. No se comparte con nadie.</p>
 </div>
 
 <!-- ── CHAT ── -->
@@ -229,7 +229,6 @@
       <div class="sole-status" id="soleStatus">en línea</div>
     </div>
     <div class="header-logo">SISTEMA<span>PULSO</span><em>.</em></div>
-    <button onclick="resetSession()" style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;padding:4px 6px;border-radius:6px;white-space:nowrap;" title="Cambiar número">↩ No soy yo</button>
   </div>
   <div class="chat-messages" id="chatMessages"></div>
   <div class="chat-input-bar" id="inputBar">
@@ -268,31 +267,11 @@ let recording = false;
 // INIT
 // ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // ?new=1 fuerza la pantalla de inicio limpiando la sesión guardada
-  if (new URLSearchParams(location.search).get('new') === '1') {
-    localStorage.removeItem(STORAGE_KEY);
-    history.replaceState({}, '', location.pathname);
-  }
-  const saved = getSaved();
-  if (saved?.phone) {
-    phone   = saved.phone;
-    history = saved.history || [];
-    done    = saved.done    || false;
-    showChatUI();
-    history.forEach(m => renderBubble(m.role, m.content));
-    if (done) { renderDoneCard(); lockInput(); }
-    else scrollDown();
-  }
-  // else: pre-chat screen is already visible (default)
+  // siempre arranca en el pre-chat
 });
 
 function getSaved() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch(_) { return null; }
-}
-
-function resetSession() {
-  localStorage.removeItem(STORAGE_KEY);
-  location.href = location.pathname;
 }
 
 function persist() {
