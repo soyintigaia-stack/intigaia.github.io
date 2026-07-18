@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagnóstico Soledad Cardoni — Tu Diagnóstico</title>
+    <title>SISTEMA PULSO — Tu Diagnóstico</title>
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#0F0F0E">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -711,7 +711,7 @@
 
 <!-- TOP BAR -->
 <div class="topbar">
-    <div class="logo-sm">Diagnóstico<span>SC</span><em>.</em></div>
+    <div class="logo-sm">SISTEMA<span>PULSO</span><em>.</em></div>
     <div class="progress-wrap">
         <div class="progress-bar" id="progressBar"></div>
     </div>
@@ -1420,8 +1420,8 @@ ${roadmapLineas}`;
         },
         body: JSON.stringify({
             access_key: WEB3FORMS_KEY,
-            subject: `Diagnóstico Soledad Cardoni — ${state.negocio} · ${totalScore}/100 (${label})`,
-            from_name: 'Diagnóstico Soledad Cardoni',
+            subject: `SISTEMA PULSO — ${state.negocio} · ${totalScore}/100 (${label})`,
+            from_name: 'SISTEMA PULSO',
             email: state.email,
             replyto: state.email,
             message: mensaje
@@ -1468,7 +1468,7 @@ function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 function shareReport() {
     if (navigator.share) {
         navigator.share({
-            title: 'Mi reporte Diagnóstico Soledad Cardoni — ' + state.negocio,
+            title: 'Mi reporte SISTEMA PULSO — ' + state.negocio,
             text: 'Hice el diagnóstico de eficiencia de mi negocio. ¡Mirá los resultados!',
             url: window.location.href,
         }).catch(() => {});
