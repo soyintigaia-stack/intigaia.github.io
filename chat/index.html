@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sole IA — SISTEMA PULSO</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:       #0F0F0E;
+      --surface:  #1C1C1A;
+      --border:   rgba(255,255,255,0.08);
+      --orange:   #C4622D;
+      --teal:     #00D4AA;
+      --white:    #FFFFFF;
+      --muted:    rgba(255,255,255,0.45);
+    }
+
+    html, body {
+      height: 100%; height: 100dvh;
+      background: var(--bg);
+      color: var(--white);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── LAYOUT ── */
+    .chat-wrap {
+      display: flex;
+      flex-direction: column;
+      height: 100%; height: 100dvh;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* ── HEADER ── */
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .sole-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), #009E80);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px; font-weight: 900; color: var(--bg);
+      flex-shrink: 0;
+    }
+    .sole-info { flex: 1; min-width: 0; }
+    .sole-name  { font-size: 15px; font-weight: 700; }
+    .sole-status {
+      font-size: 12px; color: var(--teal);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .sole-status::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--teal); display: inline-block; flex-shrink: 0;
+    }
+    .sole-status.typing { color: var(--muted); }
+    .sole-status.typing::before { background: var(--muted); animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+    .header-logo { font-size: 13px; font-weight: 800; letter-spacing: -0.3px; color: var(--muted); white-space: nowrap; }
+    .header-logo span { color: var(--orange); }
+    .header-logo em   { color: var(--teal); font-style: normal; }
+
+    /* ── MESSAGES ── */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 14px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .msg { display: flex; flex-direction: column; max-width: 82%; }
+    .msg-sole { align-self: flex-start; }
+    .msg-user { align-self: flex-end;   }
+
+    .msg-bubble {
+      padding: 11px 15px;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .msg-sole .msg-bubble {
+      background: #1B2B28;
+      border: 1px solid rgba(0,212,170,0.14);
+      border-bottom-left-radius: 4px;
+    }
+    .msg-user .msg-bubble {
+      background: #2A1C18;
+      border: 1px solid rgba(196,98,45,0.18);
+      border-bottom-right-radius: 4px;
+    }
+
+    /* typing dots */
+    .typing-wrap .msg-bubble { padding: 14px 18px; }
+    .typing-dots { display: flex; gap: 5px; align-items: center; }
+    .typing-dots span {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--teal);
+      animation: dot 1.2s infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: .2s; }
+    .typing-dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes dot { 0%,60%,100%{opacity:.15} 30%{opacity:1} }
+
+    /* completion card */
+    .done-card {
+      align-self: center;
+      width: 100%;
+      background: linear-gradient(135deg, rgba(0,212,170,.1), rgba(0,212,170,.04));
+      border: 1px solid rgba(0,212,170,.28);
+      border-radius: 16px;
+      padding: 22px 20px;
+      text-align: center;
+      margin: 6px 0;
+    }
+    .done-card .icon  { font-size: 34px; margin-bottom: 10px; }
+    .done-card h3     { font-size: 17px; font-weight: 800; color: var(--teal); margin-bottom: 8px; }
+    .done-card p      { font-size: 14px; color: var(--muted); line-height: 1.55; }
+
+    /* ── INPUT BAR ── */
+    .chat-input-bar {
+      display: flex;
+      align-items: flex-end;
+      gap: 9px;
+      padding: 10px 14px 14px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    textarea#msgInput {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 10px 15px;
+      color: var(--white);
+      font-size: 15px;
+      font-family: inherit;
+      resize: none;
+      min-height: 44px;
+      max-height: 120px;
+      overflow-y: auto;
+      line-height: 1.45;
+      outline: none;
+      transition: border-color .2s;
+    }
+    textarea#msgInput:focus   { border-color: rgba(0,212,170,.35); }
+    textarea#msgInput::placeholder { color: var(--muted); }
+    textarea#msgInput:disabled { opacity: .4; }
+
+    .btn-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: transform .15s, opacity .15s;
+      font-size: 17px;
+    }
+    .btn-mic  { background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+    .btn-mic.on { background: rgba(196,98,45,.18); border-color: var(--orange); color: var(--orange); }
+    .btn-send { background: var(--orange); color: white; }
+    .btn-send:disabled { opacity: .35; cursor: default; }
+    .btn-send:not(:disabled):active { transform: scale(.93); }
+    .btn-mic:active { opacity: .7; }
+  </style>
+</head>
+<body>
+<div class="chat-wrap">
+
+  <!-- HEADER -->
+  <div class="chat-header">
+    <div class="sole-avatar">S</div>
+    <div class="sole-info">
+      <div class="sole-name">Sole IA</div>
+      <div class="sole-status" id="soleStatus">en línea</div>
+    </div>
+    <div class="header-logo">SISTEMA<span>PULSO</span><em>.</em></div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div class="chat-messages" id="chatMessages"></div>
+
+  <!-- INPUT -->
+  <div class="chat-input-bar" id="inputBar">
+    <button class="btn-icon btn-mic" id="btnMic" onclick="toggleVoice()" title="Micrófono">🎤</button>
+    <textarea id="msgInput"
+      placeholder="Escribí tu mensaje..."
+      rows="1"
+      onkeydown="handleKey(event)"
+      oninput="onInputChange()"></textarea>
+    <button class="btn-icon btn-send" id="btnSend" onclick="handleSend()" disabled>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
+
+</div>
+<script>
+// ─────────────────────────────────────────────
+// CONFIG  — reemplazar con URL del GAS una vez desplegado
+// ─────────────────────────────────────────────
+const GAS_CHAT_URL  = 'REEMPLAZAR_CON_URL_GAS_CHAT';
+const STORAGE_KEY   = 'soleIA_conv_v1';
+const OPENING_MSG   = '¡Hola! Soy Sole, el sistema de intake de SISTEMA PULSO.\n\nSoledad va a usar lo que me contés para armar tu análisis personalizado — así la devolución es concreta, no genérica.\n\n¿Por dónde arrancamos? Contame: ¿cómo se llama tu negocio y a qué se dedica?';
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let history   = [];
+let thinking  = false;
+let done      = false;
+let recog     = null;
+let recording = false;
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadConversation();
+});
+
+function loadConversation() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (saved?.history?.length) {
+      history = saved.history;
+      done    = saved.done || false;
+      history.forEach(m => renderBubble(m.role, m.content));
+      if (done) { renderDoneCard(); lockInput(); }
+      else scrollDown();
+      return;
+    }
+  } catch(_) {}
+  // Primera vez — mensaje de apertura
+  history = [{ role: 'assistant', content: OPENING_MSG }];
+  persist();
+  renderBubble('assistant', OPENING_MSG);
+}
+
+function persist() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ history, done }));
+}
+
+// ─────────────────────────────────────────────
+// SEND
+// ─────────────────────────────────────────────
+async function handleSend() {
+  const el   = document.getElementById('msgInput');
+  const text = el.value.trim();
+  if (!text || thinking || done) return;
+
+  el.value = '';
+  resizeTextarea(el);
+  document.getElementById('btnSend').disabled = true;
+
+  history.push({ role: 'user', content: text });
+  persist();
+  renderBubble('user', text);
+  setThinking(true);
+
+  try {
+    // Últimos 14 mensajes para mantener el payload manejable
+    const payload = history.slice(-14);
+
+    const res  = await fetch(GAS_CHAT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ messages: payload })
+    });
+    const data = await res.json();
+
+    setThinking(false);
+
+    if (data.ok) {
+      history.push({ role: 'assistant', content: data.reply });
+      persist();
+      renderBubble('assistant', data.reply);
+
+      if (data.completed) {
+        done = true;
+        persist();
+        setTimeout(() => { renderDoneCard(); lockInput(); }, 500);
+      }
+    } else {
+      renderBubble('assistant', 'Hubo un problema técnico. Intentá de nuevo en un momento.');
+    }
+  } catch(_) {
+    setThinking(false);
+    renderBubble('assistant', 'Perdé el hilo un momento — problema de conexión. Intentá de nuevo.');
+  }
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    handleSend();
+  }
+}
+
+function onInputChange() {
+  const el = document.getElementById('msgInput');
+  resizeTextarea(el);
+  document.getElementById('btnSend').disabled = el.value.trim() === '';
+}
+
+// ─────────────────────────────────────────────
+// UI
+// ─────────────────────────────────────────────
+function renderBubble(role, text) {
+  const wrap = document.getElementById('chatMessages');
+  const div  = document.createElement('div');
+  div.className = `msg msg-${role === 'assistant' ? 'sole' : 'user'}`;
+  div.innerHTML = `<div class="msg-bubble">${safe(text)}</div>`;
+  wrap.appendChild(div);
+  scrollDown();
+}
+
+function setThinking(on) {
+  thinking = on;
+  const status = document.getElementById('soleStatus');
+  const wrap   = document.getElementById('chatMessages');
+
+  if (on) {
+    status.textContent = 'escribiendo...';
+    status.className   = 'sole-status typing';
+    const el = document.createElement('div');
+    el.id = 'typingDots';
+    el.className = 'msg msg-sole typing-wrap';
+    el.innerHTML = `<div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+    wrap.appendChild(el);
+    scrollDown();
+  } else {
+    status.textContent = 'en línea';
+    status.className   = 'sole-status';
+    document.getElementById('typingDots')?.remove();
+  }
+}
+
+function renderDoneCard() {
+  const wrap = document.getElementById('chatMessages');
+  const card = document.createElement('div');
+  card.className = 'done-card';
+  card.innerHTML = `
+    <div class="icon">📬</div>
+    <h3>¡Listo! Ya tenemos todo.</h3>
+    <p>Soledad va a revisar tu caso y te manda la devolución<br>en las próximas <strong>24 a 48hs</strong>.</p>
+  `;
+  wrap.appendChild(card);
+  scrollDown();
+}
+
+function lockInput() {
+  document.getElementById('msgInput').disabled  = true;
+  document.getElementById('btnSend').disabled   = true;
+  document.getElementById('btnMic').disabled    = true;
+  document.getElementById('inputBar').style.opacity = '0.35';
+}
+
+function scrollDown() {
+  const el = document.getElementById('chatMessages');
+  el.scrollTop = el.scrollHeight;
+}
+
+function resizeTextarea(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function safe(s) {
+  return s
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/\n/g,'<br>');
+}
+
+// ─────────────────────────────────────────────
+// VOZ (Web Speech API — Chrome / Android)
+// ─────────────────────────────────────────────
+function toggleVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    alert('El reconocimiento de voz no está disponible en este navegador.\nUsá Chrome en Android o computadora.');
+    return;
+  }
+  if (recording) { recog?.stop(); return; }
+
+  recog = new SR();
+  recog.lang = 'es-AR';
+  recog.continuous = false;
+  recog.interimResults = false;
+
+  recog.onstart = () => {
+    recording = true;
+    document.getElementById('btnMic').classList.add('on');
+    document.getElementById('soleStatus').textContent = '🎤 escuchando...';
+    document.getElementById('soleStatus').className   = 'sole-status typing';
+  };
+  recog.onend = () => {
+    recording = false;
+    document.getElementById('btnMic').classList.remove('on');
+    document.getElementById('soleStatus').textContent = 'en línea';
+    document.getElementById('soleStatus').className   = 'sole-status';
+  };
+  recog.onresult = (e) => {
+    const txt = e.results[0][0].transcript;
+    const el  = document.getElementById('msgInput');
+    el.value  = txt;
+    resizeTextarea(el);
+    document.getElementById('btnSend').disabled = false;
+  };
+  recog.onerror = () => recog.onend();
+  recog.start();
+}
+</script>
+</body>
+</html>
