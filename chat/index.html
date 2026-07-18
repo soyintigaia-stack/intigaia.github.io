@@ -229,6 +229,7 @@
       <div class="sole-status" id="soleStatus">en línea</div>
     </div>
     <div class="header-logo">SISTEMA<span>PULSO</span><em>.</em></div>
+    <button onclick="resetSession()" style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;padding:4px 6px;border-radius:6px;white-space:nowrap;" title="Cambiar número">↩ No soy yo</button>
   </div>
   <div class="chat-messages" id="chatMessages"></div>
   <div class="chat-input-bar" id="inputBar">
@@ -267,6 +268,11 @@ let recording = false;
 // INIT
 // ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // ?new=1 fuerza la pantalla de inicio limpiando la sesión guardada
+  if (new URLSearchParams(location.search).get('new') === '1') {
+    localStorage.removeItem(STORAGE_KEY);
+    history.replaceState({}, '', location.pathname);
+  }
   const saved = getSaved();
   if (saved?.phone) {
     phone   = saved.phone;
@@ -282,6 +288,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function getSaved() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch(_) { return null; }
+}
+
+function resetSession() {
+  localStorage.removeItem(STORAGE_KEY);
+  location.href = location.pathname;
 }
 
 function persist() {
