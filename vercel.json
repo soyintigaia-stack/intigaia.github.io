@@ -1,7 +1,1 @@
-{
-  "outputDirectory": ".",
-  "rewrites": [
-    { "source": "/chat", "destination": "/chat/index.html" },
-    { "source": "/chat/", "destination": "/chat/index.html" }
-  ]
-}
+{}
