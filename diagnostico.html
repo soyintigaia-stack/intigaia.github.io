@@ -627,7 +627,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
             margin-bottom: 18px;
         }
-        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.25); }
         .cta-fallback { font-size: 13px; opacity: 0.7; margin-bottom: 20px; }
         .cta-fallback a { color: white; text-decoration: underline; }
         .cta-section .retry-link {
@@ -669,6 +668,87 @@
             transition: border-color 0.2s, background 0.2s;
         }
         .btn-outline:hover { border-color: var(--purple); background: rgba(196,98,45,0.04); }
+
+        /* ─── BRIDGE ─── */
+        .cta-bridge {
+            background: rgba(196,98,45,0.06);
+            border: 1px solid rgba(196,98,45,0.2);
+            border-radius: 16px;
+            padding: 28px 24px;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+        .cta-bridge__icon { font-size: 2rem; display: block; margin-bottom: 12px; }
+        .cta-bridge__title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 10px; line-height: 1.3; }
+        .cta-bridge__body { font-size: 14px; color: var(--muted); line-height: 1.65; }
+        .cta-bridge__body em { font-style: normal; font-weight: 700; color: var(--purple); }
+
+        /* ─── CTA upgrades ─── */
+        .cta-score-recap {
+            background: rgba(255,255,255,0.13);
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            text-align: left;
+        }
+        .cta-score-recap__num {
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -2px;
+            flex-shrink: 0;
+        }
+        .cta-score-recap__label { font-weight: 800; font-size: 14px; display: block; margin-bottom: 3px; }
+        .cta-score-recap__text { font-size: 12px; opacity: 0.72; line-height: 1.4; }
+
+        .cta-value-prop {
+            text-align: left;
+            background: rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 18px 20px;
+            margin-bottom: 20px;
+        }
+        .cta-value-prop-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            opacity: 0.55;
+            margin-bottom: 14px;
+        }
+        .cta-value-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        .cta-value-item:last-child { margin-bottom: 0; }
+        .cta-value-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+        .cta-guarantee-box {
+            background: rgba(255,255,255,0.08);
+            border-left: 3px solid rgba(255,255,255,0.28);
+            border-radius: 0 10px 10px 0;
+            padding: 12px 16px;
+            font-size: 13px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        @keyframes pulseCta {
+            0%   { box-shadow: 0 4px 20px rgba(0,0,0,0.2), 0 0 0 0 rgba(255,255,255,0.28); }
+            70%  { box-shadow: 0 4px 20px rgba(0,0,0,0.2), 0 0 0 14px rgba(255,255,255,0); }
+            100% { box-shadow: 0 4px 20px rgba(0,0,0,0.2), 0 0 0 0 rgba(255,255,255,0); }
+        }
+        .cta-button { animation: pulseCta 2.5s infinite; }
+        .cta-button:hover { animation: none; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.28); }
     </style>
 </head>
 <body>
@@ -810,17 +890,39 @@
             <div class="roadmap" id="roadmap"></div>
         </div>
 
+        <!-- Bridge -->
+        <div class="cta-bridge">
+            <span class="cta-bridge__icon">💡</span>
+            <div class="cta-bridge__title">Sabés el diagnóstico. Ahora necesitás el plan exacto para resolverlo.</div>
+            <div class="cta-bridge__body">El reporte te mostró qué está fallando. Sole IA — la inteligencia artificial de Soledad — toma ese diagnóstico, te hace las preguntas que yo te haría en persona y construye el camino concreto para <em>tu negocio</em>. No una guía genérica. Tu caso, tu situación, tu solución.</div>
+        </div>
+
         <!-- CTA — SISTEMA PULSO intake -->
         <div class="cta-section">
+
+            <div class="cta-score-recap">
+                <div class="cta-score-recap__num" id="ctaScoreNum">--</div>
+                <div>
+                    <span class="cta-score-recap__label" id="ctaScoreLabel">--</span>
+                    <span class="cta-score-recap__text">Ese es tu punto de partida.<br>Sole IA trabaja desde acá para construir tu plan.</span>
+                </div>
+            </div>
+
             <div class="cta-eyebrow">SIGUIENTE PASO</div>
             <h3 id="ctaHeadline">Tu negocio tiene para crecer.</h3>
             <p id="ctaBody">Este diagnóstico te dio el mapa. Ahora necesito conocer tu caso en detalle para decirte exactamente qué resolver primero.</p>
 
-            <div class="cta-what">
-                <div class="cta-what-item">✅ Chat de intake con Sole IA — 10 a 15 minutos</div>
-                <div class="cta-what-item">✅ Análisis del nudo real de tu negocio</div>
-                <div class="cta-what-item">✅ Plan concreto — empezando por generar cash</div>
-                <div class="cta-what-item">✅ Devolución escrita de Soledad en 24-48hs</div>
+            <div class="cta-value-prop">
+                <div class="cta-value-prop-title">Con Sole IA vas a</div>
+                <div class="cta-value-item"><span class="cta-value-icon">🎯</span><span>Identificar el nudo real que frena tu negocio — no los síntomas, la causa raíz</span></div>
+                <div class="cta-value-item"><span class="cta-value-icon">📋</span><span>Recibir un plan de acción ordenado por impacto, específico para tu situación</span></div>
+                <div class="cta-value-item"><span class="cta-value-icon">🤖</span><span>15 minutos de análisis profundo con IA entrenada para pymes reales</span></div>
+                <div class="cta-value-item"><span class="cta-value-icon">📩</span><span>Devolución escrita de Soledad en 24-48 hs</span></div>
+            </div>
+
+            <div class="cta-guarantee-box">
+                <strong>No es un curso. No es un PDF genérico.</strong><br>
+                Sole IA tiene el contexto de tu diagnóstico y hace exactamente las preguntas que Soledad te haría en una sesión uno a uno.
             </div>
 
             <div class="cta-price-highlight">
@@ -829,21 +931,21 @@
             </div>
 
             <a id="ctaMp" href="#" target="_blank" class="cta-button" onclick="setTimeout(showPostPago, 3000)">
-                Quiero el análisis completo →
+                Quiero que Sole IA analice mi negocio →
             </a>
 
-            <p style="margin-top:12px; font-size:13px; color:#6B7280; text-align:center; line-height:1.5;">
+            <p style="margin-top:12px; font-size:13px; color:rgba(255,255,255,0.6); text-align:center; line-height:1.5;">
                 Después del pago, tocá el botón <strong>"Volver"</strong> para comenzar tu sesión con Sole IA.
             </p>
 
             <div id="postPago" style="display:none; margin-top:16px; text-align:center;">
-                <a href="https://soyintigaia-stack.github.io/intigaia.github.io/chat/" class="cta-button" style="background:#00D4AA; color:#0F0F0E; font-size:16px;">
+                <a href="https://soyintigaia-stack.github.io/intigaia.github.io/chat/" class="cta-button" style="background:#00D4AA; color:#0F0F0E; font-size:16px; animation:none;">
                     ✅ Ya pagué → Empezar con Sole IA
                 </a>
             </div>
 
             <div class="cta-fallback">
-                ¿Preferís hablar directamente? <a id="ctaWhatsapp" href="https://wa.me/5493571541984" target="_blank">Escribime por WhatsApp</a>
+                ¿Preferís hablar primero? <a id="ctaWhatsapp" href="https://wa.me/5493571541984" target="_blank">Escribime por WhatsApp</a>
             </div>
 
             <span class="retry-link" onclick="retryDiagnostico()">Volver a hacer el diagnóstico</span>
@@ -1419,21 +1521,27 @@ function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 // SHARE / RETRY
 // ============================================================
 function setCTAText(score, label, negocio) {
-    const headline = document.getElementById('ctaHeadline');
-    const body     = document.getElementById('ctaBody');
+    const headline    = document.getElementById('ctaHeadline');
+    const body        = document.getElementById('ctaBody');
+    const scoreNumEl  = document.getElementById('ctaScoreNum');
+    const scoreLblEl  = document.getElementById('ctaScoreLabel');
+
+    if (scoreNumEl) scoreNumEl.textContent = score;
+    if (scoreLblEl) scoreLblEl.textContent = label;
+
     if (headline && body) {
         if (score < 30) {
             headline.textContent = 'Hay cosas urgentes que resolver. Empecemos por la primera.';
-            body.textContent = `${negocio} sacó ${score}/100. Antes de seguir invirtiendo tiempo, necesito entender qué está frenando todo — y darte un camino concreto.`;
+            body.textContent = `Con ${score}/100 hay problemas que están costando plata todos los días. Sole IA toma tu diagnóstico y te dice exactamente qué atacar primero para estabilizar el negocio.`;
         } else if (score < 50) {
-            headline.textContent = 'Hay base. Hay que ordenarlo y ponerlo a crecer.';
-            body.textContent = `Con ${score}/100, hay cosas que funcionan y otras que están trabando el crecimiento. Sole IA te hace unas preguntas para encontrar el nudo real — y te mando el plan.`;
+            headline.textContent = 'Hay base. Hay cuellos de botella. Y hay plata que te estás dejando ir.';
+            body.textContent = `Con ${score}/100, ${negocio} tiene potencial que todavía no convierte. Sole IA encuentra el nudo exacto que está frenando el crecimiento y te da el camino para desbloquearlo.`;
         } else if (score < 70) {
-            headline.textContent = 'Buen puntaje. Hay pasos concretos para el siguiente nivel.';
-            body.textContent = `${score}/100 muestra un negocio prometedor. Para decirte exactamente qué priorizar, necesito conocer tu situación en detalle.`;
+            headline.textContent = 'Buen puntaje. Hay un salto de nivel muy concreto disponible.';
+            body.textContent = `${score}/100 muestra un negocio que funciona. Pero "funcionar" y "crecer al máximo" son dos cosas distintas. Sole IA te dice exactamente qué separa dónde estás de dónde podrías estar.`;
         } else {
-            headline.textContent = 'Negocio sólido. Veamos dónde está el mayor potencial.';
-            body.textContent = `Con ${score}/100 estás por encima del promedio. Un análisis personalizado puede mostrarte exactamente dónde están las mayores oportunidades.`;
+            headline.textContent = 'Negocio sólido. Veamos dónde está el mayor potencial sin explotar.';
+            body.textContent = `Con ${score}/100 estás por encima del promedio. Sole IA analiza tus áreas fuertes y te muestra exactamente qué palanca activar para el siguiente nivel.`;
         }
     }
     const waMsg = encodeURIComponent(`Hola Soledad, hice el diagnóstico de ${negocio} y saqué ${score}/100 (${label}). ¿Podemos hablar?`);
