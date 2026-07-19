@@ -346,6 +346,7 @@ async function handleSend() {
     const data = await res.json();
 
     setThinking(false);
+    console.log('[SoleIA] GAS response:', data);
 
     if (data.reply) {
       history.push({ role: 'assistant', content: data.reply });
@@ -354,10 +355,12 @@ async function handleSend() {
       renderBubble('assistant', data.reply);
       if (done) setTimeout(() => { renderDoneCard(); lockInput(); }, 500);
     } else {
+      console.error('[SoleIA] No reply in response. Error:', data.error || 'unknown');
       renderBubble('assistant', 'Hubo un problema técnico. Intentá de nuevo en un momento.');
     }
-  } catch(_) {
+  } catch(err) {
     setThinking(false);
+    console.error('[SoleIA] Fetch error:', err);
     renderBubble('assistant', 'Problema de conexión. Intentá de nuevo.');
   }
 }
