@@ -204,6 +204,49 @@
     }
 
     /* ═══════════════════════════════
+       QUIÉN SOY
+    ═══════════════════════════════ */
+    .quien-soy {
+      background: var(--surface);
+      padding: 5rem 1.5rem;
+    }
+
+    .quien-soy__inner {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .quien-soy__label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: var(--acento);
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+    }
+
+    .quien-soy__body {
+      font-size: 1.05rem;
+      color: rgba(245,242,237,0.78);
+      line-height: 1.82;
+    }
+
+    .quien-soy__body p + p {
+      margin-top: 1.2rem;
+    }
+
+    .quien-soy__highlight {
+      display: block;
+      margin-top: 1.8rem;
+      font-size: 1.18rem;
+      font-weight: 600;
+      color: var(--blanco);
+      line-height: 1.5;
+      border-left: 2px solid var(--acento);
+      padding-left: 1.2rem;
+    }
+
+    /* ═══════════════════════════════
        PARA QUIÉN
     ═══════════════════════════════ */
     .para-quien { background: var(--base); }
@@ -808,6 +851,19 @@
       </div>
       <div class="hero__photo">
         <img src="./soledad-cardoni.jpg" alt="Soledad Cardoni — Estratega de negocios">
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── QUIÉN SOY ─── -->
+  <section class="quien-soy" aria-labelledby="quien-title">
+    <div class="quien-soy__inner">
+      <p class="quien-soy__label fade-in">Quién soy</p>
+      <div class="quien-soy__body fade-in">
+        <p>Soy Soledad Cardoni, estratega de negocios especializada en pymes reales. Trabajo con negocios que tienen potencial pero operan a ciegas — sin claridad sobre dónde están perdiendo dinero, por qué no crecen o qué debería ser lo primero que resuelven.</p>
+        <p>Después de ver una y otra vez los mismos problemas — negocios que facturan bien pero no tienen sistema, que invierten en publicidad sin tener la base lista, que dependen de una sola persona para funcionar — entendí que el diagnóstico es siempre el primer paso. Sin saber dónde está el nudo, cualquier solución es un tiro al aire.</p>
+        <p>Por eso construí SISTEMA PULSO: un método que detecta las fallas críticas de cualquier negocio en minutos y genera el plan concreto para revertirlas. Combino estrategia, inteligencia artificial y ejecución real para que el negocio funcione, crezca y no dependa solamente de vos.</p>
+        <span class="quien-soy__highlight">No vendo recetas genéricas. Construyo la solución específica que necesita tu negocio.</span>
       </div>
     </div>
   </section>
