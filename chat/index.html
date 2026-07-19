@@ -347,9 +347,9 @@ async function handleSend() {
 
     setThinking(false);
 
-    if (data.ok) {
+    if (data.reply) {
       history.push({ role: 'assistant', content: data.reply });
-      done = data.completed || false;
+      done = data.done || false;
       persist();
       renderBubble('assistant', data.reply);
       if (done) setTimeout(() => { renderDoneCard(); lockInput(); }, 500);
