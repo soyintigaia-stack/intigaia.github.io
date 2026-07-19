@@ -828,9 +828,15 @@
                 <span class="cta-price-desc">una sola vez · sin suscripción</span>
             </div>
 
-            <a id="ctaMp" href="#" target="_blank" class="cta-button">
+            <a id="ctaMp" href="#" target="_blank" class="cta-button" onclick="setTimeout(showPostPago, 3000)">
                 Quiero el análisis completo →
             </a>
+
+            <div id="postPago" style="display:none; margin-top:16px; text-align:center;">
+                <a href="https://soyintigaia-stack.github.io/intigaia.github.io/chat/" class="cta-button" style="background:#00D4AA; color:#0F0F0E; font-size:16px;">
+                    ✅ Ya pagué → Empezar con Sole IA
+                </a>
+            </div>
 
             <div class="cta-fallback">
                 ¿Preferís hablar directamente? <a id="ctaWhatsapp" href="https://wa.me/5493571541984" target="_blank">Escribime por WhatsApp</a>
@@ -1446,6 +1452,11 @@ function shareReport() {
             .then(() => alert('¡Texto copiado! Pegalo en WhatsApp o donde quieras.'))
             .catch(() => alert('No se pudo copiar. Tomá captura de pantalla para compartir.'));
     }
+}
+
+function showPostPago() {
+    const el = document.getElementById('postPago');
+    if (el) el.style.display = 'block';
 }
 
 function retryDiagnostico() {
