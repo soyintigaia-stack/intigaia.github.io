@@ -232,7 +232,10 @@
   </div>
   <div class="chat-messages" id="chatMessages"></div>
   <div class="chat-input-bar" id="inputBar">
-    <button class="btn-icon btn-mic" id="btnMic" onclick="toggleVoice()" title="Micrófono">🎤</button>
+    <button class="btn-icon btn-mic" id="btnMic"
+      onmousedown="startVoice(event)" onmouseup="stopVoice()" onmouseleave="stopVoice()"
+      ontouchstart="startVoice(event)" ontouchend="stopVoice()"
+      title="Mantené apretado para hablar">🎤</button>
     <textarea id="msgInput" placeholder="Escribí tu mensaje..." rows="1"
       onkeydown="handleKey(event)" oninput="onInputChange()"></textarea>
     <button class="btn-icon btn-send" id="btnSend" onclick="handleSend()" disabled>
@@ -442,39 +445,66 @@ function safe(s) {
 }
 
 // ─────────────────────────────────────────────
-// VOZ
+// VOZ — hold to talk
 // ─────────────────────────────────────────────
-function toggleVoice() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { alert('Reconocimiento de voz no disponible. Usá Chrome.'); return; }
-  if (recording) { recog?.stop(); return; }
+let voiceTranscript = '';
 
+function startVoice(e) {
+  if (e) e.preventDefault();
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Reconocimiento de voz no disponible. Usá Chrome o Safari.'); return; }
+  if (recording) return;
+
+  voiceTranscript = '';
   recog = new SR();
   recog.lang = 'es-AR';
-  recog.continuous = false;
-  recog.interimResults = false;
+  recog.continuous = true;
+  recog.interimResults = true;
 
   recog.onstart = () => {
     recording = true;
     document.getElementById('btnMic').classList.add('on');
-    document.getElementById('soleStatus').textContent = '🎤 escuchando...';
+    document.getElementById('soleStatus').textContent = '🎤 escuchando... soltá cuando termines';
     document.getElementById('soleStatus').className   = 'sole-status typing';
   };
+
+  recog.onresult = (e) => {
+    let final = '';
+    let interim = '';
+    for (let i = 0; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final   += e.results[i][0].transcript;
+      else                       interim += e.results[i][0].transcript;
+    }
+    voiceTranscript = final;
+    const el = document.getElementById('msgInput');
+    el.value = final || interim;
+    resizeTextarea(el);
+    document.getElementById('btnSend').disabled = !el.value.trim();
+  };
+
   recog.onend = () => {
     recording = false;
     document.getElementById('btnMic').classList.remove('on');
     document.getElementById('soleStatus').textContent = 'en línea';
     document.getElementById('soleStatus').className   = 'sole-status';
+    const el = document.getElementById('msgInput');
+    if (voiceTranscript) {
+      el.value = voiceTranscript;
+      resizeTextarea(el);
+      document.getElementById('btnSend').disabled = false;
+    }
   };
-  recog.onresult = (e) => {
-    const txt = e.results[0][0].transcript;
-    const el  = document.getElementById('msgInput');
-    el.value  = txt;
-    resizeTextarea(el);
-    document.getElementById('btnSend').disabled = false;
+
+  recog.onerror = (e) => {
+    if (e.error !== 'aborted') console.warn('SpeechRecognition error:', e.error);
+    recog.onend();
   };
-  recog.onerror = () => recog.onend();
+
   recog.start();
+}
+
+function stopVoice() {
+  if (recog && recording) recog.stop();
 }
 </script>
 </body>
