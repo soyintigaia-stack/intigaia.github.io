@@ -8,13 +8,13 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg:       #0F0F0E;
-      --surface:  #1C1C1A;
-      --border:   rgba(255,255,255,0.08);
-      --orange:   #C4622D;
-      --teal:     #00D4AA;
-      --white:    #FFFFFF;
-      --muted:    rgba(255,255,255,0.45);
+      --bg:      #0F0F0E;
+      --surface: #1C1C1A;
+      --border:  rgba(255,255,255,0.08);
+      --orange:  #C4622D;
+      --teal:    #00D4AA;
+      --white:   #FFFFFF;
+      --muted:   rgba(255,255,255,0.45);
     }
 
     html, body {
@@ -25,20 +25,84 @@
       overflow: hidden;
     }
 
-    /* ── LAYOUT ── */
-    .chat-wrap {
-      display: flex;
-      flex-direction: column;
-      height: 100%; height: 100dvh;
-      max-width: 640px;
-      margin: 0 auto;
+    /* ── PRE-CHAT ── */
+    .prechat {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 32px 24px;
+      text-align: center;
+      z-index: 100;
+      overflow-y: auto;
+    }
+    .prechat.hidden { display: none; }
+
+    .prechat-logo {
+      font-size: 14px; font-weight: 800; letter-spacing: -0.3px;
+      color: var(--muted); margin-bottom: 32px;
+    }
+    .prechat-logo span { color: var(--orange); }
+    .prechat-logo em   { color: var(--teal); font-style: normal; }
+
+    .prechat-avatar {
+      width: 68px; height: 68px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), #009E80);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; font-weight: 900; color: var(--bg);
+      margin-bottom: 20px;
+    }
+    .prechat h2 { font-size: 23px; font-weight: 800; margin-bottom: 10px; }
+    .prechat-desc {
+      font-size: 15px; color: var(--muted); line-height: 1.65;
+      max-width: 320px; margin-bottom: 32px;
+    }
+    .prechat-field {
+      width: 100%; max-width: 340px;
+      display: flex; flex-direction: column; gap: 8px;
+      margin-bottom: 12px;
+    }
+    .prechat-field label {
+      font-size: 12px; font-weight: 700; color: var(--muted);
+      text-align: left; text-transform: uppercase; letter-spacing: .6px;
+    }
+    .prechat-field input {
+      width: 100%; padding: 14px 18px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; color: var(--white);
+      font-size: 17px; font-family: inherit; outline: none;
+      transition: border-color .2s;
+    }
+    .prechat-field input:focus  { border-color: rgba(0,212,170,.4); }
+    .prechat-field input::placeholder { color: var(--muted); }
+
+    .prechat-btn {
+      width: 100%; max-width: 340px;
+      padding: 15px; border-radius: 50px;
+      background: var(--orange); color: white;
+      font-size: 16px; font-weight: 800;
+      border: none; cursor: pointer;
+      transition: transform .15s;
+      margin-bottom: 14px;
+    }
+    .prechat-btn:active { transform: scale(.97); }
+    .prechat-privacy { font-size: 12px; color: var(--muted); max-width: 280px; line-height: 1.5; }
+
+    .prechat-loading {
+      font-size: 14px; color: var(--muted);
+      display: flex; align-items: center; gap: 10px;
     }
 
-    /* ── HEADER ── */
+    /* ── CHAT ── */
+    .chat-wrap {
+      display: flex; flex-direction: column;
+      height: 100%; height: 100dvh;
+      max-width: 640px; margin: 0 auto;
+    }
+    .chat-wrap.hidden { display: none; }
+
     .chat-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: flex; align-items: center; gap: 12px;
       padding: 13px 18px;
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
@@ -47,15 +111,11 @@
       width: 40px; height: 40px; border-radius: 50%;
       background: linear-gradient(135deg, var(--teal), #009E80);
       display: flex; align-items: center; justify-content: center;
-      font-size: 19px; font-weight: 900; color: var(--bg);
-      flex-shrink: 0;
+      font-size: 19px; font-weight: 900; color: var(--bg); flex-shrink: 0;
     }
     .sole-info { flex: 1; min-width: 0; }
-    .sole-name  { font-size: 15px; font-weight: 700; }
-    .sole-status {
-      font-size: 12px; color: var(--teal);
-      display: flex; align-items: center; gap: 5px;
-    }
+    .sole-name   { font-size: 15px; font-weight: 700; }
+    .sole-status { font-size: 12px; color: var(--teal); display: flex; align-items: center; gap: 5px; }
     .sole-status::before {
       content: ''; width: 6px; height: 6px; border-radius: 50%;
       background: var(--teal); display: inline-block; flex-shrink: 0;
@@ -68,104 +128,72 @@
     .header-logo span { color: var(--orange); }
     .header-logo em   { color: var(--teal); font-style: normal; }
 
-    /* ── MESSAGES ── */
     .chat-messages {
-      flex: 1;
-      overflow-y: auto;
+      flex: 1; overflow-y: auto;
       padding: 18px 14px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      display: flex; flex-direction: column; gap: 10px;
       -webkit-overflow-scrolling: touch;
     }
 
     .msg { display: flex; flex-direction: column; max-width: 82%; }
     .msg-sole { align-self: flex-start; }
-    .msg-user { align-self: flex-end;   }
+    .msg-user { align-self: flex-end; }
 
     .msg-bubble {
-      padding: 11px 15px;
-      border-radius: 18px;
-      font-size: 15px;
-      line-height: 1.55;
-      white-space: pre-wrap;
-      word-break: break-word;
+      padding: 11px 15px; border-radius: 18px;
+      font-size: 15px; line-height: 1.55;
+      white-space: pre-wrap; word-break: break-word;
     }
     .msg-sole .msg-bubble {
-      background: #1B2B28;
-      border: 1px solid rgba(0,212,170,0.14);
+      background: #1B2B28; border: 1px solid rgba(0,212,170,.14);
       border-bottom-left-radius: 4px;
     }
     .msg-user .msg-bubble {
-      background: #2A1C18;
-      border: 1px solid rgba(196,98,45,0.18);
+      background: #2A1C18; border: 1px solid rgba(196,98,45,.18);
       border-bottom-right-radius: 4px;
     }
 
-    /* typing dots */
     .typing-wrap .msg-bubble { padding: 14px 18px; }
     .typing-dots { display: flex; gap: 5px; align-items: center; }
     .typing-dots span {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--teal);
+      width: 7px; height: 7px; border-radius: 50%; background: var(--teal);
       animation: dot 1.2s infinite;
     }
     .typing-dots span:nth-child(2) { animation-delay: .2s; }
     .typing-dots span:nth-child(3) { animation-delay: .4s; }
     @keyframes dot { 0%,60%,100%{opacity:.15} 30%{opacity:1} }
 
-    /* completion card */
     .done-card {
-      align-self: center;
-      width: 100%;
+      align-self: center; width: 100%;
       background: linear-gradient(135deg, rgba(0,212,170,.1), rgba(0,212,170,.04));
       border: 1px solid rgba(0,212,170,.28);
-      border-radius: 16px;
-      padding: 22px 20px;
-      text-align: center;
-      margin: 6px 0;
+      border-radius: 16px; padding: 22px 20px;
+      text-align: center; margin: 6px 0;
     }
     .done-card .icon  { font-size: 34px; margin-bottom: 10px; }
     .done-card h3     { font-size: 17px; font-weight: 800; color: var(--teal); margin-bottom: 8px; }
     .done-card p      { font-size: 14px; color: var(--muted); line-height: 1.55; }
 
-    /* ── INPUT BAR ── */
     .chat-input-bar {
-      display: flex;
-      align-items: flex-end;
-      gap: 9px;
+      display: flex; align-items: flex-end; gap: 9px;
       padding: 10px 14px 14px;
-      border-top: 1px solid var(--border);
-      flex-shrink: 0;
+      border-top: 1px solid var(--border); flex-shrink: 0;
     }
-
     textarea#msgInput {
-      flex: 1;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 10px 15px;
-      color: var(--white);
-      font-size: 15px;
-      font-family: inherit;
-      resize: none;
-      min-height: 44px;
-      max-height: 120px;
-      overflow-y: auto;
-      line-height: 1.45;
-      outline: none;
-      transition: border-color .2s;
+      flex: 1; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 22px; padding: 10px 15px; color: var(--white);
+      font-size: 15px; font-family: inherit; resize: none;
+      min-height: 44px; max-height: 120px; overflow-y: auto;
+      line-height: 1.45; outline: none; transition: border-color .2s;
     }
-    textarea#msgInput:focus   { border-color: rgba(0,212,170,.35); }
+    textarea#msgInput:focus     { border-color: rgba(0,212,170,.35); }
     textarea#msgInput::placeholder { color: var(--muted); }
-    textarea#msgInput:disabled { opacity: .4; }
+    textarea#msgInput:disabled  { opacity: .4; }
 
     .btn-icon {
-      width: 44px; height: 44px; border-radius: 50%;
-      border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: transform .15s, opacity .15s;
-      font-size: 17px;
+      width: 44px; height: 44px; border-radius: 50%; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: transform .15s, opacity .15s; font-size: 17px;
     }
     .btn-mic  { background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
     .btn-mic.on { background: rgba(196,98,45,.18); border-color: var(--orange); color: var(--orange); }
@@ -176,9 +204,24 @@
   </style>
 </head>
 <body>
-<div class="chat-wrap">
 
-  <!-- HEADER -->
+<!-- ── PRE-CHAT ── -->
+<div class="prechat" id="prechat">
+  <div class="prechat-logo">SISTEMA<span>PULSO</span><em>.</em></div>
+  <div class="prechat-avatar">S</div>
+  <h2>Hola, soy Sole IA</h2>
+  <p class="prechat-desc">Voy a hacerte algunas preguntas para que Soledad pueda prepararte un análisis personalizado.<br><br>Ingresá tu número de WhatsApp para guardar tus datos.</p>
+  <div class="prechat-field">
+    <label>Tu número de WhatsApp</label>
+    <input type="tel" id="waInput" placeholder="+54 9 ..." autocomplete="tel"
+      onkeydown="if(event.key==='Enter') startChat()">
+  </div>
+  <button class="prechat-btn" onclick="startChat()">Empezar →</button>
+  <p class="prechat-privacy">Solo se usa para enviarte la devolución de Soledad. No se comparte con nadie.</p>
+</div>
+
+<!-- ── CHAT ── -->
+<div class="chat-wrap hidden" id="chatWrap">
   <div class="chat-header">
     <div class="sole-avatar">S</div>
     <div class="sole-info">
@@ -187,18 +230,11 @@
     </div>
     <div class="header-logo">SISTEMA<span>PULSO</span><em>.</em></div>
   </div>
-
-  <!-- MESSAGES -->
   <div class="chat-messages" id="chatMessages"></div>
-
-  <!-- INPUT -->
   <div class="chat-input-bar" id="inputBar">
     <button class="btn-icon btn-mic" id="btnMic" onclick="toggleVoice()" title="Micrófono">🎤</button>
-    <textarea id="msgInput"
-      placeholder="Escribí tu mensaje..."
-      rows="1"
-      onkeydown="handleKey(event)"
-      oninput="onInputChange()"></textarea>
+    <textarea id="msgInput" placeholder="Escribí tu mensaje..." rows="1"
+      onkeydown="handleKey(event)" oninput="onInputChange()"></textarea>
     <button class="btn-icon btn-send" id="btnSend" onclick="handleSend()" disabled>
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -207,19 +243,20 @@
       </svg>
     </button>
   </div>
-
 </div>
+
 <script>
 // ─────────────────────────────────────────────
-// CONFIG  — reemplazar con URL del GAS una vez desplegado
+// CONFIG
 // ─────────────────────────────────────────────
-const GAS_CHAT_URL  = 'https://script.google.com/macros/s/AKfycbyIVW-6OgfZq4tmbTrJlQxZ56qC45k5VomNCxF_lCcMZm5Dl8d9db4qsg5MkW7BFC-g/exec';
-const STORAGE_KEY   = 'soleIA_conv_v1';
-const OPENING_MSG   = '¡Hola! Soy Sole, el sistema de intake de SISTEMA PULSO.\n\nSoledad va a usar lo que me contés para armar tu análisis personalizado — así la devolución es concreta, no genérica.\n\n¿Por dónde arrancamos? Contame: ¿cómo se llama tu negocio y a qué se dedica?';
+const GAS_CHAT_URL = 'https://script.google.com/macros/s/AKfycbyIVW-6OgfZq4tmbTrJlQxZ56qC45k5VomNCxF_lCcMZm5Dl8d9db4qsg5MkW7BFC-g/exec';
+const STORAGE_KEY  = 'soleIA_conv_v2';
+const OPENING_MSG  = '¡Hola! Soy Sole, el sistema de intake de SISTEMA PULSO.\n\nSoledad va a usar lo que me contés para armar tu análisis personalizado — así la devolución es concreta, no genérica.\n\n¿Por dónde arrancamos? Contame: ¿cómo se llama tu negocio y a qué se dedica?';
 
 // ─────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────
+let phone     = '';
 let history   = [];
 let thinking  = false;
 let done      = false;
@@ -230,29 +267,57 @@ let recording = false;
 // INIT
 // ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  loadConversation();
+  // siempre arranca en el pre-chat
 });
 
-function loadConversation() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-    if (saved?.history?.length) {
-      history = saved.history;
-      done    = saved.done || false;
-      history.forEach(m => renderBubble(m.role, m.content));
-      if (done) { renderDoneCard(); lockInput(); }
-      else scrollDown();
-      return;
-    }
-  } catch(_) {}
-  // Primera vez — mensaje de apertura
-  history = [{ role: 'assistant', content: OPENING_MSG }];
-  persist();
-  renderBubble('assistant', OPENING_MSG);
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch(_) { return null; }
 }
 
 function persist() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ history, done }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ phone, history, done }));
+}
+
+// ─────────────────────────────────────────────
+// PRE-CHAT
+// ─────────────────────────────────────────────
+async function startChat() {
+  const wa = document.getElementById('waInput').value.trim();
+  if (!wa) {
+    document.getElementById('waInput').style.borderColor = 'var(--orange)';
+    return;
+  }
+  phone = wa;
+
+  // Show loading state
+  document.getElementById('prechat').innerHTML =
+    '<div class="prechat-loading">🌿 Cargando...</div>';
+
+  try {
+    const res  = await fetch(GAS_CHAT_URL + '?phone=' + encodeURIComponent(wa));
+    const data = await res.json();
+    if (data.ok && data.history?.length) {
+      history = data.history;
+      done    = data.done || false;
+    }
+  } catch(_) {
+    // red de respaldo: localStorage o nueva conversación
+  }
+
+  if (!history.length) {
+    history = [{ role: 'assistant', content: OPENING_MSG }];
+  }
+
+  persist();
+  showChatUI();
+  history.forEach(m => renderBubble(m.role, m.content));
+  if (done) { renderDoneCard(); lockInput(); }
+  else scrollDown();
+}
+
+function showChatUI() {
+  document.getElementById('prechat').classList.add('hidden');
+  document.getElementById('chatWrap').classList.remove('hidden');
 }
 
 // ─────────────────────────────────────────────
@@ -273,13 +338,10 @@ async function handleSend() {
   setThinking(true);
 
   try {
-    // Últimos 14 mensajes para mantener el payload manejable
-    const payload = history.slice(-14);
-
     const res  = await fetch(GAS_CHAT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ messages: payload })
+      body: JSON.stringify({ messages: history.slice(-14), phone })
     });
     const data = await res.json();
 
@@ -287,28 +349,21 @@ async function handleSend() {
 
     if (data.ok) {
       history.push({ role: 'assistant', content: data.reply });
+      done = data.completed || false;
       persist();
       renderBubble('assistant', data.reply);
-
-      if (data.completed) {
-        done = true;
-        persist();
-        setTimeout(() => { renderDoneCard(); lockInput(); }, 500);
-      }
+      if (done) setTimeout(() => { renderDoneCard(); lockInput(); }, 500);
     } else {
       renderBubble('assistant', 'Hubo un problema técnico. Intentá de nuevo en un momento.');
     }
   } catch(_) {
     setThinking(false);
-    renderBubble('assistant', 'Perdé el hilo un momento — problema de conexión. Intentá de nuevo.');
+    renderBubble('assistant', 'Problema de conexión. Intentá de nuevo.');
   }
 }
 
 function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    handleSend();
-  }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
 }
 
 function onInputChange() {
@@ -318,7 +373,7 @@ function onInputChange() {
 }
 
 // ─────────────────────────────────────────────
-// UI
+// UI HELPERS
 // ─────────────────────────────────────────────
 function renderBubble(role, text) {
   const wrap = document.getElementById('chatMessages');
@@ -333,7 +388,6 @@ function setThinking(on) {
   thinking = on;
   const status = document.getElementById('soleStatus');
   const wrap   = document.getElementById('chatMessages');
-
   if (on) {
     status.textContent = 'escribiendo...';
     status.className   = 'sole-status typing';
@@ -357,16 +411,16 @@ function renderDoneCard() {
   card.innerHTML = `
     <div class="icon">📬</div>
     <h3>¡Listo! Ya tenemos todo.</h3>
-    <p>Soledad va a revisar tu caso y te manda la devolución<br>en las próximas <strong>24 a 48hs</strong>.</p>
+    <p>Soledad va a revisar tu caso y te manda la devolución<br>en las próximas <strong>24 a 48hs</strong> por WhatsApp.</p>
   `;
   wrap.appendChild(card);
   scrollDown();
 }
 
 function lockInput() {
-  document.getElementById('msgInput').disabled  = true;
-  document.getElementById('btnSend').disabled   = true;
-  document.getElementById('btnMic').disabled    = true;
+  document.getElementById('msgInput').disabled = true;
+  document.getElementById('btnSend').disabled  = true;
+  document.getElementById('btnMic').disabled   = true;
   document.getElementById('inputBar').style.opacity = '0.35';
 }
 
@@ -381,22 +435,15 @@ function resizeTextarea(el) {
 }
 
 function safe(s) {
-  return s
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/\n/g,'<br>');
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
 
 // ─────────────────────────────────────────────
-// VOZ (Web Speech API — Chrome / Android)
+// VOZ
 // ─────────────────────────────────────────────
 function toggleVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    alert('El reconocimiento de voz no está disponible en este navegador.\nUsá Chrome en Android o computadora.');
-    return;
-  }
+  if (!SR) { alert('Reconocimiento de voz no disponible. Usá Chrome.'); return; }
   if (recording) { recog?.stop(); return; }
 
   recog = new SR();
