@@ -489,6 +489,180 @@
     .fade-in:nth-child(3) { transition-delay: 0.2s; }
 
     /* ═══════════════════════════════
+       EMBUDO 3 PASOS
+    ═══════════════════════════════ */
+    .embudo {
+      background: var(--base);
+      padding: 5.5rem 1.5rem;
+    }
+
+    .embudo__intro {
+      font-size: 1rem;
+      color: var(--gris);
+      line-height: 1.7;
+      margin-bottom: 3rem;
+      max-width: 520px;
+    }
+
+    .embudo-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .embudo-arrow {
+      display: none;
+      font-size: 2rem;
+      color: var(--acento);
+      align-self: center;
+      flex-shrink: 0;
+    }
+
+    .embudo-step {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 2.2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      flex: 1;
+      position: relative;
+    }
+
+    .embudo-step--paid {
+      border-color: rgba(196, 98, 45, 0.45);
+      box-shadow: 0 0 24px rgba(196, 98, 45, 0.12);
+    }
+
+    .embudo-step--trabajo {
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .embudo-step__badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      align-self: flex-start;
+    }
+
+    .embudo-step__badge--free {
+      background: rgba(255,255,255,0.08);
+      color: var(--gris);
+    }
+
+    .embudo-step__badge--paid {
+      background: linear-gradient(90deg, rgba(196,98,45,0.25) 0%, rgba(212,151,58,0.25) 100%);
+      color: var(--acento);
+      border: 1px solid rgba(196,98,45,0.4);
+    }
+
+    .embudo-step__badge--trabajo {
+      background: rgba(255,255,255,0.06);
+      color: var(--gris);
+    }
+
+    .embudo-step__num {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.06);
+      line-height: 1;
+      position: absolute;
+      top: 1.5rem;
+      right: 1.75rem;
+    }
+
+    .embudo-step__title {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      font-weight: 600;
+      color: var(--blanco);
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    .embudo-step__desc {
+      font-size: 0.92rem;
+      color: var(--gris);
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    .embudo-step__list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin: 0;
+    }
+
+    .embudo-step__list li {
+      font-size: 0.85rem;
+      color: var(--gris);
+      padding-left: 1.2rem;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .embudo-step__list li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--acento);
+      font-weight: 700;
+    }
+
+    .embudo-step__cta {
+      margin-top: 0.5rem;
+      align-self: flex-start;
+    }
+
+    .embudo-step__ctas {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      align-items: flex-start;
+    }
+
+    .btn-secondary {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--acento);
+      border: 1.5px solid var(--acento);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--acento);
+      color: #fff;
+    }
+
+    .btn-text {
+      display: inline-block;
+      font-size: 0.88rem;
+      color: var(--gris);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding-bottom: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-text:hover {
+      color: var(--blanco);
+      border-color: var(--blanco);
+    }
+
+    /* ═══════════════════════════════
        DIAGNÓSTICO EMBEBIDO
     ═══════════════════════════════ */
     .diagnostico {
@@ -572,6 +746,26 @@
 
       /* Testimonios: 2 columns */
       .testimonios-grid { grid-template-columns: repeat(2, 1fr); }
+
+      /* Embudo: 3 columns con flechas */
+      .embudo-steps {
+        flex-direction: row;
+        align-items: stretch;
+      }
+
+      .embudo-arrow {
+        display: flex;
+        align-items: center;
+        padding-top: 3rem;
+      }
+
+      .embudo-step {
+        flex: 1;
+      }
+
+      .embudo-step__ctas {
+        flex-direction: column;
+      }
 
       /* Footer: row */
       .footer__inner {
@@ -659,59 +853,63 @@
     </div>
   </section>
 
-  <!-- ─── SISTEMA PULSO TEASER ─── -->
-  <section id="diagnostico" class="diagnostico" aria-labelledby="diag-title">
+  <!-- ─── EMBUDO 3 PASOS ─── -->
+  <section id="diagnostico" class="embudo" aria-labelledby="embudo-title">
     <div class="section-inner">
-      <h2 id="diag-title" class="section-title fade-in">SISTEMA PULSO</h2>
-      <p class="diagnostico__intro fade-in">La herramienta que diseñé para darte una lectura real de tu negocio — en 10 minutos — antes de que arranquemos a trabajar.</p>
-      <div class="iframe-shell fade-in" style="min-height:auto; padding: 2.5rem 2rem; display:flex; flex-direction:column; gap:1.5rem;">
-        <div style="display:flex; flex-direction:column; gap:1rem;">
-          <div style="display:flex; align-items:flex-start; gap:1rem;">
-            <span style="font-size:1.4rem; line-height:1; flex-shrink:0;">📋</span>
-            <div>
-              <p style="font-weight:600; color:var(--blanco); margin-bottom:.25rem;">Diagnóstico de 5 módulos</p>
-              <p style="font-size:.88rem; color:var(--gris); line-height:1.6;">Presencia, captación, sistemas, operación y mentalidad. Respondés 10 minutos de preguntas y el sistema detecta dónde están las oportunidades reales.</p>
-            </div>
-          </div>
-          <div style="display:flex; align-items:flex-start; gap:1rem;">
-            <span style="font-size:1.4rem; line-height:1; flex-shrink:0;">📊</span>
-            <div>
-              <p style="font-weight:600; color:var(--blanco); margin-bottom:.25rem;">Reporte personalizado al instante</p>
-              <p style="font-size:.88rem; color:var(--gris); line-height:1.6;">Score, puntos de mejora y el mapa de lo que podemos construir juntos. Adaptado a tu negocio, no genérico.</p>
-            </div>
-          </div>
-          <div style="display:flex; align-items:flex-start; gap:1rem;">
-            <span style="font-size:1.4rem; line-height:1; flex-shrink:0;">🤖</span>
-            <div>
-              <p style="font-weight:600; color:var(--blanco); margin-bottom:.25rem;">Sesión con Sole IA</p>
-              <p style="font-size:.88rem; color:var(--gris); line-height:1.6;">Después del diagnóstico, podés continuar con Sole IA — mi sistema de análisis — que va más a fondo con tu caso antes de que yo intervenga.</p>
-            </div>
+      <h2 id="embudo-title" class="section-title fade-in">¿Cómo arrancamos?</h2>
+      <p class="embudo__intro fade-in">Tres pasos para transformar tu negocio. Empezás gratis, seguís a tu ritmo.</p>
+
+      <div class="embudo-steps">
+
+        <!-- PASO 1 -->
+        <div class="embudo-step fade-in">
+          <div class="embudo-step__badge embudo-step__badge--free">GRATIS</div>
+          <div class="embudo-step__num">01</div>
+          <h3 class="embudo-step__title">Diagnóstico Soledad Cardoni</h3>
+          <p class="embudo-step__desc">Respondés 10 minutos de preguntas sobre tu negocio. El sistema detecta dónde están los problemas reales y te da un reporte personalizado al instante — presencia, captación, sistemas, operación y mentalidad.</p>
+          <ul class="embudo-step__list">
+            <li>5 módulos de análisis</li>
+            <li>Reporte con score y oportunidades</li>
+            <li>Sin registro previo</li>
+          </ul>
+          <a href="diagnostico.html" class="btn-secondary embudo-step__cta">Hacer el diagnóstico →</a>
+        </div>
+
+        <div class="embudo-arrow" aria-hidden="true">→</div>
+
+        <!-- PASO 2 -->
+        <div class="embudo-step embudo-step--paid fade-in">
+          <div class="embudo-step__badge embudo-step__badge--paid">$10.000 ARS · una vez</div>
+          <div class="embudo-step__num">02</div>
+          <h3 class="embudo-step__title">SISTEMA PULSO — Sole IA</h3>
+          <p class="embudo-step__desc">Con tu diagnóstico como base, Sole IA —mi inteligencia artificial— profundiza en tu caso, hace las preguntas que yo haría y construye un mapa claro de acción antes de que trabajemos juntos.</p>
+          <ul class="embudo-step__list">
+            <li>Análisis profundo con IA especializada</li>
+            <li>Preguntas personalizadas a tu negocio</li>
+            <li>Síntesis lista para trabajar</li>
+          </ul>
+          <a href="diagnostico.html" class="btn-primary embudo-step__cta">Empezar con Sole IA →</a>
+        </div>
+
+        <div class="embudo-arrow" aria-hidden="true">→</div>
+
+        <!-- PASO 3 -->
+        <div class="embudo-step embudo-step--trabajo fade-in">
+          <div class="embudo-step__badge embudo-step__badge--trabajo">TRABAJO REAL</div>
+          <div class="embudo-step__num">03</div>
+          <h3 class="embudo-step__title">Trabajamos juntos</h3>
+          <p class="embudo-step__desc">Con todo el análisis encima de la mesa, diseñamos el plan y lo ejecutamos. Desde un módulo específico hasta la transformación completa de tu negocio.</p>
+          <ul class="embudo-step__list">
+            <li>Presencia digital, captación, sistemas</li>
+            <li>Planes a medida desde USD 500</li>
+            <li>Resultados medibles</li>
+          </ul>
+          <div class="embudo-step__ctas">
+            <a href="https://wa.me/5493571541984?text=Hola%20Soledad%2C%20quiero%20saber%20m%C3%A1s%20sobre%20trabajar%20juntos" target="_blank" rel="noopener noreferrer" class="btn-primary">Escribime por WhatsApp →</a>
+            <a href="servicios.html" class="btn-text">Ver todos los servicios</a>
           </div>
         </div>
-        <a href="servicios.html" class="btn-primary" style="align-self:flex-start;">Ver cómo funciona y empezar →</a>
-      </div>
-    </div>
-  </section>
 
-  <!-- ─── PAQUETE PRESENCIA DIGITAL ─── -->
-  <section class="paquete" aria-labelledby="paquete-title">
-    <div class="section-inner">
-      <div class="paquete-card fade-in">
-        <p class="paquete__label">Paquete destacado</p>
-        <h2 id="paquete-title" class="paquete__name">Presencia Digital</h2>
-        <div class="paquete__price" aria-label="Precio: USD 500">USD 500</div>
-        <p class="paquete__price-sub">Precio único · sin suscripción mensual</p>
-        <ul class="checklist" aria-label="Entregables incluidos">
-          <li>Sitio web profesional optimizado para búsquedas</li>
-          <li>Perfil de Google Business configurado y verificado</li>
-          <li>Branding o rebranding de identidad visual</li>
-          <li>Ficha de WhatsApp Business con catálogo de servicios</li>
-          <li>Integración de formulario de contacto y seguimiento</li>
-          <li>Reporte de visibilidad inicial y métricas base</li>
-          <li>Sesión de entrega y capacitación (60 min)</li>
-        </ul>
-        <a href="https://wa.me/5493571541984?text=Hola%20Soledad%2C%20me%20interesa%20el%20paquete%20Presencia%20Digital" target="_blank" rel="noopener noreferrer" class="btn-primary">Quiero este paquete →</a>
-        <p class="paquete__nota">El equivalente en pesos se calcula al tipo de cambio vigente.</p>
       </div>
     </div>
   </section>
