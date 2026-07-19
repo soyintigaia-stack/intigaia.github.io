@@ -1,4 +1,8 @@
 {
-  "buildCommand": "mkdir -p public && cp -r index.html diagnostico.html chat icons manifest.json sw.js icon-192.png icon-512.png soledad-cardoni.jpg pulso public/ 2>/dev/null; true",
-  "outputDirectory": "public"
+  "buildCommand": "mkdir -p public && cp -r index.html servicios.html diagnostico.html chat icons manifest.json sw.js icon-192.png icon-512.png soledad-cardoni.jpg public/ 2>/dev/null; true",
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/chat", "destination": "/chat/index.html" },
+    { "source": "/chat/", "destination": "/chat/index.html" }
+  ]
 }
