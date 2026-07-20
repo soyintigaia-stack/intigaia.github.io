@@ -257,6 +257,13 @@ const STORAGE_KEY  = 'soleIA_conv_v2';
 const OPENING_MSG  = '¡Hola! Soy Sole, el sistema de intake de SISTEMA PULSO.\n\nSoledad va a usar lo que me contés para armar tu análisis personalizado — así la devolución es concreta, no genérica.\n\n¿Por dónde arrancamos? Contame: ¿cómo se llama tu negocio y a qué se dedica?';
 
 // ─────────────────────────────────────────────
+// PAYMENT GATE
+// ─────────────────────────────────────────────
+const _params    = new URLSearchParams(window.location.search);
+const paymentId  = _params.get('payment_id') || '';
+const masterKey  = _params.get('master')     || '';
+
+// ─────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────
 let phone     = '';
@@ -344,7 +351,7 @@ async function handleSend() {
     const res  = await fetch(GAS_CHAT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ messages: history.slice(-14), phone })
+      body: JSON.stringify({ messages: history.slice(-14), phone, payment_id: paymentId, master_key: masterKey })
     });
     const data = await res.json();
 
@@ -357,6 +364,17 @@ async function handleSend() {
       persist();
       renderBubble('assistant', data.reply);
       if (done) setTimeout(() => { renderDoneCard(); lockInput(); }, 500);
+    } else if (data.error === 'payment_required') {
+      setThinking(false);
+      renderBubble('assistant', 'Para acceder al chat de Sole IA necesitás completar el pago. Entrá desde el enlace que te llegó después de pagar.');
+      lockInput();
+    } else if (data.error === 'payment_already_used') {
+      setThinking(false);
+      renderBubble('assistant', 'Este enlace de pago ya fue utilizado con otro número. Contactá a Soledad para resolverlo.');
+      lockInput();
+    } else if (data.error === 'payment_invalid') {
+      setThinking(false);
+      renderBubble('assistant', 'No pudimos verificar tu pago. Intentá de nuevo o contactá a Soledad.');
     } else {
       console.error('[SoleIA] No reply in response. Error:', data.error || 'unknown');
       renderBubble('assistant', 'Hubo un problema técnico. Intentá de nuevo en un momento.');
