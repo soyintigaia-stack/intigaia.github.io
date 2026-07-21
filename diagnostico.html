@@ -1020,199 +1020,402 @@ const MODULES = [
     { name: 'Posicionamiento', emoji: '🏆', color: '#16A34A' },
 ];
 
-const QUESTIONS = [
-    // Presencia Digital (3 preguntas)
-    {
-        mod: 0,
-        q: '¿Tenés perfil activo en redes sociales con publicaciones frecuentes?',
-        opts: [
+const BRANCH_QUESTION = {
+    q: '¿Cómo funciona principalmente tu negocio?',
+    opts: [
+        { text: 'Brindo servicios — mis clientes pagan por mi trabajo, atención o conocimiento', branch: 'servicios' },
+        { text: 'Vendo productos — tengo stock, catálogo o artículos para comercializar', branch: 'ventas' },
+        { text: 'Produzco y vendo — fabrico, elaboro o creo lo que después vendo', branch: 'produccion' },
+    ]
+};
+
+const QUESTIONS_BY_BRANCH = {
+    servicios: [
+        // Presencia Digital
+        { mod: 0, q: '¿Tenés perfil activo en redes sociales con publicaciones frecuentes de tu trabajo?', opts: [
             { text: 'Sí, publicamos al menos 3 veces por semana', pts: 7 },
             { text: 'Tengo perfil pero publico esporádicamente', pts: 3 },
             { text: 'No tengo o está sin actividad', pts: 0 },
-        ]
-    },
-    {
-        mod: 0,
-        q: '¿Tu negocio aparece en Google Maps con fotos, horarios y reseñas?',
-        opts: [
+        ]},
+        { mod: 0, q: '¿Tu negocio aparece en Google Maps con fotos, horarios y reseñas?', opts: [
             { text: 'Sí, perfil completo con varias reseñas', pts: 7 },
             { text: 'Aparezco pero sin información completa', pts: 3 },
             { text: 'No aparezco o no lo verificué', pts: 0 },
-        ]
-    },
-    {
-        mod: 0,
-        q: '¿Publicás fotos o resultados de tu trabajo (antes/después, proceso)?',
-        opts: [
+        ]},
+        { mod: 0, q: '¿Publicás fotos o resultados de tu trabajo (antes/después, proceso, portfolio)?', opts: [
             { text: 'Sí, regularmente con contenido de calidad', pts: 6 },
             { text: 'A veces, sin estrategia clara', pts: 2 },
             { text: 'Casi nunca o nunca', pts: 0 },
-        ]
-    },
-
-    // Captación de Clientes (3 preguntas)
-    {
-        mod: 1,
-        q: '¿De dónde vienen principalmente tus clientes nuevos?',
-        opts: [
+        ]},
+        // Captación
+        { mod: 1, q: '¿De dónde vienen principalmente tus clientes nuevos?', opts: [
             { text: 'Redes sociales, publicidad y recomendaciones', pts: 7 },
             { text: 'Solo boca en boca y conocidos', pts: 3 },
             { text: 'Muy pocos clientes nuevos me llegan', pts: 0 },
-        ]
-    },
-    {
-        mod: 1,
-        q: '¿Hacés publicidad paga (Meta Ads, Google Ads, Instagram) de forma regular?',
-        opts: [
+        ]},
+        { mod: 1, q: '¿Hacés publicidad paga (Meta Ads, Google Ads, Instagram) de forma regular?', opts: [
             { text: 'Sí, con resultados concretos', pts: 7 },
             { text: 'Lo probé pero no lo mantuve', pts: 3 },
             { text: 'No hago publicidad paga', pts: 0 },
-        ]
-    },
-    {
-        mod: 1,
-        q: '¿Cuántos clientes nuevos te contactan por mes?',
-        opts: [
+        ]},
+        { mod: 1, q: '¿Cuántos clientes nuevos te contactan por mes?', opts: [
             { text: 'Más de 15', pts: 6 },
             { text: 'Entre 5 y 15', pts: 3 },
             { text: 'Menos de 5', pts: 0 },
-        ]
-    },
-
-    // Automatización (3 preguntas)
-    {
-        mod: 2,
-        q: '¿Cómo coordinás tus turnos o pedidos con clientes?',
-        opts: [
-            { text: 'Sistema de reservas online (Calendly, AgendaPro, etc.)', pts: 7 },
+        ]},
+        // Automatización
+        { mod: 2, q: '¿Cómo coordinás los turnos o citas con tus clientes?', opts: [
+            { text: 'Sistema de turnos online (Calendly, AgendaPro, etc.)', pts: 7 },
             { text: 'Por WhatsApp de forma organizada', pts: 3 },
             { text: 'Por llamada o sin sistema definido', pts: 0 },
-        ]
-    },
-    {
-        mod: 2,
-        q: '¿Mandás recordatorios automáticos antes de cada turno o entrega?',
-        opts: [
+        ]},
+        { mod: 2, q: '¿Mandás recordatorios automáticos antes de cada turno o cita?', opts: [
             { text: 'Sí, de forma completamente automática', pts: 7 },
             { text: 'Lo hago a mano cuando me acuerdo', pts: 3 },
             { text: 'No mando recordatorios', pts: 0 },
-        ]
-    },
-    {
-        mod: 2,
-        q: '¿Cómo registrás y gestionás la información de tus clientes?',
-        opts: [
+        ]},
+        { mod: 2, q: '¿Cómo registrás y gestionás la información de tus clientes?', opts: [
             { text: 'CRM o planilla organizada y actualizada', pts: 6 },
             { text: 'Agenda física o notas del celular', pts: 2 },
             { text: 'De memoria o no registro datos', pts: 0 },
-        ]
-    },
-
-    // Fidelización (3 preguntas)
-    {
-        mod: 3,
-        q: '¿Qué porcentaje estimado de tus clientes vuelve a comprarte?',
-        opts: [
+        ]},
+        // Fidelización
+        { mod: 3, q: '¿Qué porcentaje estimado de tus clientes vuelve a contratarte?', opts: [
             { text: 'Más del 60%', pts: 7 },
             { text: 'Entre 30% y 60%', pts: 3 },
             { text: 'Menos del 30% o no lo sé', pts: 0 },
-        ]
-    },
-    {
-        mod: 3,
-        q: '¿Informás a tus clientes actuales cuando tenés novedades, servicios o promociones?',
-        opts: [
+        ]},
+        { mod: 3, q: '¿Informás a tus clientes actuales cuando tenés novedades, servicios o promociones?', opts: [
             { text: 'Sí, tengo lista de WhatsApp o email activa', pts: 7 },
             { text: 'A veces, solo por redes', pts: 3 },
             { text: 'No los contacto proactivamente', pts: 0 },
-        ]
-    },
-    {
-        mod: 3,
-        q: '¿Pedís reseñas o testimonios de forma sistemática después de cada servicio?',
-        opts: [
+        ]},
+        { mod: 3, q: '¿Pedís reseñas o testimonios de forma sistemática después de cada servicio?', opts: [
             { text: 'Sí, siempre pido feedback y reseñas', pts: 6 },
             { text: 'A veces se los pido', pts: 2 },
             { text: 'No los pido', pts: 0 },
-        ]
-    },
-
-    // Posicionamiento (3 preguntas)
-    {
-        mod: 4,
-        q: '¿Tenés una especialidad clara que te diferencia de la competencia?',
-        opts: [
+        ]},
+        // Posicionamiento
+        { mod: 4, q: '¿Tenés una especialidad clara que te diferencia de la competencia?', opts: [
             { text: 'Sí, bien definida y la comunico activamente', pts: 7 },
             { text: 'La tengo pero no la comunico bien', pts: 3 },
             { text: 'Ofrezco de todo sin especialidad definida', pts: 0 },
-        ]
-    },
-    {
-        mod: 4,
-        q: '¿Tus precios reflejan el valor real de tu trabajo?',
-        opts: [
+        ]},
+        { mod: 4, q: '¿Tus precios reflejan el valor real de tu trabajo?', opts: [
             { text: 'Sí, cobro lo que corresponde con confianza', pts: 7 },
             { text: 'Creo que cobro menos de lo que debería', pts: 3 },
             { text: 'No sé cómo fijar mis precios correctamente', pts: 0 },
-        ]
-    },
-    {
-        mod: 4,
-        q: '¿Tenés claro quién es tu cliente ideal y orientás tus acciones a ese perfil?',
-        opts: [
+        ]},
+        { mod: 4, q: '¿Tenés claro quién es tu cliente ideal y orientás tus acciones a ese perfil?', opts: [
             { text: 'Sí, muy claro y trabajo para ese cliente', pts: 6 },
             { text: 'Más o menos, no siempre lo enfoco bien', pts: 2 },
             { text: 'No, atiendo a cualquiera que aparezca', pts: 0 },
-        ]
-    },
-];
+        ]},
+    ],
+    ventas: [
+        // Presencia Digital
+        { mod: 0, q: '¿Tenés perfil activo en redes sociales donde mostrás tus productos regularmente?', opts: [
+            { text: 'Sí, publicamos productos al menos 3 veces por semana', pts: 7 },
+            { text: 'Tengo perfil pero publico esporádicamente', pts: 3 },
+            { text: 'No tengo o está sin actividad', pts: 0 },
+        ]},
+        { mod: 0, q: '¿Tu local o tienda aparece en Google Maps con fotos, horarios y reseñas?', opts: [
+            { text: 'Sí, perfil completo con varias reseñas positivas', pts: 7 },
+            { text: 'Aparezco pero sin información completa', pts: 3 },
+            { text: 'No aparezco o no lo verificué', pts: 0 },
+        ]},
+        { mod: 0, q: '¿Publicás fotos de calidad de tus productos con descripción y precio?', opts: [
+            { text: 'Sí, regularmente con contenido atractivo', pts: 6 },
+            { text: 'A veces, sin estrategia clara', pts: 2 },
+            { text: 'Casi nunca o nunca', pts: 0 },
+        ]},
+        // Captación
+        { mod: 1, q: '¿De dónde vienen principalmente tus compradores nuevos?', opts: [
+            { text: 'Redes sociales, publicidad y recomendaciones', pts: 7 },
+            { text: 'Solo boca en boca o clientes que pasan por el local', pts: 3 },
+            { text: 'Muy pocos compradores nuevos llegan solos', pts: 0 },
+        ]},
+        { mod: 1, q: '¿Vendés en plataformas online (MercadoLibre, Instagram Shopping, tienda web)?', opts: [
+            { text: 'Sí, activamente con ventas regulares', pts: 7 },
+            { text: 'Tengo cuenta pero con poca actividad', pts: 3 },
+            { text: 'No vendo por canales online', pts: 0 },
+        ]},
+        { mod: 1, q: '¿Cuántas consultas o pedidos nuevos recibís por mes?', opts: [
+            { text: 'Más de 20', pts: 6 },
+            { text: 'Entre 8 y 20', pts: 3 },
+            { text: 'Menos de 8', pts: 0 },
+        ]},
+        // Automatización
+        { mod: 2, q: '¿Cómo gestionás las consultas de productos y pedidos que te llegan?', opts: [
+            { text: 'Catálogo digital, tienda online o sistema de pedidos automatizado', pts: 7 },
+            { text: 'Por WhatsApp de forma organizada', pts: 3 },
+            { text: 'Sin sistema claro, respondo cuando puedo', pts: 0 },
+        ]},
+        { mod: 2, q: '¿Avisás automáticamente a los clientes sobre el estado de su compra o pedido?', opts: [
+            { text: 'Sí, con mensajes automáticos por WhatsApp o email', pts: 7 },
+            { text: 'Lo aviso a mano cuando me acuerdo', pts: 3 },
+            { text: 'No comunico el estado de los pedidos', pts: 0 },
+        ]},
+        { mod: 2, q: '¿Cómo registrás tu stock, ventas y datos de clientes?', opts: [
+            { text: 'Sistema de gestión, planilla o POS actualizado', pts: 6 },
+            { text: 'Cuaderno, notas o de memoria', pts: 2 },
+            { text: 'No llevo un registro sistemático', pts: 0 },
+        ]},
+        // Fidelización
+        { mod: 3, q: '¿Qué porcentaje estimado de tus compradores vuelve a comprarte?', opts: [
+            { text: 'Más del 50%', pts: 7 },
+            { text: 'Entre 20% y 50%', pts: 3 },
+            { text: 'Menos del 20% o no lo sé', pts: 0 },
+        ]},
+        { mod: 3, q: '¿Informás a tus clientes habituales cuando tenés productos nuevos, stock o promociones?', opts: [
+            { text: 'Sí, tengo lista de WhatsApp o email activa', pts: 7 },
+            { text: 'A veces, solo por redes', pts: 3 },
+            { text: 'No los contacto proactivamente', pts: 0 },
+        ]},
+        { mod: 3, q: '¿Pedís valoraciones o recomendaciones de manera sistemática a quienes te compraron?', opts: [
+            { text: 'Sí, siempre pido feedback y reseñas', pts: 6 },
+            { text: 'A veces se los pido', pts: 2 },
+            { text: 'No los pido', pts: 0 },
+        ]},
+        // Posicionamiento
+        { mod: 4, q: '¿Tenés algo que hace que tu negocio sea la primera opción para tu comprador ideal?', opts: [
+            { text: 'Sí, bien definido y lo comunico activamente', pts: 7 },
+            { text: 'Lo tengo pero no lo comunico bien', pts: 3 },
+            { text: 'Compito principalmente por precio o conveniencia', pts: 0 },
+        ]},
+        { mod: 4, q: '¿Tus precios son competitivos y los comunicás de forma clara?', opts: [
+            { text: 'Sí, con confianza y sin necesidad de justificarlos', pts: 7 },
+            { text: 'A veces bajo precios para competir o no sé bien cómo fijarlos', pts: 3 },
+            { text: 'No sé si mis precios son correctos para el mercado', pts: 0 },
+        ]},
+        { mod: 4, q: '¿Sabés exactamente a qué tipo de comprador apuntás y orientás tus acciones a ese perfil?', opts: [
+            { text: 'Sí, muy claro y trabajo para ese comprador', pts: 6 },
+            { text: 'Más o menos, no siempre lo enfoco bien', pts: 2 },
+            { text: 'No, vendo a cualquiera que quiera comprar', pts: 0 },
+        ]},
+    ],
+    produccion: [
+        // Presencia Digital
+        { mod: 0, q: '¿Mostrás en redes sociales tu proceso de elaboración o el producto final?', opts: [
+            { text: 'Sí, regularmente con fotos y videos del proceso y resultado', pts: 7 },
+            { text: 'A veces, sin consistencia', pts: 3 },
+            { text: 'No o casi nunca', pts: 0 },
+        ]},
+        { mod: 0, q: '¿Tu emprendimiento tiene presencia online donde se puede ver y pedir lo que producís?', opts: [
+            { text: 'Sí, completo con fotos, precios y forma de contacto', pts: 7 },
+            { text: 'Tengo algo pero incompleto o desactualizado', pts: 3 },
+            { text: 'No tengo presencia online clara', pts: 0 },
+        ]},
+        { mod: 0, q: '¿Publicás fotos de calidad de tu producto terminado de forma regular?', opts: [
+            { text: 'Sí, regularmente con contenido atractivo', pts: 6 },
+            { text: 'A veces, sin estrategia clara', pts: 2 },
+            { text: 'Casi nunca o nunca', pts: 0 },
+        ]},
+        // Captación
+        { mod: 1, q: '¿De dónde vienen principalmente tus pedidos o clientes nuevos?', opts: [
+            { text: 'Redes sociales, publicidad, ferias y recomendaciones', pts: 7 },
+            { text: 'Solo boca en boca y conocidos', pts: 3 },
+            { text: 'Muy pocos clientes nuevos llegan solos', pts: 0 },
+        ]},
+        { mod: 1, q: '¿Vendés por canales online (MercadoLibre, Instagram, tienda web, delivery) además de venta directa?', opts: [
+            { text: 'Sí, activamente con pedidos regulares', pts: 7 },
+            { text: 'Tengo pero con poca actividad o ventas esporádicas', pts: 3 },
+            { text: 'No, solo vendo en persona o de boca en boca', pts: 0 },
+        ]},
+        { mod: 1, q: '¿Cuántos pedidos o clientes nuevos recibís por mes?', opts: [
+            { text: 'Más de 15', pts: 6 },
+            { text: 'Entre 5 y 15', pts: 3 },
+            { text: 'Menos de 5', pts: 0 },
+        ]},
+        // Automatización
+        { mod: 2, q: '¿Cómo tomás y organizás los pedidos que recibís?', opts: [
+            { text: 'Formulario online, catálogo digital o sistema de pedidos organizado', pts: 7 },
+            { text: 'Por WhatsApp de forma organizada', pts: 3 },
+            { text: 'Sin sistema claro, de forma improvisada', pts: 0 },
+        ]},
+        { mod: 2, q: '¿Avisás automáticamente a tus clientes cuando el pedido está listo o en camino?', opts: [
+            { text: 'Sí, con mensajes automáticos o flujo organizado', pts: 7 },
+            { text: 'Lo aviso a mano cuando me acuerdo', pts: 3 },
+            { text: 'No, el cliente tiene que preguntar', pts: 0 },
+        ]},
+        { mod: 2, q: '¿Cómo registrás tus insumos, costos de producción y datos de clientes?', opts: [
+            { text: 'Planilla, sistema o herramienta actualizada', pts: 6 },
+            { text: 'Cuaderno, notas o de memoria', pts: 2 },
+            { text: 'No llevo un registro claro', pts: 0 },
+        ]},
+        // Fidelización
+        { mod: 3, q: '¿Qué porcentaje estimado de tus clientes te vuelve a pedir?', opts: [
+            { text: 'Más del 50%', pts: 7 },
+            { text: 'Entre 20% y 50%', pts: 3 },
+            { text: 'Menos del 20% o no lo sé', pts: 0 },
+        ]},
+        { mod: 3, q: '¿Informás a tus clientes habituales cuando tenés producción nueva, temporada o novedades?', opts: [
+            { text: 'Sí, tengo lista de WhatsApp o contacto directo activo', pts: 7 },
+            { text: 'A veces, solo por redes', pts: 3 },
+            { text: 'No los contacto proactivamente', pts: 0 },
+        ]},
+        { mod: 3, q: '¿Pedís fotos o reseñas a tus clientes después de recibir el producto?', opts: [
+            { text: 'Sí, siempre pido feedback y testimonios', pts: 6 },
+            { text: 'A veces', pts: 2 },
+            { text: 'No los pido', pts: 0 },
+        ]},
+        // Posicionamiento
+        { mod: 4, q: '¿Tenés algo que hace que lo que producís sea único y lo comunicás claramente?', opts: [
+            { text: 'Sí, bien definido y lo muestro activamente', pts: 7 },
+            { text: 'Lo sé internamente pero no lo comunico bien', pts: 3 },
+            { text: 'No tengo algo que me diferencie claramente', pts: 0 },
+        ]},
+        { mod: 4, q: '¿Tus precios cubren bien tus costos y reflejan el valor de lo que producís?', opts: [
+            { text: 'Sí, calculé mis costos y cobro con seguridad', pts: 7 },
+            { text: 'Creo que cobro menos de lo que debería', pts: 3 },
+            { text: 'No sé si mis precios son correctos', pts: 0 },
+        ]},
+        { mod: 4, q: '¿Sabés exactamente a qué tipo de cliente apuntás y orientás tu producción a ese perfil?', opts: [
+            { text: 'Sí, muy claro y oriento mi producción a ese cliente', pts: 6 },
+            { text: 'Más o menos, depende de quién pregunte', pts: 2 },
+            { text: 'No, produzco para cualquiera que quiera comprar', pts: 0 },
+        ]},
+    ],
+};
 
 const MAX_PER_MOD = [20, 20, 20, 20, 20];
 
-const MODULE_INSIGHTS = [
-    {
-        low: { title: 'No te están encontrando online', desc: 'Sin presencia digital activa, los clientes que buscan tus servicios terminan en la competencia.', roi: '+4 a 8 clientes nuevos/mes', level: 'critical' },
-        mid: { title: 'Presencia digital mejorable', desc: 'Estás visible pero sin consistencia. La regularidad en redes es lo que convierte seguidores en clientes.', roi: '+2 a 4 clientes nuevos/mes', level: 'warning' },
-        high: { title: 'Buena presencia digital', desc: 'Tu visibilidad está bien establecida. El siguiente paso es monetizarla más eficientemente.', roi: 'Optimizar conversión', level: 'ok' },
-    },
-    {
-        low: { title: 'Captación 100% dependiente del azar', desc: 'Solo boca en boca significa que tu facturación depende del azar. Eso es frágil e impredecible.', roi: 'Duplicar clientes en 90 días', level: 'critical' },
-        mid: { title: 'Captación limitada', desc: 'Llegás a algunos clientes nuevos, pero no de forma sistemática. Un canal publicitario bien configurado cambia todo.', roi: '+5 a 10 clientes nuevos/mes', level: 'warning' },
-        high: { title: 'Captación funcionando', desc: 'Tenés canales activos. La clave ahora es reducir el costo por cliente y automatizar el seguimiento.', roi: 'Escalar con menos costo', level: 'ok' },
-    },
-    {
-        low: { title: 'Operás manualmente y perdés tiempo todos los días', desc: 'Sin sistemas, das vueltas haciendo tareas que podrían estar automatizadas. Eso limita cuánto podés crecer.', roi: '+3 a 5hs libres por semana', level: 'critical' },
-        mid: { title: 'Automatización parcial', desc: 'Tenés algo implementado, pero hay cuellos de botella. Cada hora en tareas manuales es una hora que no usás para crecer.', roi: '+2hs libres por semana', level: 'warning' },
-        high: { title: 'Buenos sistemas instalados', desc: 'Tus procesos están automatizados. Considerá integrar tus herramientas para tener una vista unificada del negocio.', roi: 'Integrar y escalar', level: 'ok' },
-    },
-    {
-        low: { title: 'Estás dejando ir clientes que ya conquistaste', desc: 'Conseguir un cliente nuevo cuesta 5x más que retener uno. Sin fidelización, perdés ingresos que ya tenías asegurados.', roi: '+35% de clientes recurrentes', level: 'critical' },
-        mid: { title: 'Fidelización ocasional', desc: 'Algunos clientes vuelven, pero no por un sistema tuyo sino por decisión propia. Podés influir en eso.', roi: '+20% de retención', level: 'warning' },
-        high: { title: 'Buena retención de clientes', desc: 'Tus clientes vuelven. Ahora enfocate en aumentar el valor promedio por cliente con upselling de servicios.', roi: 'Aumentar ticket promedio', level: 'ok' },
-    },
-    {
-        low: { title: 'Sin diferenciación, competís solo por precio', desc: 'Si no comunicás qué te hace única, los clientes deciden por precio. Eso te obliga a cobrar menos de lo que merecés.', roi: 'Subir precios 20-40%', level: 'critical' },
-        mid: { title: 'Diferenciación confusa', desc: 'Sabés en qué sos buena, pero no lo estás comunicando con claridad. Tu posicionamiento es más fuerte de lo que parece.', roi: 'Subir precios 10-20%', level: 'warning' },
-        high: { title: 'Posicionamiento sólido', desc: 'Sabés quién sos y para quién trabajás. Esto te permite cobrar lo que corresponde y atraer mejores clientes.', roi: 'Expandir a nuevos segmentos', level: 'ok' },
-    },
-];
+const MODULE_INSIGHTS_BY_BRANCH = {
+    servicios: [
+        {
+            low: { title: 'No te están encontrando online', desc: 'Sin presencia digital activa, los clientes que buscan tus servicios terminan en la competencia.', roi: '+4 a 8 clientes nuevos/mes', level: 'critical' },
+            mid: { title: 'Presencia digital mejorable', desc: 'Estás visible pero sin consistencia. La regularidad en redes es lo que convierte seguidores en clientes.', roi: '+2 a 4 clientes nuevos/mes', level: 'warning' },
+            high: { title: 'Buena presencia digital', desc: 'Tu visibilidad está bien establecida. El siguiente paso es monetizarla más eficientemente.', roi: 'Optimizar conversión', level: 'ok' },
+        },
+        {
+            low: { title: 'Captación 100% dependiente del azar', desc: 'Solo boca en boca significa que tu facturación depende del azar. Eso es frágil e impredecible.', roi: 'Duplicar clientes en 90 días', level: 'critical' },
+            mid: { title: 'Captación limitada', desc: 'Llegás a algunos clientes nuevos, pero no de forma sistemática. Un canal publicitario bien configurado cambia todo.', roi: '+5 a 10 clientes nuevos/mes', level: 'warning' },
+            high: { title: 'Captación funcionando', desc: 'Tenés canales activos. La clave ahora es reducir el costo por cliente y automatizar el seguimiento.', roi: 'Escalar con menos costo', level: 'ok' },
+        },
+        {
+            low: { title: 'Perdés horas todos los días en turnos y seguimientos manuales', desc: 'Sin sistemas, das vueltas coordinando turnos y recordando datos que podrían estar automatizados.', roi: '+3 a 5hs libres por semana', level: 'critical' },
+            mid: { title: 'Automatización parcial', desc: 'Tenés algo implementado, pero hay cuellos de botella. Cada hora en tareas manuales es una hora que no usás para crecer.', roi: '+2hs libres por semana', level: 'warning' },
+            high: { title: 'Buenos sistemas instalados', desc: 'Tus procesos están automatizados. Considerá integrar tus herramientas para tener una vista unificada del negocio.', roi: 'Integrar y escalar', level: 'ok' },
+        },
+        {
+            low: { title: 'Estás dejando ir clientes que ya conquistaste', desc: 'Conseguir un cliente nuevo cuesta 5x más que retener uno. Sin fidelización, perdés ingresos que ya tenías asegurados.', roi: '+35% de clientes recurrentes', level: 'critical' },
+            mid: { title: 'Fidelización ocasional', desc: 'Algunos clientes vuelven, pero no por un sistema tuyo sino por decisión propia. Podés influir en eso.', roi: '+20% de retención', level: 'warning' },
+            high: { title: 'Buena retención de clientes', desc: 'Tus clientes vuelven. Ahora enfocate en aumentar el valor promedio por cliente con upselling de servicios.', roi: 'Aumentar ticket promedio', level: 'ok' },
+        },
+        {
+            low: { title: 'Sin diferenciación, competís solo por precio', desc: 'Si no comunicás qué te hace única, los clientes deciden por precio. Eso te obliga a cobrar menos de lo que merecés.', roi: 'Subir precios 20-40%', level: 'critical' },
+            mid: { title: 'Diferenciación confusa', desc: 'Sabés en qué sos buena, pero no lo estás comunicando con claridad. Tu posicionamiento es más fuerte de lo que parece.', roi: 'Subir precios 10-20%', level: 'warning' },
+            high: { title: 'Posicionamiento sólido', desc: 'Sabés quién sos y para quién trabajás. Esto te permite cobrar lo que corresponde y atraer mejores clientes.', roi: 'Expandir a nuevos segmentos', level: 'ok' },
+        },
+    ],
+    ventas: [
+        {
+            low: { title: 'Tus productos no se encuentran online', desc: 'Sin presencia digital activa, los compradores que buscan lo que vendés terminan en otro lado.', roi: '+6 a 12 compradores nuevos/mes', level: 'critical' },
+            mid: { title: 'Presencia digital mejorable', desc: 'Estás visible pero sin consistencia. Publicar con regularidad aumenta la confianza y las ventas.', roi: '+3 a 6 compradores nuevos/mes', level: 'warning' },
+            high: { title: 'Buena presencia digital', desc: 'Tu visibilidad online está funcionando. El paso siguiente es optimizar la conversión de visitas en ventas.', roi: 'Optimizar conversión', level: 'ok' },
+        },
+        {
+            low: { title: 'Captación 100% pasiva — esperás que el cliente venga', desc: 'Depender del local físico o el boca en boca es frágil. Hay canales online que multiplican tu alcance hoy mismo.', roi: 'Duplicar compradores en 90 días', level: 'critical' },
+            mid: { title: 'Captación limitada a pocos canales', desc: 'Llegás a compradores, pero no aprovechás el potencial de plataformas como MercadoLibre o Instagram Shopping.', roi: '+8 a 15 compradores/mes', level: 'warning' },
+            high: { title: 'Captación activa funcionando', desc: 'Tenés canales activos. La clave ahora es reducir el costo por venta y automatizar el seguimiento post-consulta.', roi: 'Escalar con menos costo', level: 'ok' },
+        },
+        {
+            low: { title: 'Perdés ventas por respuesta lenta o proceso caótico', desc: 'Sin sistema de pedidos claro, muchas consultas se pierden o el proceso de compra frustra al cliente.', roi: '+20% de conversión de consultas', level: 'critical' },
+            mid: { title: 'Gestión de pedidos mejorable', desc: 'Gestionás los pedidos, pero hay demoras o falta de comunicación proactiva que afectan la experiencia de compra.', roi: '+10% de conversión', level: 'warning' },
+            high: { title: 'Buena gestión operativa', desc: 'Tus pedidos están organizados. Considerá automatizar más la comunicación post-venta para aumentar la recurrencia.', roi: 'Aumentar recurrencia', level: 'ok' },
+        },
+        {
+            low: { title: 'Compradores que se van y no vuelven', desc: 'Cada comprador que no vuelve es una inversión perdida. Sin fidelización, siempre tenés que salir a buscar clientes nuevos.', roi: '+35% de compradores recurrentes', level: 'critical' },
+            mid: { title: 'Fidelización ocasional', desc: 'Algunos compradores vuelven, pero no porque vos hiciste algo para que vuelvan. Podés cambiar eso activamente.', roi: '+20% de retención', level: 'warning' },
+            high: { title: 'Buena retención de compradores', desc: 'Tus clientes vuelven. Ahora enfocate en aumentar el ticket promedio con packs, combos o exclusividades.', roi: 'Aumentar ticket promedio', level: 'ok' },
+        },
+        {
+            low: { title: 'Sin diferenciación, competís solo por precio', desc: 'Si no comunicás qué te hace diferente de otros que venden lo mismo, el cliente decide por precio. Siempre perdés.', roi: 'Subir precios 20-30%', level: 'critical' },
+            mid: { title: 'Diferenciación confusa', desc: 'Tenés algo especial, pero no lo estás comunicando. Tu propuesta de valor es más fuerte de lo que el mercado percibe.', roi: 'Subir precios 10-20%', level: 'warning' },
+            high: { title: 'Posicionamiento sólido', desc: 'Sabés qué te diferencia y para qué cliente trabajás. Esto te permite sostener precios y atraer mejores compradores.', roi: 'Expandir a nuevos segmentos', level: 'ok' },
+        },
+    ],
+    produccion: [
+        {
+            low: { title: 'Tu producto no se ve — no existe para el mercado', desc: 'Si no mostrás lo que producís, los compradores que buscan lo que hacés terminan eligiendo a otro.', roi: '+5 a 10 pedidos nuevos/mes', level: 'critical' },
+            mid: { title: 'Presencia digital irregular', desc: 'Tu producto aparece, pero no con la frecuencia ni calidad suficiente para generar confianza y pedidos constantes.', roi: '+3 a 6 pedidos nuevos/mes', level: 'warning' },
+            high: { title: 'Buena presencia digital', desc: 'Tu producto y proceso son visibles. El paso siguiente es que esa visibilidad se convierta en pedidos recurrentes.', roi: 'Optimizar conversión', level: 'ok' },
+        },
+        {
+            low: { title: 'Captación 100% pasiva — esperás que te busquen', desc: 'Solo boca en boca es frágil para un productor. Hay canales que multiplican tu alcance sin depender del azar.', roi: 'Duplicar pedidos en 90 días', level: 'critical' },
+            mid: { title: 'Captación limitada a canales directos', desc: 'Llegás a compradores, pero sin aprovechar el potencial de MercadoLibre, delivery o redes para pedidos online.', roi: '+8 a 15 pedidos/mes', level: 'warning' },
+            high: { title: 'Captación activa funcionando', desc: 'Tus canales traen pedidos. La clave ahora es reducir la dependencia de cualquier canal único y diversificar.', roi: 'Escalar y diversificar', level: 'ok' },
+        },
+        {
+            low: { title: 'Pedidos que se pierden o se gestionan de forma caótica', desc: 'Sin sistema de pedidos, es fácil confundir cantidades o llegar tarde. Eso afecta la confianza y la reputación.', roi: '+30% de pedidos entregados a tiempo', level: 'critical' },
+            mid: { title: 'Gestión de pedidos mejorable', desc: 'Gestionás los pedidos, pero de forma manual y reactiva. Un flujo simple de WhatsApp Business o formulario cambia todo.', roi: '+15% de eficiencia operativa', level: 'warning' },
+            high: { title: 'Buena gestión operativa', desc: 'Tus pedidos están organizados. Sistematizar los avisos de estado mejora la experiencia y genera más recomendaciones.', roi: 'Mejorar experiencia post-compra', level: 'ok' },
+        },
+        {
+            low: { title: 'Compradores que se van y no vuelven a pedir', desc: 'Sin contacto proactivo, el cliente que te compró una vez no sabe cuándo tenés producción nueva. Eso es dinero que se va.', roi: '+40% de pedidos recurrentes', level: 'critical' },
+            mid: { title: 'Fidelización ocasional', desc: 'Algunos clientes vuelven, pero no porque vos los contactaste. Un grupo de WhatsApp o lista de difusión cambia ese porcentaje.', roi: '+25% de retención', level: 'warning' },
+            high: { title: 'Buena retención de clientes', desc: 'Tus clientes vuelven a pedir. Ahora enfocate en aumentar el valor de cada pedido con combos, temporadas o suscripción.', roi: 'Aumentar tamaño de pedido', level: 'ok' },
+        },
+        {
+            low: { title: 'Sin diferenciación, competís solo por precio', desc: 'Si no comunicás qué hace especial lo que producís, el comprador decide por precio. Y siempre hay alguien más barato.', roi: 'Subir precios 25-40%', level: 'critical' },
+            mid: { title: 'Diferenciación confusa', desc: 'Tu producto tiene algo especial, pero no lo estás mostrando bien. El proceso, los ingredientes o el origen son tu diferencial.', roi: 'Subir precios 15-25%', level: 'warning' },
+            high: { title: 'Posicionamiento sólido', desc: 'Sabés qué hacés único y para qué cliente producís. Eso te permite sostener precios y fidelizar compradores de calidad.', roi: 'Expandir a nuevos mercados', level: 'ok' },
+        },
+    ],
+};
 
-const ROADMAP_BY_SCORE = {
-    low: [
-        { mes: 'MES 1', title: 'Existir digitalmente', desc: 'Google Maps completo, Instagram activo, 5 fotos de tu trabajo con tu marca.' },
-        { mes: 'MES 2', title: 'Sistematizar la operación', desc: 'Turnos online + recordatorios automáticos de WhatsApp para cada cliente.' },
-        { mes: 'MES 3', title: 'Primera campaña de captación', desc: 'Meta Ads segmentado en tu zona con presupuesto desde $5/día.' },
-    ],
-    mid: [
-        { mes: 'MES 1', title: 'Consolidar presencia', desc: 'Estrategia de contenido consistente y perfil de Google Maps optimizado con reseñas.' },
-        { mes: 'MES 2', title: 'Automatizar fidelización', desc: 'Lista de difusión WhatsApp, recordatorio de retoque/renovación automático.' },
-        { mes: 'MES 3', title: 'Escalar captación', desc: 'Campaña paga con audiencia definida + sistema de referidos para clientes actuales.' },
-    ],
-    high: [
-        { mes: 'MES 1', title: 'Optimizar conversión', desc: 'Mejorar la tasa de contacto → cliente con seguimiento automatizado post-consulta.' },
-        { mes: 'MES 2', title: 'Aumentar ticket promedio', desc: 'Paquetes de servicios y upselling estratégico dentro de cada atención.' },
-        { mes: 'MES 3', title: 'Escalar el negocio', desc: 'Evaluar incorporar equipo, franquicia del modelo o servicios online.' },
-    ],
+const ROADMAP_BY_BRANCH = {
+    servicios: {
+        low: [
+            { mes: 'MES 1', title: 'Existir digitalmente', desc: 'Google Maps completo, Instagram activo, 5 fotos de tu trabajo con tu marca.' },
+            { mes: 'MES 2', title: 'Sistematizar turnos y seguimiento', desc: 'Turnos online + recordatorios automáticos de WhatsApp para cada cliente.' },
+            { mes: 'MES 3', title: 'Primera campaña de captación', desc: 'Meta Ads segmentado en tu zona con presupuesto desde $5/día.' },
+        ],
+        mid: [
+            { mes: 'MES 1', title: 'Consolidar presencia', desc: 'Estrategia de contenido consistente y perfil de Google Maps optimizado con reseñas.' },
+            { mes: 'MES 2', title: 'Automatizar fidelización', desc: 'Lista de difusión WhatsApp, recordatorio de seguimiento post-servicio automático.' },
+            { mes: 'MES 3', title: 'Escalar captación', desc: 'Campaña paga con audiencia definida + sistema de referidos para clientes actuales.' },
+        ],
+        high: [
+            { mes: 'MES 1', title: 'Optimizar conversión', desc: 'Mejorar la tasa de consulta → cliente con seguimiento automatizado post-contacto.' },
+            { mes: 'MES 2', title: 'Aumentar ticket promedio', desc: 'Paquetes de servicios y upselling estratégico dentro de cada atención.' },
+            { mes: 'MES 3', title: 'Escalar el negocio', desc: 'Evaluar incorporar equipo, franquicia del modelo o servicios online.' },
+        ],
+    },
+    ventas: {
+        low: [
+            { mes: 'MES 1', title: 'Existir en el canal correcto', desc: 'Google Maps completo, Instagram activo con fotos de productos, cuenta en MercadoLibre con catálogo básico.' },
+            { mes: 'MES 2', title: 'Organizar el proceso de venta', desc: 'Sistema para gestionar consultas y pedidos, respuesta rápida garantizada, comunicación del estado de compra.' },
+            { mes: 'MES 3', title: 'Primera campaña de captación', desc: 'Meta Ads con foto de producto + oferta concreta, segmentado en tu zona o perfil de comprador objetivo.' },
+        ],
+        mid: [
+            { mes: 'MES 1', title: 'Consolidar canales de venta', desc: 'Estrategia de contenido de producto consistente y reseñas en Google Maps y MercadoLibre optimizadas.' },
+            { mes: 'MES 2', title: 'Fidelizar compradores actuales', desc: 'Lista de WhatsApp con novedades de stock, promociones exclusivas o prioridad para clientes repetidos.' },
+            { mes: 'MES 3', title: 'Escalar captación online', desc: 'Campaña paga con audiencia definida + programa de referidos para compradores habituales.' },
+        ],
+        high: [
+            { mes: 'MES 1', title: 'Optimizar conversión', desc: 'Mejorar el proceso de consulta → venta con seguimiento automático post-contacto y catálogo digital.' },
+            { mes: 'MES 2', title: 'Aumentar ticket promedio', desc: 'Packs de productos, combos o upselling estratégico dentro de cada venta.' },
+            { mes: 'MES 3', title: 'Escalar o diversificar', desc: 'Evaluar nuevos canales, venta mayorista, dropshipping o apertura de segundo punto de venta.' },
+        ],
+    },
+    produccion: {
+        low: [
+            { mes: 'MES 1', title: 'Mostrar lo que hacés', desc: 'Fotos del producto terminado, del proceso y los materiales. Google Maps o Instagram activo con identidad clara.' },
+            { mes: 'MES 2', title: 'Organizar la toma de pedidos', desc: 'Formulario por WhatsApp Business, catálogo digital o tienda online básica para recibir pedidos sin caos.' },
+            { mes: 'MES 3', title: 'Ampliar los canales de venta', desc: 'MercadoLibre, ferias locales o delivery + primera campaña de Meta Ads con tu producto estrella.' },
+        ],
+        mid: [
+            { mes: 'MES 1', title: 'Consolidar la presencia del producto', desc: 'Estrategia de contenido consistente mostrando proceso + resultado. Reseñas en Google Maps activas.' },
+            { mes: 'MES 2', title: 'Sistematizar pedidos y comunicación', desc: 'Flujo de WhatsApp Business para pedidos, avisos de estado automáticos y recordatorios de temporada.' },
+            { mes: 'MES 3', title: 'Escalar captación', desc: 'Campaña del producto estrella + lista de clientes habituales con novedades y anticipos de temporada.' },
+        ],
+        high: [
+            { mes: 'MES 1', title: 'Optimizar conversión de consultas', desc: 'Seguimiento automático post-consulta, mejora de fotos y descripción de producto para aumentar conversión.' },
+            { mes: 'MES 2', title: 'Aumentar ticket promedio', desc: 'Packs, combos, personalización o entrega a domicilio como servicio premium de valor agregado.' },
+            { mes: 'MES 3', title: 'Escalar producción y distribución', desc: 'Evaluar mayorista, revendedores, suscripción mensual o catálogo de temporada ampliado.' },
+        ],
+    },
 };
 
 // ============================================================
@@ -1220,10 +1423,15 @@ const ROADMAP_BY_SCORE = {
 // ============================================================
 let state = {
     negocio: '', rubro: '', ciudad: '', email: '',
-    currentQ: 0,
+    tipo: null,
+    currentQ: -1,
     answers: [],
     modScores: [0, 0, 0, 0, 0],
 };
+
+function getCurrentQuestions() {
+    return QUESTIONS_BY_BRANCH[state.tipo] || QUESTIONS_BY_BRANCH.servicios;
+}
 
 // ============================================================
 // NAVIGATION HELPERS
@@ -1238,8 +1446,8 @@ function showScreen(id) {
 }
 
 function updateProgress() {
-    const total = QUESTIONS.length;
-    const done  = state.currentQ;
+    const total = getCurrentQuestions().length;
+    const done  = Math.max(state.currentQ, 0);
     const pct   = Math.round((done / total) * 100);
     document.getElementById('progressBar').style.width = pct + '%';
     document.getElementById('progressLabel').textContent = done + '/' + total;
@@ -1266,7 +1474,8 @@ function startDiagnostico() {
     state.rubro   = rub;
     state.ciudad  = ciu;
     state.email   = em;
-    state.currentQ = 0;
+    state.tipo    = null;
+    state.currentQ = -1;
     state.answers  = [];
     state.modScores = [0, 0, 0, 0, 0];
 
@@ -1279,56 +1488,71 @@ function startDiagnostico() {
 // QUESTIONS
 // ============================================================
 function renderQuestion(dir = 'forward') {
-    const q = QUESTIONS[state.currentQ];
-    const mod = MODULES[q.mod];
-
-    document.getElementById('moduleTag').textContent = mod.emoji + '  ' + mod.name;
-    document.getElementById('questionText').textContent = q.q;
-
-    const container = document.getElementById('optionsContainer');
-    container.innerHTML = '';
-
-    q.opts.forEach((opt, i) => {
-        const letters = ['A', 'B', 'C'];
-        const btn = document.createElement('div');
-        btn.className = 'option';
-        btn.innerHTML = `
-            <div class="option-letter">${letters[i]}</div>
-            <div class="option-text">${opt.text}</div>
-        `;
-        btn.onclick = () => selectOption(i, opt.pts, btn);
-        container.appendChild(btn);
-    });
-
-    // Slide-in animation
+    const letters = ['A', 'B', 'C'];
     const card = document.querySelector('.question-card');
     const animIn = dir === 'back' ? 'q-in-left' : 'q-in-right';
+    const container = document.getElementById('optionsContainer');
+
+    if (state.currentQ === -1) {
+        document.getElementById('moduleTag').textContent = '🏢  Tu negocio';
+        document.getElementById('questionText').textContent = BRANCH_QUESTION.q;
+        container.innerHTML = '';
+        BRANCH_QUESTION.opts.forEach((opt, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'option';
+            btn.innerHTML = `<div class="option-letter">${letters[i]}</div><div class="option-text">${opt.text}</div>`;
+            btn.onclick = () => selectOption(i, opt, btn);
+            container.appendChild(btn);
+        });
+        document.getElementById('backBtn').style.display = 'none';
+    } else {
+        const questions = getCurrentQuestions();
+        const q = questions[state.currentQ];
+        const mod = MODULES[q.mod];
+        document.getElementById('moduleTag').textContent = mod.emoji + '  ' + mod.name;
+        document.getElementById('questionText').textContent = q.q;
+        container.innerHTML = '';
+        q.opts.forEach((opt, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'option';
+            btn.innerHTML = `<div class="option-letter">${letters[i]}</div><div class="option-text">${opt.text}</div>`;
+            btn.onclick = () => selectOption(i, opt.pts, btn);
+            container.appendChild(btn);
+        });
+        document.getElementById('backBtn').style.display = 'flex';
+    }
+
     card.classList.remove('q-out-left', 'q-out-right', 'q-in-right', 'q-in-left');
     card.classList.add(animIn);
     card.addEventListener('animationend', () => card.classList.remove(animIn), { once: true });
-
-    // Back button visibility
-    const backBtn = document.getElementById('backBtn');
-    backBtn.style.display = state.currentQ > 0 ? 'flex' : 'none';
 }
 
-function selectOption(idx, pts, el) {
+function selectOption(idx, data, el) {
     if (document.querySelector('.option.selected')) return;
-
     el.classList.add('selected');
 
-    const q = QUESTIONS[state.currentQ];
-    state.modScores[q.mod] += pts;
-    state.answers.push({ q: state.currentQ, chosen: idx, pts });
-
-    // Slide out current card
     const card = document.querySelector('.question-card');
     card.classList.add('q-out-left');
+
+    if (state.currentQ === -1) {
+        setTimeout(() => {
+            state.tipo = data.branch;
+            state.currentQ = 0;
+            updateProgress();
+            renderQuestion('forward');
+        }, 220);
+        return;
+    }
+
+    const questions = getCurrentQuestions();
+    const q = questions[state.currentQ];
+    state.modScores[q.mod] += data;
+    state.answers.push({ q: state.currentQ, chosen: idx, pts: data });
 
     setTimeout(() => {
         state.currentQ++;
         updateProgress();
-        if (state.currentQ >= QUESTIONS.length) {
+        if (state.currentQ >= questions.length) {
             showLoading();
         } else {
             renderQuestion('forward');
@@ -1337,14 +1561,26 @@ function selectOption(idx, pts, el) {
 }
 
 function goBack() {
-    if (state.currentQ <= 0) return;
-
-    // Revert last answer
-    const last = state.answers.pop();
-    if (last) state.modScores[QUESTIONS[last.q].mod] -= last.pts;
+    if (state.currentQ < 0) return;
 
     const card = document.querySelector('.question-card');
     card.classList.add('q-out-right');
+
+    if (state.currentQ === 0) {
+        setTimeout(() => {
+            state.tipo = null;
+            state.currentQ = -1;
+            updateProgress();
+            renderQuestion('back');
+        }, 220);
+        return;
+    }
+
+    const last = state.answers.pop();
+    if (last) {
+        const questions = getCurrentQuestions();
+        state.modScores[questions[last.q].mod] -= last.pts;
+    }
 
     setTimeout(() => {
         state.currentQ--;
@@ -1358,8 +1594,9 @@ function goBack() {
 // ============================================================
 function showLoading() {
     showScreen('screen-loading');
+    const total = getCurrentQuestions().length;
     document.getElementById('progressBar').style.width = '100%';
-    document.getElementById('progressLabel').textContent = '15/15';
+    document.getElementById('progressLabel').textContent = total + '/' + total;
 
     const steps = ['ls1', 'ls2', 'ls3', 'ls4'];
     steps.forEach((id, i) => {
@@ -1444,13 +1681,14 @@ function buildReport() {
         .sort((a, b) => a.s - b.s)
         .slice(0, 3);
 
+    const branchInsights = MODULE_INSIGHTS_BY_BRANCH[state.tipo || 'servicios'];
     sortedMods.forEach(({ i, s }) => {
         const pct = s / 20;
         const insight = pct < 0.4
-            ? MODULE_INSIGHTS[i].low
+            ? branchInsights[i].low
             : pct < 0.7
-                ? MODULE_INSIGHTS[i].mid
-                : MODULE_INSIGHTS[i].high;
+                ? branchInsights[i].mid
+                : branchInsights[i].high;
         findingsEl.innerHTML += `
             <div class="finding-card ${insight.level}">
                 <div class="finding-top">
@@ -1472,7 +1710,8 @@ function buildReport() {
     // Roadmap
     const roadmapEl = document.getElementById('roadmap');
     const roadmapKey = totalScore < 40 ? 'low' : totalScore < 70 ? 'mid' : 'high';
-    roadmapEl.innerHTML = ROADMAP_BY_SCORE[roadmapKey].map(r => `
+    const branchRoadmap = ROADMAP_BY_BRANCH[state.tipo || 'servicios'][roadmapKey];
+    roadmapEl.innerHTML = branchRoadmap.map(r => `
         <div class="roadmap-item">
             <div class="roadmap-month">${r.mes}</div>
             <div class="roadmap-content">
@@ -1486,7 +1725,7 @@ function buildReport() {
     setCTAText(totalScore, label, state.negocio);
 
     showScreen('screen-report');
-    sendDiagnosticoEmail(state, totalScore, label, normScores, ROADMAP_BY_SCORE[roadmapKey]);
+    sendDiagnosticoEmail(state, totalScore, label, normScores, branchRoadmap);
     logDiagnostico(state, totalScore, label, normScores);
     showEmailConfirmation(state.email);
 }
@@ -1589,7 +1828,9 @@ function sendDiagnosticoEmail(state, totalScore, label, normScores, roadmap) {
     const moduloLineas = MODULES.map((m, i) => `${m.emoji} ${m.name}: ${normScores[i]}/20`).join('\n');
     const roadmapLineas = roadmap.map(r => `${r.mes}: ${r.title}\n${r.desc}`).join('\n\n');
 
+    const tipoLabel = { servicios: 'Servicios', ventas: 'Ventas', produccion: 'Producción' };
     const mensaje = `Negocio: ${state.negocio}
+Tipo: ${tipoLabel[state.tipo] || state.tipo || '-'}
 Rubro: ${state.rubro}
 Ciudad: ${state.ciudad}
 Email del cliente: ${state.email}
@@ -1635,6 +1876,7 @@ function logDiagnostico(state, totalScore, label, normScores) {
         rubro:   state.rubro,
         ciudad:  state.ciudad,
         email:   state.email,
+        tipo:    state.tipo,
         totalScore,
         label,
         modScores: normScores,
@@ -1709,7 +1951,7 @@ function showPostPago() {
 }
 
 function retryDiagnostico() {
-    state = { negocio: '', rubro: '', ciudad: '', email: '', currentQ: 0, answers: [], modScores: [0,0,0,0,0] };
+    state = { negocio: '', rubro: '', ciudad: '', email: '', tipo: null, currentQ: -1, answers: [], modScores: [0,0,0,0,0] };
     document.getElementById('progressBar').style.width = '0%';
     document.getElementById('progressLabel').textContent = '0/15';
     showScreen('screen-intro');
