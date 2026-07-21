@@ -1036,6 +1036,7 @@ const BRANCH_QUESTION = {
         { text: 'Brindo servicios — mis clientes pagan por mi trabajo, atención o conocimiento', branch: 'servicios' },
         { text: 'Vendo productos — tengo stock, catálogo o artículos para comercializar', branch: 'ventas' },
         { text: 'Produzco y vendo — fabrico, elaboro o creo lo que después vendo', branch: 'produccion' },
+        { text: 'Vendo proyectos, terrenos o activos de alto valor — inmobiliaria, desarrollos, maquinaria, construcción', branch: 'proyecto' },
     ]
 };
 
@@ -1288,6 +1289,90 @@ const QUESTIONS_BY_BRANCH = {
     ],
 };
 
+    proyecto: [
+        // Presencia Digital
+        { mod: 0, q: '¿Tu empresa tiene presencia online con información actualizada de los proyectos disponibles: ubicación, cuotas, planos y fotos?', opts: [
+            { text: 'Sí, web o perfil actualizado con toda la información y formas de contacto', pts: 7 },
+            { text: 'Tengo algo pero desactualizado o incompleto', pts: 3 },
+            { text: 'No tengo presencia online clara o no funciona', pts: 0 },
+        ]},
+        { mod: 0, q: '¿Tu empresa aparece en Google Maps con fotos del proyecto, datos de contacto y reseñas?', opts: [
+            { text: 'Sí, perfil completo con reseñas y fotos actualizadas', pts: 7 },
+            { text: 'Aparezco pero con información incompleta o pocas reseñas', pts: 3 },
+            { text: 'No aparezco o el perfil está sin verificar', pts: 0 },
+        ]},
+        { mod: 0, q: '¿Publicás en redes sociales mostrando los proyectos, avances de obra o testimonios de compradores?', opts: [
+            { text: 'Sí, con publicaciones regulares y contenido de calidad', pts: 6 },
+            { text: 'A veces, sin frecuencia ni estrategia clara', pts: 2 },
+            { text: 'Casi nunca o la cuenta está inactiva', pts: 0 },
+        ]},
+        // Captación
+        { mod: 1, q: '¿De dónde vienen principalmente las personas que consultan por tus proyectos?', opts: [
+            { text: 'Redes sociales, publicidad, buscadores y referidos activos', pts: 7 },
+            { text: 'Principalmente referidos y boca en boca sin sistema', pts: 3 },
+            { text: 'Muy pocas consultas llegan de forma espontánea', pts: 0 },
+        ]},
+        { mod: 1, q: '¿Tenés un sistema para capturar datos de personas interesadas antes de que estén listas para comprar?', opts: [
+            { text: 'Sí, formulario, WhatsApp Business o CRM con seguimiento sistemático', pts: 7 },
+            { text: 'A veces tomo datos pero sin un proceso claro', pts: 3 },
+            { text: 'No, solo atiendo a quien llama o aparece por iniciativa propia', pts: 0 },
+        ]},
+        { mod: 1, q: '¿Cuántas consultas genuinas de personas interesadas en comprar recibís por mes?', opts: [
+            { text: 'Más de 10', pts: 6 },
+            { text: 'Entre 3 y 10', pts: 3 },
+            { text: 'Menos de 3', pts: 0 },
+        ]},
+        // Automatización
+        { mod: 2, q: '¿Cómo hacés el seguimiento de personas que consultaron pero todavía no compraron?', opts: [
+            { text: 'Tengo un proceso claro: CRM, recordatorios y contacto periódico programado', pts: 7 },
+            { text: 'Lo hago a mano cuando me acuerdo', pts: 3 },
+            { text: 'No hago seguimiento activo de los interesados', pts: 0 },
+        ]},
+        { mod: 2, q: '¿Tenés un proceso documentado para presentar el proyecto, condiciones de financiación y requisitos de compra?', opts: [
+            { text: 'Sí, presentación profesional con toda la información organizada', pts: 7 },
+            { text: 'Lo explico verbalmente cada vez que alguien consulta', pts: 3 },
+            { text: 'No tengo un proceso estandarizado de presentación', pts: 0 },
+        ]},
+        { mod: 2, q: '¿Cómo registrás los datos, el estado y el historial de cada contacto o cliente potencial?', opts: [
+            { text: 'CRM, planilla actualizada o sistema de gestión organizado', pts: 6 },
+            { text: 'En el celular, cuaderno o de memoria', pts: 2 },
+            { text: 'No llevo un registro sistemático', pts: 0 },
+        ]},
+        // Fidelización — en este rubro = referidos
+        { mod: 3, q: '¿Contactás activamente a clientes que ya compraron para pedirles que te recomienden a personas de su entorno?', opts: [
+            { text: 'Sí, tenemos un proceso para pedir referidos de forma sistemática', pts: 7 },
+            { text: 'A veces, solo si surge la oportunidad', pts: 3 },
+            { text: 'No los contactamos proactivamente después de la compra', pts: 0 },
+        ]},
+        { mod: 3, q: '¿Tenés algún incentivo o sistema para que tus compradores actuales generen referidos?', opts: [
+            { text: 'Sí, programa de referidos o beneficios concretos para quien refiere', pts: 7 },
+            { text: 'No formalmente, pero reconocemos cuando alguien refiere', pts: 3 },
+            { text: 'No, confiamos solo en que recomienden por iniciativa propia', pts: 0 },
+        ]},
+        { mod: 3, q: '¿Pedís reseñas o testimonios de manera sistemática a quienes ya completaron su compra?', opts: [
+            { text: 'Sí, pedimos reseña y testimonio a cada comprador después del cierre', pts: 6 },
+            { text: 'A veces, cuando nos acordamos', pts: 2 },
+            { text: 'No los pedimos', pts: 0 },
+        ]},
+        // Posicionamiento
+        { mod: 4, q: '¿Comunicás activamente la trayectoria, solidez y garantías de tu empresa para generar confianza antes de que el cliente decida?', opts: [
+            { text: 'Sí, es parte central de nuestra comunicación y diferenciación', pts: 7 },
+            { text: 'Lo mencionamos pero no lo comunicamos con suficiente énfasis', pts: 3 },
+            { text: 'No lo comunicamos activamente', pts: 0 },
+        ]},
+        { mod: 4, q: '¿Tus condiciones de financiación son competitivas y están comunicadas de forma clara y accesible para el comprador?', opts: [
+            { text: 'Sí, son un argumento de venta destacado y están publicadas', pts: 7 },
+            { text: 'Las ofrecemos pero no las comunicamos ni las destacamos bien', pts: 3 },
+            { text: 'No las usamos como argumento o no sabemos si son competitivas', pts: 0 },
+        ]},
+        { mod: 4, q: '¿Sabés exactamente a qué perfil de comprador apuntás y orientás toda tu comunicación a ese perfil?', opts: [
+            { text: 'Sí, muy claro: sabemos quién es nuestro comprador y cómo encontrarlo', pts: 6 },
+            { text: 'Más o menos, pero no lo tenemos bien definido', pts: 2 },
+            { text: 'No, atendemos a cualquiera que consulte', pts: 0 },
+        ]},
+    ],
+};
+
 const MAX_PER_MOD = [20, 20, 20, 20, 20];
 
 const MODULE_INSIGHTS_BY_BRANCH = {
@@ -1374,7 +1459,53 @@ const MODULE_INSIGHTS_BY_BRANCH = {
     ],
 };
 
+const MODULE_INSIGHTS_PROYECTO = [
+    {
+        low: { title: 'Sin presencia digital, no existís para quien busca en Google', desc: 'El comprador de alto valor investiga online antes de consultar. Si no aparecés o tu info está desactualizada, la primera impresión la da la competencia.', roi: '+5 a 10 consultas nuevas/mes', level: 'critical' },
+        mid: { title: 'Presencia digital incompleta o desactualizada', desc: 'Aparecés, pero con información que no genera confianza. Una foto vieja o un sitio sin funcionar aleja a compradores serios antes de que te contacten.', roi: '+3 a 6 consultas/mes', level: 'warning' },
+        high: { title: 'Buena presencia digital', desc: 'Tu empresa es encontrable y genera confianza online. El paso siguiente es convertir más visitas en consultas concretas.', roi: 'Optimizar conversión de visitas en consultas', level: 'ok' },
+    },
+    {
+        low: { title: 'Captación 100% pasiva — esperás que te busquen', desc: 'En ventas de alto valor, el boca en boca sin sistema pierde compradores que están listos pero no saben que existís.', roi: 'Duplicar consultas en 90 días', level: 'critical' },
+        mid: { title: 'Captación limitada a canales directos', desc: 'Llegás a compradores, pero sin aprovechar el potencial de publicidad segmentada o generación activa de leads.', roi: '+5 a 8 consultas/mes', level: 'warning' },
+        high: { title: 'Captación activa funcionando', desc: 'Tenés canales que traen interesados. La clave ahora es bajar el costo por consulta y mejorar la calidad de los leads.', roi: 'Escalar y reducir costo por lead', level: 'ok' },
+    },
+    {
+        low: { title: 'Interesados que consultaron y nunca cerraron por falta de seguimiento', desc: 'En proyectos de alto valor el ciclo de decisión es largo. Sin seguimiento sistemático, perdés ventas que estaban casi cerradas.', roi: '+30% de conversión de consultas', level: 'critical' },
+        mid: { title: 'Seguimiento inconsistente', desc: 'Hacés seguimiento, pero sin sistema. Algunos interesados se enfrían y terminan eligiendo a alguien que los siguió mejor.', roi: '+15% de conversión de consultas', level: 'warning' },
+        high: { title: 'Buen proceso de seguimiento', desc: 'Tus leads están bien atendidos. Considerá automatizar los puntos de contacto para liberar tiempo sin perder calidad.', roi: 'Automatizar y escalar', level: 'ok' },
+    },
+    {
+        low: { title: 'Años de compradores satisfechos que no están generando nuevas ventas para vos', desc: 'Si tu cliente no vuelve a comprar pero sí recomienda, el referido activo es tu canal más poderoso — y no lo estás usando.', roi: '+4 a 8 referidos/año', level: 'critical' },
+        mid: { title: 'Referidos ocasionales sin sistema', desc: 'Algunos clientes te recomiendan, pero por iniciativa propia. Un proceso activo de pedido de referidos multiplica ese número.', roi: '+2 a 4 referidos/año', level: 'warning' },
+        high: { title: 'Sistema de referidos activo', desc: 'Tus compradores te recomiendan de forma activa. Formalizá el programa para medir y escalar ese canal.', roi: 'Escalar programa de referidos', level: 'ok' },
+    },
+    {
+        low: { title: 'Sin diferenciación clara, competís contra cualquier desarrolladora', desc: 'El comprador que no conoce tu trayectoria decide por precio o por quien le habló primero. Tu historia de 20+ años vale más de lo que estás comunicando.', roi: 'Mejorar tasa de cierre 20-30%', level: 'critical' },
+        mid: { title: 'Trayectoria y garantías no comunicadas', desc: 'Tenés credenciales sólidas, pero no las estás usando como argumento de venta. Eso te pone en desventaja frente a competidores más nuevos pero más visibles.', roi: 'Mejorar tasa de cierre 10-20%', level: 'warning' },
+        high: { title: 'Posicionamiento sólido', desc: 'Tu empresa transmite confianza y diferenciación. Enfocate en llevar ese mensaje a más compradores potenciales del perfil correcto.', roi: 'Expandir a nuevos segmentos o proyectos', level: 'ok' },
+    },
+];
+
+// Agrego la rama proyecto a MODULE_INSIGHTS_BY_BRANCH después de definirla
 const ROADMAP_BY_BRANCH = {
+    proyecto: {
+        low: [
+            { mes: 'MES 1', title: 'Hacer visible lo que ya existe', desc: 'Google Maps actualizado con fotos actuales del proyecto, información de financiación y respuesta a reseñas negativas. Instagram activo con contenido del proyecto.' },
+            { mes: 'MES 2', title: 'Sistematizar el proceso de ventas', desc: 'CRM o planilla de seguimiento de leads, presentación profesional del proyecto, proceso de contacto periódico para interesados que no cerraron.' },
+            { mes: 'MES 3', title: 'Activar referidos y primera campaña', desc: 'Contactar compradores actuales para pedirles referidos + Meta Ads segmentado al perfil de comprador en Comodoro Rivadavia y zona.' },
+        ],
+        mid: [
+            { mes: 'MES 1', title: 'Completar y actualizar presencia digital', desc: 'Fotos actuales del proyecto, información de cuotas y financiación visible, respuesta a todas las reseñas de Google Maps y solicitud de nuevas reseñas.' },
+            { mes: 'MES 2', title: 'Implementar seguimiento sistemático de leads', desc: 'CRM básico con estado de cada contacto, recordatorios de seguimiento, presentación estandarizada del proyecto con hoja de preguntas frecuentes.' },
+            { mes: 'MES 3', title: 'Sistema de referidos activo', desc: 'Contactar toda la base de compradores para pedirles referidos, definir incentivo concreto para quien refiere, primera campaña de captación online.' },
+        ],
+        high: [
+            { mes: 'MES 1', title: 'Optimizar conversión de consultas a cierres', desc: 'Mejorar el proceso de presentación y seguimiento para reducir el tiempo entre consulta y cierre. Medir cuántos leads se pierden y en qué etapa.' },
+            { mes: 'MES 2', title: 'Escalar captación con publicidad segmentada', desc: 'Meta Ads y Google Ads orientados al perfil de comprador ideal. Contenido de autoridad: trayectoria, proyectos entregados, testimonios en video.' },
+            { mes: 'MES 3', title: 'Formalizar programa de referidos', desc: 'Programa con incentivos claros para compradores que refieren. Contacto periódico con la base de clientes para mantener el vínculo y generar referidos continuos.' },
+        ],
+    },
     servicios: {
         low: [
             { mes: 'MES 1', title: 'Existir digitalmente', desc: 'Google Maps completo, Instagram activo, 5 fotos de tu trabajo con tu marca.' },
@@ -1691,7 +1822,9 @@ function buildReport() {
         .sort((a, b) => a.s - b.s)
         .slice(0, 3);
 
-    const branchInsights = MODULE_INSIGHTS_BY_BRANCH[state.tipo || 'servicios'];
+    const branchInsights = state.tipo === 'proyecto'
+        ? MODULE_INSIGHTS_PROYECTO
+        : MODULE_INSIGHTS_BY_BRANCH[state.tipo || 'servicios'];
     sortedMods.forEach(({ i, s }) => {
         const pct = s / 20;
         const insight = pct < 0.4
