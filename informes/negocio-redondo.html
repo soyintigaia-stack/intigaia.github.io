@@ -317,10 +317,11 @@ tr:last-child td { border-bottom:none }
 
 /* ── PRINT ── */
 @media print {
-  body { background:#0F0F0E; -webkit-print-color-adjust:exact; print-color-adjust:exact }
-  .wrap { padding:0 }
+  html { background:#0F0F0E !important }
+  body { background:#0F0F0E !important; -webkit-print-color-adjust:exact; print-color-adjust:exact }
+  .wrap { padding:1.2cm 1.4cm }
   .cta-btn { color:#F5F2ED !important; background:#C4622D !important }
-  @page { margin:1.5cm; size:A4 }
+  @page { margin:0; size:A4 }
   .phase-sep { margin:2rem 0 }
 }
 
