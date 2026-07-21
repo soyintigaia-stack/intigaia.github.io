@@ -395,6 +395,73 @@
     }
 
     /* ═══════════════════════════════
+       NIVEL 3 TEASER
+    ═══════════════════════════════ */
+    .nivel3-teaser {
+      background: var(--base);
+      padding: 0 1.5rem 5rem;
+    }
+    .nivel3-card {
+      max-width: 780px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid rgba(196, 98, 45, 0.25);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .nivel3-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--acento), #E8943A, var(--acento));
+    }
+    .nivel3-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--acento);
+      margin-bottom: 1rem;
+    }
+    .nivel3-title {
+      font-size: clamp(1.25rem, 3vw, 1.6rem);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+      color: var(--blanco);
+    }
+    .nivel3-desc {
+      font-size: 0.97rem;
+      color: rgba(245,242,237,0.72);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .nivel3-what {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 520px) { .nivel3-what { grid-template-columns: 1fr; } }
+    .nivel3-item {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--blanco);
+      background: rgba(196,98,45,0.1);
+      border-radius: 10px;
+      padding: 0.65rem 0.9rem;
+      line-height: 1.4;
+    }
+    .nivel3-note {
+      font-size: 0.8rem;
+      color: rgba(245,242,237,0.45);
+      font-style: italic;
+    }
+
+    /* ═══════════════════════════════
        TESTIMONIOS
     ═══════════════════════════════ */
     .testimonios { background: var(--surface); }
@@ -975,6 +1042,24 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── NIVEL 3 TEASER ─── -->
+  <section class="nivel3-teaser" aria-labelledby="nivel3-title">
+    <div class="section-inner">
+      <div class="nivel3-card fade-in">
+        <div class="nivel3-eyebrow">Más allá del intake</div>
+        <h2 id="nivel3-title" class="nivel3-title">¿Querés saber exactamente qué está haciendo tu competencia — y dónde está el hueco que podés ocupar?</h2>
+        <p class="nivel3-desc">Después de analizar tu negocio con Sole IA, el siguiente paso es mirarlo desde afuera. Qué ven tus clientes cuando te buscan. Qué hace tu competencia que vos no estás haciendo. Y cuál es la oportunidad de mercado que está disponible y sin ocupar en tu zona o rubro.</p>
+        <div class="nivel3-what">
+          <div class="nivel3-item">🔍 Auditoría de tus canales digitales</div>
+          <div class="nivel3-item">📊 Análisis de competidores directos</div>
+          <div class="nivel3-item">💡 El hueco del mercado disponible</div>
+          <div class="nivel3-item">🎯 3 acciones concretas para ocuparlo</div>
+        </div>
+        <p class="nivel3-note">Se entrega como informe personalizado después de completar el análisis con Sole IA.</p>
       </div>
     </div>
   </section>
