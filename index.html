@@ -87,15 +87,15 @@
     }
     .header__nav-link {
       font-size: 0.82rem;
-      color: rgba(245,242,237,0.65);
+      color: var(--acento);
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       transition: color 0.2s;
       white-space: nowrap;
     }
-    .header__nav-link:hover { color: var(--blanco); }
+    .header__nav-link:hover { color: #D4752E; }
     @media (max-width: 420px) { .header__nav { display: none; } }
 
     /* ═══════════════════════════════
@@ -811,6 +811,170 @@
     }
 
     /* ═══════════════════════════════
+       ETAPAS
+    ═══════════════════════════════ */
+    .etapas-section {
+      background: var(--surface);
+      padding: 5rem 1.5rem;
+    }
+    .etapas-section .section-inner { max-width: 1100px; }
+    .etapas-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--acento);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .etapas-title {
+      font-size: clamp(1.45rem, 4vw, 2.1rem);
+      font-weight: 700;
+      color: var(--blanco);
+      margin-bottom: 0.75rem;
+    }
+    .etapas-sub {
+      font-size: 0.97rem;
+      color: var(--gris);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+    }
+    .etapas-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (min-width: 600px) {
+      .etapas-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .etapas-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    .etapa-card {
+      background: var(--base);
+      border-radius: 12px;
+      padding: 1.25rem 1.1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-top: 3px solid;
+      position: relative;
+    }
+    .etapa-card.e0 { border-top-color: rgba(160,160,152,0.5); }
+    .etapa-card.e1 { border-top-color: #FBB024; }
+    .etapa-card.e2 { border-top-color: #FF6B8A; }
+    .etapa-card.e3 { border-top-color: var(--acento); }
+    .etapa-card.e4 { border-top-color: #00D4AA; }
+    .etapa-icon { font-size: 1.6rem; margin-bottom: 0.6rem; display: block; }
+    .etapa-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--blanco);
+      margin-bottom: 0.3rem;
+    }
+    .etapa-score {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--gris);
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .etapa-desc {
+      font-size: 0.82rem;
+      color: var(--gris);
+      line-height: 1.55;
+    }
+
+    /* ═══════════════════════════════
+       QUÉ PODEMOS CONSTRUIR
+    ═══════════════════════════════ */
+    .modulos-section {
+      background: var(--base);
+      padding: 5rem 1.5rem;
+    }
+    .modulos-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 640px) {
+      .modulos-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .modulos-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .modulo-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 1.3rem 1.2rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .modulo-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .modulo-icon.m1 { background: rgba(196,98,45,0.12); }
+    .modulo-icon.m2 { background: rgba(0,212,170,0.10); }
+    .modulo-icon.m3 { background: rgba(251,176,36,0.10); }
+    .modulo-icon.m4 { background: rgba(255,107,138,0.10); }
+    .modulo-icon.m5 { background: linear-gradient(135deg, rgba(196,98,45,0.1), rgba(0,212,170,0.08)); }
+    .modulo-icon.m6 { background: rgba(255,255,255,0.05); }
+    .modulo-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--blanco);
+      margin-bottom: 0.25rem;
+    }
+    .modulo-desc {
+      font-size: 0.83rem;
+      color: var(--gris);
+      line-height: 1.55;
+    }
+    .bundle-box {
+      background: var(--surface);
+      border: 1px solid rgba(196,98,45,0.3);
+      border-radius: 14px;
+      padding: 1.75rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .bundle-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .bundle-tag {
+      font-size: 0.75rem;
+      background: rgba(255,255,255,0.07);
+      color: var(--gris);
+      padding: 0.2rem 0.7rem;
+      border-radius: 20px;
+    }
+    .bundle-price {
+      font-size: clamp(2.2rem, 5vw, 3rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--acento), #00D4AA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .bundle-sub { font-size: 0.78rem; color: var(--gris); margin-bottom: 1rem; }
+
+    /* ═══════════════════════════════
        DIAGNÓSTICO EMBEBIDO
     ═══════════════════════════════ */
     .diagnostico {
@@ -952,6 +1116,123 @@
       </div>
       <div class="hero__photo">
         <img src="./soledad-cardoni.jpg" alt="Soledad Cardoni — Estratega de negocios">
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ETAPAS ─── -->
+  <section class="etapas-section">
+    <div class="section-inner">
+      <p class="etapas-eyebrow fade-in">¿Dónde está tu negocio hoy?</p>
+      <h2 class="etapas-title fade-in">Las 5 etapas de un negocio real</h2>
+      <p class="etapas-sub fade-in">El diagnóstico detecta en cuál estás. Cada etapa tiene acciones concretas para pasar a la siguiente — sin saltearse pasos y sin invertir donde todavía no corresponde.</p>
+
+      <div class="etapas-grid">
+        <div class="etapa-card e0 fade-in">
+          <span class="etapa-icon">👻</span>
+          <div class="etapa-name">Invisible</div>
+          <div class="etapa-score">Score 0–25</div>
+          <div class="etapa-desc">No existe digitalmente o la presencia es tan débil que no genera nada.</div>
+        </div>
+        <div class="etapa-card e1 fade-in">
+          <span class="etapa-icon">📍</span>
+          <div class="etapa-name">Presente</div>
+          <div class="etapa-score">Score 26–45</div>
+          <div class="etapa-desc">Se puede encontrar pero no convierte ni genera confianza.</div>
+        </div>
+        <div class="etapa-card e2 fade-in">
+          <span class="etapa-icon">🧲</span>
+          <div class="etapa-name">Activo</div>
+          <div class="etapa-score">Score 46–65</div>
+          <div class="etapa-desc">Genera interés pero el proceso de venta es manual y caótico.</div>
+        </div>
+        <div class="etapa-card e3 fade-in">
+          <span class="etapa-icon">⚙️</span>
+          <div class="etapa-name">Escalable</div>
+          <div class="etapa-score">Score 66–80</div>
+          <div class="etapa-desc">Tiene sistemas funcionando pero todavía depende del dueño.</div>
+        </div>
+        <div class="etapa-card e4 fade-in">
+          <span class="etapa-icon">👑</span>
+          <div class="etapa-name">Dominante</div>
+          <div class="etapa-score">Score 81–100</div>
+          <div class="etapa-desc">Base sólida. El siguiente paso es crear ventajas que nadie puede copiar.</div>
+        </div>
+      </div>
+
+      <a href="diagnostico.html" class="btn-primary fade-in" style="display:inline-block;">Descubrí en qué etapa estás — es gratis →</a>
+    </div>
+  </section>
+
+  <!-- ─── QUÉ PODEMOS CONSTRUIR ─── -->
+  <section class="modulos-section">
+    <div class="section-inner">
+      <p class="etapas-eyebrow fade-in">Qué construimos juntos</p>
+      <h2 class="etapas-title fade-in">Un sistema para cada parte del negocio</h2>
+      <p class="etapas-sub fade-in">El diagnóstico define qué necesita tu negocio primero. Podés empezar por un solo módulo — el más urgente — y sumar a tu ritmo.</p>
+
+      <div class="modulos-grid">
+        <div class="modulo-card fade-in">
+          <div class="modulo-icon m1">🎨</div>
+          <div>
+            <div class="modulo-name">Identidad</div>
+            <div class="modulo-desc">Nombre, logo, paleta, tono de voz. El negocio existe y tiene personalidad clara.</div>
+          </div>
+        </div>
+        <div class="modulo-card fade-in">
+          <div class="modulo-icon m2">🌐</div>
+          <div>
+            <div class="modulo-name">Presencia Digital</div>
+            <div class="modulo-desc">Web profesional, Google My Business, redes y SEO local. Te pueden encontrar.</div>
+          </div>
+        </div>
+        <div class="modulo-card fade-in">
+          <div class="modulo-icon m3">📣</div>
+          <div>
+            <div class="modulo-name">Captación</div>
+            <div class="modulo-desc">Contenido, Meta Ads, Google Ads, funnel de ventas. El negocio atrae clientes.</div>
+          </div>
+        </div>
+        <div class="modulo-card fade-in">
+          <div class="modulo-icon m4">⚙️</div>
+          <div>
+            <div class="modulo-name">Sistemas</div>
+            <div class="modulo-desc">CRM, automatizaciones, chatbot IA, fidelización. Funciona sin depender de vos.</div>
+          </div>
+        </div>
+        <div class="modulo-card fade-in">
+          <div class="modulo-icon m5">✨</div>
+          <div>
+            <div class="modulo-name">Innovación</div>
+            <div class="modulo-desc">Herramientas únicas a medida, IA aplicada, apps propias. El negocio sorprende y lidera.</div>
+          </div>
+        </div>
+        <div class="modulo-card fade-in">
+          <div class="modulo-icon m6">📈</div>
+          <div>
+            <div class="modulo-name">Pago progresivo</div>
+            <div class="modulo-desc">Empezás con un módulo, sumás cuando el negocio crece. Cada módulo se descuenta del paquete completo.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bundle-box fade-in">
+        <div style="flex:1; min-width:200px;">
+          <div style="font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal); margin-bottom:0.5rem;">Paquete completo · Más conveniente</div>
+          <div style="font-size:1.2rem; font-weight:700; color:var(--blanco); margin-bottom:0.5rem;">Presencia Digital completa</div>
+          <p style="font-size:0.85rem; color:var(--gris); line-height:1.65;">Identidad + Web profesional + Google Business + WhatsApp Business + sesión de entrega. Todo lo que el negocio necesita para ser encontrado y generar confianza.</p>
+          <div class="bundle-tags">
+            <span class="bundle-tag">✓ Web profesional</span>
+            <span class="bundle-tag">✓ Google My Business</span>
+            <span class="bundle-tag">✓ Branding</span>
+            <span class="bundle-tag">✓ WhatsApp Business</span>
+          </div>
+        </div>
+        <div style="text-align:center; flex-shrink:0;">
+          <div class="bundle-price">USD 500</div>
+          <div class="bundle-sub">precio único · sin suscripción</div>
+          <a href="https://wa.me/5493571541984?text=Hola%20Soledad%2C%20me%20interesa%20el%20paquete%20Presencia%20Digital%20USD%20500" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:0.88rem;">Quiero saber más →</a>
+        </div>
       </div>
     </div>
   </section>
