@@ -1,4 +1,4 @@
-const CACHE = 'diagnostico-sc-v7';
+const CACHE = 'diagnostico-sc-v8';
 const ASSETS = ['./index.html', './diagnostico.html', './servicios.html', './manual.html', './manifest.json'];
 
 self.addEventListener('install', e => {
