@@ -1869,11 +1869,9 @@ function buildReport() {
     setCTAText(totalScore, label, state.negocio);
 
     showScreen('screen-report');
-    if (!IS_DEMO) {
-        sendDiagnosticoEmail(state, totalScore, label, normScores, branchRoadmap);
-        logDiagnostico(state, totalScore, label, normScores);
-        showEmailConfirmation(state.email);
-    }
+    sendDiagnosticoEmail(state, totalScore, label, normScores, branchRoadmap);
+    logDiagnostico(state, totalScore, label, normScores);
+    showEmailConfirmation(state.email);
 }
 
 // ============================================================
