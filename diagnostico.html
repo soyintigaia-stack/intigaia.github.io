@@ -1869,9 +1869,11 @@ function buildReport() {
     setCTAText(totalScore, label, state.negocio);
 
     showScreen('screen-report');
-    sendDiagnosticoEmail(state, totalScore, label, normScores, branchRoadmap);
-    logDiagnostico(state, totalScore, label, normScores);
-    showEmailConfirmation(state.email);
+    if (!IS_DEMO) {
+        sendDiagnosticoEmail(state, totalScore, label, normScores, branchRoadmap);
+        logDiagnostico(state, totalScore, label, normScores);
+        showEmailConfirmation(state.email);
+    }
 }
 
 // ============================================================
@@ -2013,6 +2015,8 @@ const LOG_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyqhb_6JI8YAsggL9W
 
 // Reemplazar con el link de Mercado Pago una vez creado
 const MP_LINK = 'https://mpago.li/11T6PJz'; // $10.000 ARS — producción
+const CHAT_URL = 'https://soyintigaia-stack.github.io/intigaia.github.io/chat/';
+const IS_DEMO = new URLSearchParams(window.location.search).get('demo') === 'true';
 
 function logDiagnostico(state, totalScore, label, normScores) {
     const data = encodeURIComponent(JSON.stringify({
@@ -2071,7 +2075,19 @@ function setCTAText(score, label, negocio) {
     const ctaWa = document.getElementById('ctaWhatsapp');
     if (ctaWa) ctaWa.href = `https://wa.me/5493571541984?text=${waMsg}`;
     const ctaMp = document.getElementById('ctaMp');
-    if (ctaMp && MP_LINK !== 'REEMPLAZAR_CON_LINK_MP') ctaMp.href = MP_LINK;
+    if (IS_DEMO) {
+        ctaMp.href = CHAT_URL;
+        ctaMp.removeAttribute('onclick');
+        ctaMp.textContent = 'Empezar sesión con Sole IA →';
+        const postPago = document.getElementById('postPago');
+        if (postPago) postPago.style.display = 'none';
+        const pagoNote = ctaMp.nextElementSibling;
+        if (pagoNote) pagoNote.style.display = 'none';
+        const priceBlock = document.querySelector('.cta-price-highlight');
+        if (priceBlock) priceBlock.style.display = 'none';
+    } else if (ctaMp && MP_LINK !== 'REEMPLAZAR_CON_LINK_MP') {
+        ctaMp.href = MP_LINK;
+    }
 }
 
 // ============================================================

@@ -1481,5 +1481,14 @@
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
   </script>
+
+  <script>
+    // Demo mode: propagate ?demo=true to all diagnostic links
+    if (new URLSearchParams(window.location.search).get('demo') === 'true') {
+      document.querySelectorAll('a[href*="diagnostico.html"]').forEach(a => {
+        a.href = a.href.includes('?') ? a.href + '&demo=true' : a.href + '?demo=true';
+      });
+    }
+  </script>
 </body>
 </html>
