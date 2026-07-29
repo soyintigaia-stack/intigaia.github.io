@@ -1,0 +1,25 @@
+#!/bin/bash
+# Validates JavaScript syntax in diagnostico.html before each commit
+
+if git diff --cached --name-only | grep -q "diagnostico.html"; then
+    echo "⏳ Validando JavaScript de diagnostico.html..."
+
+    # Extract JS content between <script> and </script>
+    TMPFILE=$(mktemp /tmp/diag-check-XXXX.js)
+    SCRIPT_START=$(grep -n "<script>" diagnostico.html | tail -1 | cut -d: -f1)
+    SCRIPT_END=$(grep -n "</script>" diagnostico.html | tail -1 | cut -d: -f1)
+
+    if [ -n "$SCRIPT_START" ] && [ -n "$SCRIPT_END" ]; then
+        sed -n "$((SCRIPT_START+1)),$((SCRIPT_END-1))p" diagnostico.html > "$TMPFILE"
+        if node --check "$TMPFILE" 2>&1; then
+            echo "✅ JavaScript válido — commit OK"
+        else
+            echo ""
+            echo "❌ ERROR DE SINTAXIS en diagnostico.html — commit cancelado."
+            echo "   Corregí el error antes de hacer commit."
+            rm -f "$TMPFILE"
+            exit 1
+        fi
+    fi
+    rm -f "$TMPFILE"
+fi
