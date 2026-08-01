@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#09090b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Turno Timer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #09090b; --bg2: #18181b; --bg3: #27272a;
+      --border: rgba(63,63,70,.6);
+      --t1: #f4f4f5; --t2: #a1a1aa; --t3: #52525b;
+      --green: #34d399; --yellow: #facc15; --red: #f87171;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--t1); min-height: 100vh; min-height: 100dvh; overflow-x: hidden; }
+    .mono { font-family: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace; }
+
+    .center { min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; gap:1.5rem; }
+    .card { background:var(--bg2); border:1px solid var(--border); border-radius:1rem; padding:1.5rem; width:100%; max-width:360px; }
+    label { display:block; font-size:.75rem; color:var(--t2); margin-bottom:.375rem; font-weight:500; }
+    input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:.5rem; padding:.625rem .75rem; color:var(--t1); font-size:.875rem; font-family:ui-monospace,monospace; margin-bottom:1rem; outline:none; }
+    input:focus { border-color:#71717a; }
+    .btn { display:flex; align-items:center; justify-content:center; gap:.5rem; width:100%; padding:.875rem 1.5rem; border-radius:.875rem; font-size:.875rem; font-weight:600; cursor:pointer; border:none; transition:opacity .15s,transform .1s; }
+    .btn:active { transform:scale(.97); }
+    .btn-white { background:#fff; color:#18181b; }
+    .btn-zinc { background:var(--bg3); color:var(--t1); border:1px solid var(--border); }
+    .link-btn { background:none; border:none; color:var(--t3); font-size:.75rem; cursor:pointer; text-decoration:underline; }
+
+    .app { min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; }
+    .header { display:flex; align-items:center; justify-content:space-between; padding:.75rem 1rem; border-bottom:1px solid var(--border); background:rgba(9,9,11,.9); backdrop-filter:blur(8px); position:sticky; top:0; z-index:10; flex-shrink:0; }
+    .cal-select { background:transparent; border:none; color:var(--t1); font-size:.875rem; font-weight:500; outline:none; cursor:pointer; max-width:200px; }
+    .cal-select option { background:#18181b; }
+    .hdr-right { display:flex; align-items:center; gap:.75rem; }
+    .badge { font-size:.625rem; font-family:ui-monospace,monospace; background:rgba(120,53,15,.5); color:#fbbf24; border:1px solid rgba(180,83,9,.4); padding:.125rem .5rem; border-radius:9999px; }
+    .clock { font-size:.75rem; color:var(--t3); font-family:ui-monospace,monospace; }
+    .icon-btn { background:none; border:none; color:var(--t3); font-size:1.25rem; cursor:pointer; line-height:1; padding:.25rem; }
+    .icon-btn:hover { color:var(--t2); }
+    .error-bar { background:rgba(127,29,29,.4); border-bottom:1px solid rgba(127,29,29,.4); padding:.5rem; text-align:center; font-size:.75rem; color:#fca5a5; }
+
+    .body { flex:1; display:flex; flex-direction:column; }
+    @media(min-width:1024px) { .body { flex-direction:row; } }
+
+    .timer-panel { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; gap:1.5rem; transition:background .7s; }
+    .tp-overtime { background:rgba(127,29,29,.25); }
+    .tp-warning { background:rgba(78,58,0,.15); }
+
+    .client-name { font-size:2.25rem; font-weight:700; line-height:1.1; word-break:break-word; text-align:center; transition:color .3s; }
+    @media(min-width:640px) { .client-name { font-size:3rem; } }
+    .cn-ot { color:#fca5a5; } .cn-w { color:#fef08a; }
+    .procedure { font-size:1rem; color:var(--t2); text-align:center; }
+    @media(min-width:640px) { .procedure { font-size:1.25rem; } }
+    .time-range { font-size:.875rem; color:var(--t3); font-family:ui-monospace,monospace; text-align:center; }
+
+    .timer-block { width:100%; max-width:320px; display:flex; flex-direction:column; gap:1.25rem; }
+    .t-label { font-size:.625rem; text-transform:uppercase; letter-spacing:.2em; color:var(--t3); text-align:center; }
+    .t-elapsed { font-size:3.5rem; font-family:ui-monospace,monospace; font-weight:700; text-align:center; color:#d4d4d8; line-height:1; font-variant-numeric:tabular-nums; }
+    @media(min-width:640px) { .t-elapsed { font-size:5rem; } }
+    .t-remaining { font-size:3rem; font-family:ui-monospace,monospace; font-weight:700; text-align:center; line-height:1; font-variant-numeric:tabular-nums; transition:color .3s; }
+    @media(min-width:640px) { .t-remaining { font-size:4rem; } }
+    .c-green { color:var(--green); } .c-yellow { color:var(--yellow); } .c-red { color:var(--red); } .c-white { color:var(--t1); }
+
+    .p-track { width:100%; height:1.125rem; background:var(--bg3); border-radius:9999px; overflow:hidden; }
+    .p-bar { height:100%; border-radius:9999px; transition:width 1s linear,background .5s; }
+    .p-green { background:var(--green); } .p-yellow { background:var(--yellow); } .p-red { background:var(--red); }
+    .p-meta { display:flex; justify-content:space-between; font-size:.625rem; color:var(--t3); font-family:ui-monospace,monospace; margin-top:.375rem; }
+
+    .banner { width:100%; max-width:320px; border-radius:1rem; padding:.75rem 1.25rem; text-align:center; font-size:.875rem; font-weight:600; letter-spacing:.05em; }
+    .b-red { background:rgba(127,29,29,.5); border:1px solid rgba(239,68,68,.4); color:#fca5a5; }
+    .b-yellow { background:rgba(78,58,0,.4); border:1px solid rgba(234,179,8,.3); color:#fef08a; }
+
+    .controls { display:flex; gap:.75rem; flex-wrap:wrap; justify-content:center; }
+    .ctrl { padding:.75rem 1.5rem; border-radius:1rem; font-size:.875rem; font-weight:500; cursor:pointer; border:1px solid var(--border); transition:background .15s,transform .1s; }
+    .ctrl:active { transform:scale(.97); }
+    .ctrl-d { background:var(--bg3); color:var(--t1); }
+    .ctrl-d:hover { background:#3f3f46; }
+    .ctrl-g { background:rgba(16,85,60,.6); color:var(--green); border-color:rgba(52,211,153,.3); }
+    .ctrl-gh { background:var(--bg2); color:var(--t3); }
+
+    .next-card { width:100%; max-width:320px; background:rgba(24,24,27,.6); border:1px solid var(--border); border-radius:1rem; padding:.875rem 1rem; }
+    .nx-lbl { font-size:.625rem; text-transform:uppercase; letter-spacing:.2em; color:var(--t3); margin-bottom:.25rem; }
+    .nx-client { font-size:.875rem; font-weight:600; color:#d4d4d8; }
+    .nx-proc { font-size:.75rem; color:var(--t3); }
+    .nx-time { font-size:.75rem; color:var(--t3); font-family:ui-monospace,monospace; margin-top:.25rem; }
+
+    .no-ev { text-align:center; display:flex; flex-direction:column; align-items:center; gap:1.25rem; max-width:280px; }
+    .countdown-card { background:var(--bg2); border:1px solid var(--border); border-radius:1rem; padding:.875rem 1.5rem; text-align:center; }
+    .cd-lbl { font-size:.75rem; color:var(--t3); }
+    .cd-val { font-size:1.5rem; font-family:ui-monospace,monospace; font-weight:700; color:#d4d4d8; font-variant-numeric:tabular-nums; }
+
+    .ev-panel { border-top:1px solid var(--border); display:flex; flex-direction:column; max-height:45vh; overflow:hidden; }
+    @media(min-width:1024px) { .ev-panel { width:280px; border-top:none; border-left:1px solid var(--border); max-height:none; } }
+    .ev-hdr { display:flex; align-items:center; justify-content:space-between; padding:.75rem 1rem; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .ev-title { font-size:.625rem; text-transform:uppercase; letter-spacing:.2em; color:var(--t3); font-weight:500; }
+    .ev-date { font-size:.75rem; color:var(--t2); text-transform:capitalize; }
+    .ev-list { overflow-y:auto; flex:1; }
+    .ev-item { display:flex; align-items:flex-start; gap:.75rem; padding:.75rem 1rem; border-bottom:1px solid rgba(63,63,70,.3); }
+    .ev-item.active { background:rgba(39,39,42,.7); }
+    .ev-ico { font-size:.875rem; padding-top:.125rem; flex-shrink:0; }
+    .ev-ico.done { color:var(--t3); } .ev-ico.curr { color:var(--green); } .ev-ico.next2 { color:var(--t3); }
+    .ev-info { flex:1; min-width:0; }
+    .ev-cl { font-size:.875rem; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.2; }
+    .ev-cl.done { color:var(--t3); text-decoration:line-through; } .ev-cl.curr { color:var(--t1); } .ev-cl.next2 { color:#d4d4d8; }
+    .ev-pr { font-size:.75rem; color:var(--t3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ev-tm { font-size:.75rem; color:var(--t3); font-family:ui-monospace,monospace; }
+
+    /* Calendar picker modal */
+    .cal-modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:100; display:flex; align-items:flex-end; justify-content:center; }
+    .cal-modal { background:var(--bg2); border:1px solid var(--border); border-radius:1.25rem 1.25rem 0 0; width:100%; max-width:480px; padding:1.25rem; }
+    .cal-modal-title { font-size:.75rem; text-transform:uppercase; letter-spacing:.15em; color:var(--t3); margin-bottom:1rem; text-align:center; }
+    .cal-opt { display:flex; align-items:center; gap:.75rem; padding:.875rem 1rem; border-radius:.75rem; cursor:pointer; transition:background .1s; }
+    .cal-opt:hover, .cal-opt:active { background:var(--bg3); }
+    .cal-opt-name { font-size:1rem; font-weight:500; flex:1; }
+    .cal-opt-check { color:var(--green); font-size:1.25rem; }
+    .cal-modal-cancel { width:100%; margin-top:.75rem; padding:.875rem; border-radius:.875rem; background:var(--bg3); border:1px solid var(--border); color:var(--t2); font-size:.875rem; font-weight:500; cursor:pointer; }
+
+    .loading { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.75rem; }
+    .spinner { width:2rem; height:2rem; border:2px solid var(--bg3); border-top-color:var(--t2); border-radius:50%; animation:spin .8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.5; } }
+    .pulse { animation:pulse 1s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+'use strict';
+const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
+const REDIR = location.origin + location.pathname;
+const ls = { get: k=>localStorage.getItem(k), set:(k,v)=>localStorage.setItem(k,v), del:k=>localStorage.removeItem(k) };
+
+let S = {
+  screen:'loading',
+  clientId: ls.get('tc_cid')||'',
+  clientSecret: ls.get('tc_cs')||'',
+  accessToken: ls.get('tc_at')||'',
+  refreshToken: ls.get('tc_rt')||'',
+  tokenExpiry: parseInt(ls.get('tc_te')||'0'),
+  calendars:[], calId: ls.get('tc_cal')||'', events:[],
+  now: new Date(), error:null,
+  manualMode:false, manualStartMs:null, accPausedMs:0, pausedAtMs:null, isPaused:false,
+  alertsDone:{},
+  showCalPicker:false
+};
+
+function saveAuth() {
+  ls.set('tc_at',S.accessToken); ls.set('tc_rt',S.refreshToken); ls.set('tc_te',S.tokenExpiry.toString());
+}
+
+function logout() {
+  ls.del('tc_at'); ls.del('tc_rt'); ls.del('tc_te');
+  S.accessToken=''; S.refreshToken=''; S.tokenExpiry=0;
+  S.events=[]; S.calendars=[]; S.screen='auth'; render();
+}
+
+function genVerifier() {
+  const a=new Uint8Array(32); crypto.getRandomValues(a);
+  return btoa(String.fromCharCode(...a)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+async function genChallenge(v) {
+  const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));
+  return btoa(String.fromCharCode(...new Uint8Array(d))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+
+async function startOAuth() {
+  const v=genVerifier(), c=await genChallenge(v);
+  sessionStorage.setItem('tc_v',v);
+  const p=new URLSearchParams({client_id:S.clientId,redirect_uri:REDIR,response_type:'code',
+    scope:SCOPES,access_type:'offline',prompt:'consent',code_challenge:c,code_challenge_method:'S256'});
+  location.href='https://accounts.google.com/o/oauth2/v2/auth?'+p;
+}
+
+async function exchangeCode(code) {
+  const v=sessionStorage.getItem('tc_v')||''; sessionStorage.removeItem('tc_v');
+  history.replaceState({},'',location.pathname);
+  const r=await fetch('https://oauth2.googleapis.com/token',{method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:new URLSearchParams({code,client_id:S.clientId,client_secret:S.clientSecret,
+      redirect_uri:REDIR,grant_type:'authorization_code',code_verifier:v})});
+  const t=await r.json();
+  if(!t.access_token) throw new Error('token failed');
+  S.accessToken=t.access_token; S.refreshToken=t.refresh_token||S.refreshToken;
+  S.tokenExpiry=Date.now()+t.expires_in*1000; saveAuth();
+}
+
+async function doRefresh() {
+  if(!S.refreshToken) return false;
+  const r=await fetch('https://oauth2.googleapis.com/token',{method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:new URLSearchParams({client_id:S.clientId,client_secret:S.clientSecret,
+      refresh_token:S.refreshToken,grant_type:'refresh_token'})});
+  const t=await r.json();
+  if(!t.access_token) return false;
+  S.accessToken=t.access_token; S.tokenExpiry=Date.now()+t.expires_in*1000; saveAuth(); return true;
+}
+
+async function getToken() {
+  if(Date.now()<S.tokenExpiry-60000) return S.accessToken;
+  if(await doRefresh()) return S.accessToken;
+  logout(); return null;
+}
+
+async function apiCalendars() {
+  const tok=await getToken(); if(!tok) return;
+  const r=await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList',{headers:{Authorization:'Bearer '+tok}});
+  const d=await r.json();
+  S.calendars=(d.items||[]).map(c=>({id:c.id,summary:c.summary,primary:c.primary}));
+  if(!S.calId||!S.calendars.find(c=>c.id===S.calId)) {
+    const p=S.calendars.find(c=>c.primary)||S.calendars[0];
+    S.calId=p?p.id:''; ls.set('tc_cal',S.calId);
+  }
+}
+
+async function apiEvents() {
+  if(!S.calId) return;
+  const tok=await getToken(); if(!tok) return;
+  const d=new Date(), s=new Date(d), e=new Date(d);
+  s.setHours(0,0,0,0); e.setHours(23,59,59,999);
+  const p=new URLSearchParams({timeMin:s.toISOString(),timeMax:e.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'50'});
+  const r=await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(S.calId)}/events?${p}`,{headers:{Authorization:'Bearer '+tok}});
+  const data=await r.json();
+  S.events=(data.items||[]).filter(e=>e.start&&e.start.dateTime);
+  S.error=null;
+}
+
+function fmt(secs,plus=false) {
+  const neg=secs<0, abs=Math.abs(Math.round(secs));
+  const h=Math.floor(abs/3600), m=Math.floor((abs%3600)/60), s=abs%60;
+  const sign=neg?'-':(plus?'+':'');
+  return h>0?`${sign}${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${sign}${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function fmtH(iso){return new Date(iso).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false});}
+function split(s) {
+  for(const sep of[' - ',' | ',' – ',' / ','\n']){
+    const i=s.indexOf(sep); if(i>0) return{client:s.slice(0,i).trim(),proc:s.slice(i+sep.length).trim()};
+  }
+  return{client:s.trim(),proc:''};
+}
+
+function calcTimer() {
+  const ms=S.now.getTime();
+  const cur=S.events.find(e=>{const a=new Date(e.start.dateTime).getTime(),b=new Date(e.end.dateTime).getTime();return a<=ms&&b>ms;});
+  if(!cur) return null;
+  const es=new Date(cur.start.dateTime).getTime(), ee=new Date(cur.end.dateTime).getTime(), total=ee-es;
+  let elapsed;
+  if(S.manualMode&&S.manualStartMs!==null){
+    const run=(S.isPaused&&S.pausedAtMs)?S.pausedAtMs-S.manualStartMs-S.accPausedMs:ms-S.manualStartMs-S.accPausedMs;
+    elapsed=Math.max(0,run);
+  } else { elapsed=ms-es; }
+  const rem=total-elapsed;
+  return{ev:cur,elapsed:elapsed/1000,remaining:rem/1000,progress:Math.min(1,Math.max(0,elapsed/total))};
+}
+
+function beep(f,d,v=.45){
+  try{
+    const C=window.AudioContext||window.webkitAudioContext, ctx=new C();
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value=f; o.type='sine';
+    g.gain.setValueAtTime(v,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+d);
+    o.start(); o.stop(ctx.currentTime+d);
+  }catch(e){}
+}
+function alertW(){beep(880,.35);setTimeout(()=>beep(880,.35),450);setTimeout(()=>beep(1108,.55),900);}
+function alertO(){[0,280,560,840,1120].forEach(d=>setTimeout(()=>beep(440,.28),d));}
+
+function checkAlerts(t){
+  if(!t) return;
+  const id=t.ev.id; if(!S.alertsDone[id]) S.alertsDone[id]={}; const done=S.alertsDone[id];
+  if(t.remaining<=600&&t.remaining>0&&!done.w){done.w=true;alertW();}
+  if(t.remaining<=0&&!done.o){done.o=true;alertO();}
+}
+
+function startManual(){S.manualMode=true;S.manualStartMs=Date.now();S.accPausedMs=0;S.pausedAtMs=null;S.isPaused=false;render();}
+function togglePause(){
+  if(!S.manualMode) return;
+  if(S.isPaused){S.accPausedMs+=S.pausedAtMs?Date.now()-S.pausedAtMs:0;S.pausedAtMs=null;S.isPaused=false;}
+  else{S.pausedAtMs=Date.now();S.isPaused=true;}
+  render();
+}
+function resetAuto(){S.manualMode=false;S.manualStartMs=null;S.accPausedMs=0;S.pausedAtMs=null;S.isPaused=false;render();}
+
+function render(){
+  const app=document.getElementById('app');
+  if(S.screen==='loading'){app.innerHTML='<div class="loading"><div class="spinner"></div><p style="color:var(--t3);font-size:.875rem">Cargando...</p></div>';return;}
+  if(S.screen==='setup'){app.innerHTML=rSetup();bindSetup();return;}
+  if(S.screen==='auth'){app.innerHTML=rAuth();bindAuth();return;}
+  if(S.screen==='app'){app.innerHTML=rApp();bindApp();return;}
+}
+
+function rSetup(){
+  return `<div class="center">
+    <div style="text-align:center"><div style="font-size:3rem">⏱️</div>
+      <h1 style="font-size:1.75rem;font-weight:700;margin-top:.5rem">Turno Timer</h1>
+      <p style="font-size:.875rem;color:var(--t3);margin-top:.5rem;max-width:260px">Ingresá tus credenciales de Google OAuth2</p></div>
+    <div class="card">
+      <label>Client ID</label>
+      <input id="inp-cid" type="text" value="${S.clientId}" placeholder="123456-xxx.apps.googleusercontent.com">
+      <label>Client Secret</label>
+      <input id="inp-cs" type="password" value="${S.clientSecret}" placeholder="GOCSPX-...">
+      <button id="btn-setup" class="btn btn-white">Guardar y conectar →</button>
+    </div>
+    <p style="font-size:.75rem;color:var(--t3);text-align:center;max-width:260px">Se guardan solo en este dispositivo. Nunca salen del navegador.</p>
+  </div>`;
+}
+function bindSetup(){
+  document.getElementById('btn-setup').onclick=()=>{
+    const cid=document.getElementById('inp-cid').value.trim();
+    const cs=document.getElementById('inp-cs').value.trim();
+    if(!cid||!cs) return;
+    S.clientId=cid; S.clientSecret=cs; ls.set('tc_cid',cid); ls.set('tc_cs',cs);
+    S.screen='auth'; render();
+  };
+}
+
+function rAuth(){
+  return `<div class="center">
+    <div style="text-align:center"><div style="font-size:3rem">⏱️</div>
+      <h1 style="font-size:1.75rem;font-weight:700;margin-top:.5rem">Turno Timer</h1>
+      <p style="font-size:.875rem;color:var(--t3);margin-top:.5rem;max-width:260px">Cronómetro de turnos conectado a Google Calendar</p></div>
+    <button id="btn-auth" class="btn btn-white" style="max-width:320px">
+      <svg width="20" height="20" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Conectar con Google Calendar
+    </button>
+    <button id="btn-change" class="link-btn">Cambiar credenciales</button>
+    <p style="font-size:.75rem;color:var(--t3);text-align:center;max-width:260px">Solo lectura de calendarios. Ningún evento es modificado.</p>
+  </div>`;
+}
+function bindAuth(){
+  document.getElementById('btn-auth').onclick=startOAuth;
+  document.getElementById('btn-change').onclick=()=>{S.screen='setup';render();};
+}
+
+function rCalPicker(){
+  const opts=S.calendars.map(c=>`
+    <div class="cal-opt" data-id="${c.id}">
+      <span class="cal-opt-name">${c.summary}</span>
+      ${c.id===S.calId?'<span class="cal-opt-check">✓</span>':''}
+    </div>`).join('');
+  return `<div class="cal-modal-bg" id="cal-bg">
+    <div class="cal-modal">
+      <div class="cal-modal-title">Elegí tu agenda</div>
+      ${opts}
+      <button class="cal-modal-cancel" id="cal-cancel">Cancelar</button>
+    </div>
+  </div>`;
+}
+
+function rApp(){
+  const ms=S.now.getTime();
+  const timer=calcTimer();
+  const cur=timer?timer.ev:null;
+  const nxt=S.events.find(e=>e.start.dateTime&&new Date(e.start.dateTime).getTime()>ms);
+  const at=!timer?'none':timer.remaining<=0?'overtime':timer.remaining<=600?'warning':'none';
+  const tpCls='timer-panel'+(at==='overtime'?' tp-overtime':at==='warning'?' tp-warning':'');
+  const calName=S.calendars.find(c=>c.id===S.calId)?.summary||'Agenda';
+  const clk=S.now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  const dateStr=S.now.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+
+  let main='';
+  if(cur&&timer){
+    const{client,proc}=split(cur.summary);
+    const nc='client-name'+(at==='overtime'?' cn-ot':at==='warning'?' cn-w':'');
+    const pct=timer.progress;
+    const bc='p-bar '+(timer.remaining<=0?'p-red':timer.remaining<=600?'p-red':pct>=.65?'p-yellow':'p-green');
+    const bw=Math.min(100,Math.max(2,pct*100)).toFixed(1);
+    const rc=at==='overtime'?'c-red':at==='warning'?'c-yellow':pct<.5?'c-green':'c-white';
+    const rs=timer.remaining<0?fmt(Math.abs(timer.remaining),true):fmt(timer.remaining);
+    const nxtHTML=nxt&&nxt.start.dateTime?(()=>{
+      const{client:nc,proc:np}=split(nxt.summary);
+      return `<div class="next-card"><div class="nx-lbl">Siguiente</div><div class="nx-client">${nc}</div>${np?`<div class="nx-proc">${np}</div>`:''}<div class="nx-time">${fmtH(nxt.start.dateTime)} · en ${fmt((new Date(nxt.start.dateTime).getTime()-ms)/1000)}</div></div>`;
+    })():'';
+    const ban=at==='overtime'?'<div class="banner b-red pulse">⏰ TIEMPO AGOTADO</div>':at==='warning'?'<div class="banner b-yellow">⚠️ Quedan 10 minutos</div>':'';
+    const ctrl=!S.manualMode
+      ?'<button class="ctrl ctrl-d" id="btn-m">▶ Iniciar manual</button>'
+      :`<button class="ctrl ${S.isPaused?'ctrl-g':'ctrl-d'}" id="btn-p">${S.isPaused?'▶ Continuar':'⏸ Pausar'}</button><button class="ctrl ctrl-gh" id="btn-a">Auto</button>`;
+    main=`
+      <div style="text-align:center;width:100%;max-width:360px">
+        <h2 class="${nc}">${client}</h2>
+        ${proc?`<p class="procedure">${proc}</p>`:''}
+        <p class="time-range" style="margin-top:.375rem">${fmtH(cur.start.dateTime)} → ${fmtH(cur.end.dateTime)}</p>
+      </div>
+      <div class="timer-block">
+        <div><div class="t-label">Transcurrido</div><div class="t-elapsed">${fmt(timer.elapsed)}</div></div>
+        <div><div class="t-label">Restante</div><div class="t-remaining ${rc}">${rs}</div></div>
+        <div><div class="p-track"><div class="${bc}" style="width:${bw}%"></div></div>
+          <div class="p-meta"><span>${fmtH(cur.start.dateTime)}</span><span>${Math.round(pct*100)}%</span><span>${fmtH(cur.end.dateTime)}</span></div></div>
+        ${ban}
+      </div>
+      <div class="controls">${ctrl}</div>
+      ${nxtHTML}`;
+  } else {
+    const icon=nxt?'🕐':S.events.length?'✅':'📭';
+    let inner='';
+    if(nxt&&nxt.start.dateTime){
+      const{client:nc,proc:np}=split(nxt.summary);
+      const inS=(new Date(nxt.start.dateTime).getTime()-ms)/1000;
+      inner=`<div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t3)">Próximo turno</div>
+        <div style="font-size:2rem;font-weight:700;color:var(--t1)">${nc}</div>
+        ${np?`<div style="font-size:1rem;color:var(--t2)">${np}</div>`:''}
+        <div style="font-size:.875rem;color:var(--t3);font-family:ui-monospace,monospace">${fmtH(nxt.start.dateTime)} → ${nxt.end.dateTime?fmtH(nxt.end.dateTime):''}</div>
+        <div class="countdown-card"><div class="cd-lbl">Empieza en</div><div class="cd-val">${fmt(inS)}</div></div>`;
+    } else if(S.events.length===0){
+      inner=`<div style="font-size:1.25rem;font-weight:600;color:var(--t2)">Sin turnos hoy</div><button id="btn-ref" class="link-btn" style="margin-top:.25rem">Actualizar</button>`;
+    } else {
+      inner=`<div style="font-size:1.5rem;font-weight:700">Día terminado ✓</div><div style="color:var(--t2);font-size:.875rem">${S.events.length} turnos completados</div>`;
+    }
+    main=`<div class="no-ev"><div style="font-size:4rem">${icon}</div>${inner}</div>`;
+  }
+
+  const evItems=S.events.map(ev=>{
+    if(!ev.start.dateTime||!ev.end.dateTime) return '';
+    const a=new Date(ev.start.dateTime).getTime(),b=new Date(ev.end.dateTime).getTime();
+    const done=b<ms, active=a<=ms&&b>ms;
+    const{client,proc}=split(ev.summary);
+    return `<div class="ev-item${active?' active':''}">
+      <div class="ev-ico ${done?'done':active?'curr':'next2'}">${done?'✓':active?'▶':'◦'}</div>
+      <div class="ev-info">
+        <div class="ev-cl ${done?'done':active?'curr':'next2'}">${client}</div>
+        ${proc?`<div class="ev-pr">${proc}</div>`:''}
+        <div class="ev-tm">${fmtH(ev.start.dateTime)} → ${fmtH(ev.end.dateTime)}</div>
+      </div></div>`;
+  }).join('');
+
+  const calPicker=S.showCalPicker?rCalPicker():'';
+
+  return `<div class="app">
+    <div class="header">
+      <button class="ctrl ctrl-gh" id="btn-cal-open" style="font-size:.875rem;padding:.5rem .875rem;border-radius:.75rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${calName} ▾</button>
+      <div class="hdr-right">
+        ${S.manualMode?'<span class="badge">MANUAL</span>':''}
+        <span class="clock">${clk}</span>
+        <button class="icon-btn" id="btn-out" title="Cerrar sesión">×</button>
+      </div>
+    </div>
+    ${S.error?`<div class="error-bar">${S.error}</div>`:''}
+    <div class="body">
+      <div class="${tpCls}">${main}</div>
+      <div class="ev-panel">
+        <div class="ev-hdr">
+          <div><div class="ev-title">Turnos del día</div><div class="ev-date">${dateStr}</div></div>
+          <button class="icon-btn" id="btn-ref2" style="font-size:.875rem">↻</button>
+        </div>
+        <div class="ev-list">${evItems||'<div style="padding:1.5rem;text-align:center;color:var(--t3);font-size:.875rem">Sin turnos</div>'}</div>
+      </div>
+    </div>
+    ${calPicker}
+  </div>`;
+}
+
+function bindApp(){
+  document.getElementById('btn-out')?.addEventListener('click',logout);
+  document.getElementById('btn-cal-open')?.addEventListener('click',()=>{S.showCalPicker=true;render();});
+  document.getElementById('btn-m')?.addEventListener('click',startManual);
+  document.getElementById('btn-p')?.addEventListener('click',togglePause);
+  document.getElementById('btn-a')?.addEventListener('click',resetAuto);
+  document.getElementById('btn-ref')?.addEventListener('click',loadEvs);
+  document.getElementById('btn-ref2')?.addEventListener('click',loadEvs);
+  document.getElementById('cal-cancel')?.addEventListener('click',()=>{S.showCalPicker=false;render();});
+  document.getElementById('cal-bg')?.addEventListener('click',(e)=>{if(e.target.id==='cal-bg'){S.showCalPicker=false;render();}});
+  document.querySelectorAll('.cal-opt').forEach(el=>{
+    el.addEventListener('click',()=>{
+      S.calId=el.dataset.id; ls.set('tc_cal',S.calId);
+      S.showCalPicker=false; S.events=[];
+      loadEvs();
+    });
+  });
+}
+
+async function loadEvs(){
+  try{ await apiEvents(); } catch(e){ S.error='Error cargando turnos. Verificá tu conexión.'; }
+  render();
+}
+
+async function loadAll(){
+  try{ await apiCalendars(); await apiEvents(); } catch(e){ S.error='Error de conexión.'; }
+}
+
+let lastSec=-1;
+function tick(){
+  if(!(S.isPaused&&S.manualMode)) S.now=new Date();
+  if(S.screen==='app'&&!S.showCalPicker){
+    const sec=Math.floor(S.now.getTime()/1000);
+    if(sec!==lastSec){lastSec=sec;checkAlerts(calcTimer());render();}
+  }
+}
+
+async function init(){
+  const p=new URLSearchParams(location.search);
+  const code=p.get('code'), err=p.get('error');
+  if(err){history.replaceState({},'',location.pathname);S.screen='auth';render();return;}
+  if(code){
+    if(!S.clientId||!S.clientSecret){S.screen='setup';render();return;}
+    try{await exchangeCode(code);S.screen='app';await loadAll();}
+    catch(e){S.error='Error al autenticar. Intentá de nuevo.';S.screen='auth';}
+    render();return;
+  }
+  if(!S.clientId||!S.clientSecret){S.screen='setup';render();return;}
+  if(!S.accessToken){S.screen='auth';render();return;}
+  S.screen='app';render();
+  await loadAll();
+  render();
+  setInterval(loadEvs,5*60*1000);
+}
+
+setInterval(tick,250);
+init();
+</script>
+</body>
+</html>
