@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bodas — Don Valentino Eventos</title>
+<meta name="description" content="Paquetes para bodas en Ushuaia. Distendido · Paquete Plata · Experiencia Oro — Don Valentino Eventos, Belgrano 21 2.º piso.">
+<meta property="og:title" content="Bodas — Don Valentino Eventos">
+<meta property="og:description" content="Celebrá tu boda en Ushuaia con todo coordinado por nosotros. Distendido · Plata · Experiencia Oro.">
+<meta property="og:image" content="https://donvalentinoeventos.com/salon.jpeg">
+<meta property="og:url" content="https://donvalentinoeventos.com/bodas.html">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap">
+<style>
+  :root {
+    --bg: #2C2C2C;
+    --bg-card: rgba(245,242,232,0.10);
+    --text: #F5F2E8;
+    --text-muted: rgba(245,242,232,0.88);
+    --text-faint: rgba(245,242,232,0.60);
+    --border: rgba(245,242,232,0.18);
+    --accent: #C9A84C;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 18px; }
+  @media (min-width: 600px) { html { font-size: 16px; } }
+
+  body {
+    background:
+      linear-gradient(rgba(18,16,16,0.80), rgba(18,16,16,0.80)),
+      url('/salon.jpeg') center/cover fixed;
+    color: var(--text);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── PRINT BACKGROUND ── */
+  #print-bg { display: none; }
+  @media print {
+    #print-bg {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: #F5F2E8;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    body {
+      background: #F5F2E8 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    text-align: center;
+    padding: 48px 24px 28px;
+  }
+  .site-header .logo-mark {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .site-header svg { width: 48px; height: 48px; }
+  .site-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.0rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .site-header .subtitle {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 6px;
+  }
+
+  /* ── TABS ── */
+  .tabs-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(18,16,16,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+    padding: 0 16px;
+  }
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── PANELS ── */
+  .menu-panel { display: none; }
+  .menu-panel.active { display: block; }
+
+  /* ── HERO DEL PAQUETE ── */
+  .pkg-hero {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 0;
+    text-align: center;
+  }
+  .pkg-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    padding: 4px 12px;
+    margin-bottom: 18px;
+  }
+  .pkg-hero h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .pkg-hero .tagline {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 24px;
+  }
+  .price-pill {
+    display: inline-block;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.35);
+    border-radius: 30px;
+    padding: 10px 28px;
+    font-size: 1.0rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.03em;
+  }
+  .price-pill span {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-faint);
+    margin-left: 6px;
+  }
+  .price-note {
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    margin-top: 8px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── SECTIONS ── */
+  .pkg-content {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+  }
+  .section-block {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+  }
+  .section-block:last-child { border-bottom: 1px solid var(--border); }
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .section-heading .icon {
+    font-size: 1.0rem;
+    line-height: 1;
+  }
+  .section-heading h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .section-body {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+  .section-body p { margin-bottom: 10px; }
+  .section-body p:last-child { margin-bottom: 0; }
+  .section-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+  }
+  .section-body ul li {
+    padding: 3px 0 3px 14px;
+    position: relative;
+  }
+  .section-body ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .section-body .note {
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    font-style: italic;
+    margin-top: 10px;
+  }
+
+  /* ── INVERSIÓN / PRECIO DETALLE ── */
+  .inversion-block {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-top: 32px;
+    text-align: center;
+  }
+  .inversion-block h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.0rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 18px;
+  }
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+  .price-row:last-of-type { border-bottom: none; }
+  .price-row .amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .inversion-notes {
+    margin-top: 16px;
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    line-height: 1.7;
+    text-align: left;
+  }
+  .inversion-notes p { margin-bottom: 4px; }
+
+  /* ── EXTRAS COMPARTIDOS ── */
+  .extras-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 24px;
+  }
+  .extras-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text-faint);
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 0.04em;
+  }
+  .extras-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 540px) { .extras-grid { grid-template-columns: 1fr; } }
+  .extra-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .extra-card .extra-title {
+    font-size: 0.70rem;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .extra-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .extra-card ul li {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    padding: 3px 0 3px 12px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .extra-card ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ── CTA WHATSAPP ── */
+  .cta-section {
+    text-align: center;
+    padding: 40px 24px 60px;
+  }
+  .cta-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--text-faint);
+    margin-bottom: 20px;
+    line-height: 1.5;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #25D366;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 32px;
+    border-radius: 4px;
+    transition: opacity 0.2s;
+  }
+  .btn-whatsapp:hover { opacity: 0.88; }
+  .btn-whatsapp svg { width: 18px; height: 18px; fill: #fff; flex-shrink: 0; }
+  .contact-info {
+    margin-top: 20px;
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    line-height: 1.9;
+    letter-spacing: 0.04em;
+  }
+  .contact-info a { color: var(--text-faint); text-decoration: none; }
+  .contact-info a:hover { color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div id="print-bg"></div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="/" class="logo-mark">
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="17" cy="24" r="14" fill="#1a1a1a" stroke="#F5F2E8" stroke-width="1.2"/>
+      <circle cx="31" cy="24" r="14" fill="#1a1a1a" stroke="#F5F2E8" stroke-width="1.2"/>
+      <ellipse cx="24" cy="24" rx="7" ry="14" fill="#1a1a1a" stroke="#F5F2E8" stroke-width="0.6"/>
+    </svg>
+    <div>
+      <h1>Don Valentino Eventos</h1>
+      <div class="subtitle">Bodas en Ushuaia</div>
+    </div>
+  </a>
+</header>
+
+<!-- TABS -->
+<nav class="tabs-bar">
+  <button class="tab-btn active" data-tab="distendido">Distendido</button>
+  <button class="tab-btn" data-tab="plata">Paquete Plata</button>
+  <button class="tab-btn" data-tab="oro">Experiencia Oro</button>
+</nav>
+
+<!-- ─────────────── DISTENDIDO ─────────────── -->
+<div class="menu-panel active" id="tab-distendido">
+  <div class="pkg-hero">
+    <div class="pkg-badge">Distendido · 5 horas · mín. 40 personas</div>
+    <h2>Todo lo que necesitás.<br>Nada de lo que no necesitás.</h2>
+    <p class="tagline">Hay fiestas que se planifican durante meses y otras que simplemente suceden. El Distendido es para cuando querés celebrar de verdad, sin volverte loca en el proceso. Vos llegás. Nosotros ya estamos.</p>
+    <div class="price-pill">$80.000<span>por persona</span></div>
+    <div class="price-note">Menores de 3 a 11 años: $60.000 · Mínimo 40 personas</div>
+  </div>
+
+  <div class="pkg-content">
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🥂</span>
+        <h3>La llegada</h3>
+      </div>
+      <div class="section-body">
+        <p>El salón ambientado, la comida lista, el DJ al mando. Tus invitados entran y encuentran una mesa servida, copa de bienvenida en mano.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🍽️</span>
+        <h3>La cena</h3>
+      </div>
+      <div class="section-body">
+        <p>Elegís entre:</p>
+        <ul>
+          <li>Bondiola a la cerveza desmenuzada con pancitos caseros y salsas</li>
+          <li>Estilo Finger Food — variedad de sabores para degustar</li>
+        </ul>
+        <p>Durante toda la cena se servirán:</p>
+        <ul>
+          <li>Vino blanco y tinto</li>
+          <li>Gaseosas de primera línea</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🎧</span>
+        <h3>La noche</h3>
+      </div>
+      <div class="section-body">
+        <p>DJ profesional, sonido e iluminación. El salón —con balcón y vista al Canal Beagle— hace el resto. Una pista que tarde o temprano los va a atrapar. Cinco horas donde tu única tarea es disfrutar.</p>
+      </div>
+    </div>
+
+    <div class="inversion-block">
+      <h3>Inversión</h3>
+      <div class="price-row">
+        <span>Adultos</span>
+        <span class="amount">$80.000</span>
+      </div>
+      <div class="price-row">
+        <span>Menores de 3 a 11 años</span>
+        <span class="amount">$60.000</span>
+      </div>
+      <div class="inversion-notes">
+        <p>· Mínimo 40 personas · 5 horas de celebración</p>
+        <p>· 20% de seña para reservar la fecha</p>
+        <p>· La seña reserva la fecha, pero no congela el valor del servicio</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="extras-section">
+    <p class="extras-title">Hacé tu evento todavía más tuyo</p>
+    <div class="extras-grid">
+      <div class="extra-card">
+        <div class="extra-title"><span>📞</span> Recuerdos & contenido</div>
+        <ul>
+          <li>Teléfono vintage para mensajes</li>
+          <li>Filmación profesional</li>
+          <li>Creadores de contenido</li>
+          <li>QR para compartir fotos</li>
+        </ul>
+      </div>
+      <div class="extra-card">
+        <div class="extra-title"><span>🎶</span> Shows & entretenimiento</div>
+        <ul>
+          <li>Música en vivo</li>
+          <li>Animación con personajes</li>
+          <li>Show de bengalas y chispas frías</li>
+          <li>Espejo mágico · Plataforma 360°</li>
+        </ul>
+      </div>
+      <div class="extra-card">
+        <div class="extra-title"><span>🍸</span> Experiencias gastronómicas</div>
+        <ul>
+          <li>Barra libre</li>
+          <li>Barra en el balcón con coctelería de autor</li>
+          <li>Cascada de chocolate</li>
+          <li>Final de fiesta con pata flambeada</li>
+        </ul>
+      </div>
+      <div class="extra-card">
+        <div class="extra-title"><span>🌟</span> Ambientación & look</div>
+        <ul>
+          <li>Decoración temática y personalizada</li>
+          <li>Fotógrafo profesional</li>
+          <li>Animación</li>
+          <li>Cabina espejada · Túnel de luces</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────── PAQUETE PLATA ─────────────── -->
+<div class="menu-panel" id="tab-plata">
+  <div class="pkg-hero">
+    <div class="pkg-badge">Paquete Plata · mín. 50 personas</div>
+    <h2>La noche que imaginaron<br>desde que empezaron a planificar.</h2>
+    <p class="tagline">Completa, elegante y pensada para que ustedes no tengan que ocuparse de nada. Desde que sus invitados suben la escalera hasta el último bocado del cierre de fiesta, todo estará coordinado por nosotros. Ustedes solo tienen que llegar, disfrutar y ser los novios.</p>
+    <div class="price-pill">$110.000<span>por persona</span></div>
+    <div class="price-note">Menores de 3 a 11 años: $80.000 · Mínimo 50 personas</div>
+  </div>
+
+  <div class="pkg-content">
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🥂</span>
+        <h3>La recepción</h3>
+      </div>
+      <div class="section-body">
+        <p>Copa de bienvenida y bocados de entrada para recibir a sus invitados y lograr que la experiencia comience incluso antes de que suene la primera canción.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">✨</span>
+        <h3>La ambientación</h3>
+      </div>
+      <div class="section-body">
+        <ul>
+          <li>Mantelería completa, caminos de mesa y lazos</li>
+          <li>Centros de mesa</li>
+          <li>Telas aéreas</li>
+          <li>Iluminación cálida</li>
+        </ul>
+        <p>Un entorno elegante y romántico en el que cada fotografía refleje la magia de ese día.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🍽️</span>
+        <h3>La cena</h3>
+      </div>
+      <div class="section-body">
+        <p>Cena formal de tres pasos:</p>
+        <ul>
+          <li>Entrada</li>
+          <li>Plato principal</li>
+          <li>Postre</li>
+        </ul>
+        <p>Con opciones vegetarianas, sin TACC y menú infantil.</p>
+        <p>Bebidas durante toda la cena:</p>
+        <ul>
+          <li>Vino Norton Dulce</li>
+          <li>Alma Mora Malbec</li>
+          <li>Gaseosas línea Coca-Cola</li>
+          <li>Agua sin gas y aguas saborizadas</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🎂</span>
+        <h3>El brindis y la mesa dulce</h3>
+      </div>
+      <div class="section-body">
+        <p>El momento de levantar las copas para celebrar su unión, acompañado de una delicada mesa dulce con mini tortitas.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🎧</span>
+        <h3>El entretenimiento</h3>
+      </div>
+      <div class="section-body">
+        <p>DJ profesional, animación y coordinación integral del evento para que cada momento tenga el ritmo perfecto.</p>
+        <p>A elección, una de estas experiencias:</p>
+        <ul>
+          <li>Plataforma 360°</li>
+          <li>Espejo mágico</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🍸</span>
+        <h3>La barra libre</h3>
+      </div>
+      <div class="section-body">
+        <p>Desde la 1:00 h · sin límite:</p>
+        <ul>
+          <li>Fernet</li>
+          <li>Gancia</li>
+          <li>Daiquiris</li>
+          <li>Campari con naranja</li>
+          <li>Vodka</li>
+          <li>Cervezas</li>
+        </ul>
+        <p class="note">También se ofrecerán daiquiris sin alcohol para los menores.</p>
+        <p style="margin-top:12px;">Todo acompañado por servicio de mozos durante toda la noche, seguridad, limpieza y coordinación integral del evento.</p>
+      </div>
+    </div>
+
+    <div class="inversion-block">
+      <h3>Inversión</h3>
+      <div class="price-row">
+        <span>Adultos</span>
+        <span class="amount">$110.000</span>
+      </div>
+      <div class="price-row">
+        <span>Menores de 3 a 11 años</span>
+        <span class="amount">$80.000</span>
+      </div>
+      <div class="inversion-notes">
+        <p>· Mínimo 50 personas</p>
+        <p>· 20% de seña para reservar la fecha</p>
+        <p>· La seña reserva la fecha, pero no congela el valor del servicio</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="extras-section">
+    <p class="extras-title">Hagan su boda todavía más suya</p>
+    <div class="extras-grid">
+      <div class="extra-card">
+        <div class="extra-title"><span>📞</span> Recuerdos & contenido</div>
+        <ul>
+          <li>Teléfono vintage para recuerdos</li>
+          <li>Filmación profesional</li>
+          <li>Creadores de contenido</li>
+          <li>QR para compartir fotos y recuerdos</li>
+        </ul>
+      </div>
+      <div class="extra-card">
+        <div class="extra-title"><span>🎶</span> Shows & entretenimiento</div>
+        <ul>
+          <li>Música en vivo</li>
+          <li>Animación con personajes</li>
+          <li>Show de bengalas y chispas frías</li>
+        </ul>
+      </div>
+      <div class="extra-card">
+        <div class="extra-title"><span>🍸</span> Gastronomía adicional</div>
+        <ul>
+          <li>Barra en el balcón con coctelería de autor</li>
+          <li>Cascada de chocolate</li>
+          <li>Final de fiesta con pata flambeada</li>
+        </ul>
+      </div>
+      <div class="extra-card">
+        <div class="extra-title"><span>✨</span> Ambientación & look</div>
+        <ul>
+          <li>Decoración temática y personalizada</li>
+          <li>Cabina espejada</li>
+          <li>Túnel de luces</li>
+          <li>20% dto. en alquiler de vestidos</li>
+          <li>15% dto. en maquillaje y peinado</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────── EXPERIENCIA ORO ─────────────── -->
+<div class="menu-panel" id="tab-oro">
+  <div class="pkg-hero">
+    <div class="pkg-badge">Experiencia Oro</div>
+    <h2>Hay noches que se recuerdan<br>para siempre.</h2>
+    <p class="tagline">Nuestra propuesta más completa para celebrar una boda en Ushuaia. Cada detalle está pensado para que puedan vivir su gran noche como verdaderos protagonistas: sin preocupaciones, disfrutando cada momento junto a las personas que más quieren.</p>
+    <div class="price-pill">$135.000<span>por persona</span></div>
+    <div class="price-note">Menores de 3 a 11 años: $110.000</div>
+  </div>
+
+  <div class="pkg-content">
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🥂</span>
+        <h3>La recepción</h3>
+      </div>
+      <div class="section-body">
+        <p>Copa de bienvenida y mini empanaditas para recibir a sus invitados.</p>
+        <p>El salón estará completamente preparado con:</p>
+        <ul>
+          <li>Mantelería, caminos de mesa y lazos</li>
+          <li>Centros de mesa y numeración</li>
+          <li>Telas aéreas</li>
+          <li>Iluminación cálida</li>
+          <li>Sector de fotografías a elección</li>
+          <li>Mesa principal de los novios ambientada especialmente</li>
+        </ul>
+        <p>Desde el primer momento, sus invitados sentirán que están entrando a una noche diferente.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🎧</span>
+        <h3>El entretenimiento</h3>
+      </div>
+      <div class="section-body">
+        <ul>
+          <li>DJ profesional durante toda la celebración</li>
+          <li>Animación y coordinación integral del evento</li>
+          <li>Plataforma 360° o Espejo Mágico, a elección</li>
+          <li>Show de música en vivo, a elección para la recepción o el comienzo de la fiesta</li>
+        </ul>
+        <p>Cada experiencia coordinada para acompañar los momentos más importantes y mantener la celebración en movimiento.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🍽️</span>
+        <h3>La cena</h3>
+      </div>
+      <div class="section-body">
+        <p>Cena formal de tres pasos: entrada, plato principal y postre.</p>
+        <p>Con opciones vegetarianas, sin TACC y menú infantil.</p>
+        <p>Bebidas durante toda la cena:</p>
+        <ul>
+          <li>Vino Santa Julia Chenin</li>
+          <li>Trumpeter Malbec</li>
+          <li>Cervezas Stella Artois o Heineken</li>
+          <li>Gaseosas, agua sin gas y aguas saborizadas</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🍸</span>
+        <h3>La barra libre</h3>
+      </div>
+      <div class="section-body">
+        <p>Desde la 1:00 h hasta el final · exclusiva para adultos:</p>
+        <ul>
+          <li>Fernet</li>
+          <li>Gancia</li>
+          <li>Daiquiris</li>
+          <li>Gin tonic</li>
+          <li>Campari con naranja</li>
+          <li>Vodka</li>
+          <li>Cervezas premium</li>
+        </ul>
+        <p class="note">También se ofrecerán daiquiris sin alcohol para los menores.</p>
+        <p style="margin-top:12px;">La pista no se detiene y la celebración continúa hasta el último momento.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🎂</span>
+        <h3>El momento dulce</h3>
+      </div>
+      <div class="section-body">
+        <p>Torta de bodas, brindis y una delicada estación de petit desserts artesanales:</p>
+        <ul>
+          <li>Mini cheesecakes</li>
+          <li>Lemon pie</li>
+          <li>Años locos</li>
+          <li>Rogel</li>
+          <li>Alfajorcitos</li>
+          <li>Pavlova</li>
+          <li>Chocotorta</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">📸</span>
+        <h3>Los recuerdos</h3>
+      </div>
+      <div class="section-body">
+        <p>Fotógrafo profesional incluido, con entrega digital completa. Porque una noche tan importante merece ser capturada con la misma dedicación con la que fue soñada.</p>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🍕</span>
+        <h3>El cierre de fiesta</h3>
+      </div>
+      <div class="section-body">
+        <p>Para finalizar la noche, a elección:</p>
+        <ul>
+          <li>Pizza Party</li>
+          <li>Conitos de papas fritas</li>
+          <li>Medialunas de jamón y queso</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-heading">
+        <span class="icon">🌟</span>
+        <h3>Todo coordinado por nosotros</h3>
+      </div>
+      <div class="section-body">
+        <ul>
+          <li>Servicio de mozos</li>
+          <li>Seguridad</li>
+          <li>Limpieza</li>
+          <li>Invitación digital personalizada</li>
+          <li>Coordinación integral de la boda</li>
+        </ul>
+        <p>Ustedes no tienen que resolver nada. Nosotros nos ocupamos de todo.</p>
+      </div>
+    </div>
+
+    <div class="inversion-block">
+      <h3>Inversión</h3>
+      <div class="price-row">
+        <span>Adultos</span>
+        <span class="amount">$135.000</span>
+      </div>
+      <div class="price-row">
+        <span>Menores de 3 a 11 años</span>
+        <span class="amount">$110.000</span>
+      </div>
+      <div class="inversion-notes">
+        <p>· 20% de seña para reservar la fecha</p>
+        <p>· El saldo puede abonarse en cuotas, cancelado hasta 30 días antes de la boda</p>
+        <p>· La seña reserva la fecha, pero no congela el valor. Las cuotas se actualizan con la inflación.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="extras-section">
+    <p class="extras-title">Hagan su boda todavía más suya</p>
+    <div class="extras-grid">
+      <div class="extra-card">
+        <div class="extra-title"><span>📞</span> Recuerdos & contenido</div>
+        <ul>
+          <li>Teléfono vintage para recuerdos</li>
+          <li>Filmación profesional</li>
+          <li>Creadores de contenido</li>
+          <li>QR para compartir fotos y recuerdos</li>
+        </ul>
+      </div>
+      <div class="extra-card">
+        <div class="extra-title"><span>🎶</span> Shows & entretenimiento</div>
+        <ul>
+          <li>Otras propuestas de música en vivo</li>
+          <li>Animación con personajes</li>
+          <li>Show de bengalas y chispas frías</li>
+        </ul>
+      </div>
+      <div class="extra-card">
+        <div class="extra-title"><span>🍸</span> Gastronomía adicional</div>
+        <ul>
+          <li>Barra en el balcón con coctelería de autor</li>
+          <li>Cascada de chocolate</li>
+          <li>Final de fiesta con pata flambeada</li>
+        </ul>
+      </div>
+      <div class="extra-card">
+        <div class="extra-title"><span>✨</span> Ambientación & look</div>
+        <ul>
+          <li>Decoración temática y personalizada</li>
+          <li>Cabina espejada</li>
+          <li>Túnel de luces</li>
+          <li>20% dto. en alquiler de vestidos</li>
+          <li>15% dto. en maquillaje y peinado</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────── CTA ─────────────── -->
+<div class="cta-section">
+  <p class="cta-tagline">Porque no hay dos historias de amor iguales, tampoco debería haber dos bodas iguales.</p>
+  <a class="btn-whatsapp" href="https://wa.me/5492901403062?text=Hola%2C%20me%20gustar%C3%ADa%20consultar%20sobre%20paquetes%20para%20bodas." target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Consultar por mi boda
+  </a>
+  <div class="contact-info">
+    Belgrano 21, 2.º piso · Ushuaia<br>
+    <a href="tel:+5492901403062">2901 403062</a> · <a href="https://instagram.com/donvalentinoushuaia" target="_blank" rel="noopener">@donvalentinoushuaia</a>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + id).classList.add('active');
+      const accentMap = { distendido: '#B76E79', plata: '#C0C0C0', oro: '#C9A84C' };
+      document.documentElement.style.setProperty('--accent', accentMap[id]);
+    });
+  });
+</script>
+</body>
+</html>
