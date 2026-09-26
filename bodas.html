@@ -340,6 +340,42 @@
     font-weight: 700;
   }
 
+  /* ── FOTO HERO DEL TAB ── */
+  .tab-photo {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 0;
+  }
+  .tab-photo img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+  }
+  @media (min-width: 600px) {
+    .tab-photo img { height: 340px; }
+  }
+
+  /* ── TIRA DE FOTOS ── */
+  .photo-strip {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  @media (max-width: 480px) { .photo-strip { grid-template-columns: repeat(2, 1fr); } }
+  .photo-strip img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+  }
+
   /* ── CTA WHATSAPP ── */
   .cta-section {
     text-align: center;
@@ -419,6 +455,10 @@
     <p class="tagline">Hay fiestas que se planifican durante meses y otras que simplemente suceden. El Distendido es para cuando querés celebrar de verdad, sin volverte loca en el proceso. Vos llegás. Nosotros ya estamos.</p>
     <div class="price-pill">$80.000<span>por persona</span></div>
     <div class="price-note">Menores de 3 a 11 años: $60.000 · Mínimo 40 personas</div>
+  </div>
+
+  <div class="tab-photo">
+    <img src="/WhatsApp%20Image%202026-09-16%20at%2010.45.07%20AM.jpeg" alt="Fiesta Distendido — Don Valentino Eventos" loading="lazy">
   </div>
 
   <div class="pkg-content">
@@ -531,6 +571,10 @@
     <p class="tagline">Completa, elegante y pensada para que ustedes no tengan que ocuparse de nada. Desde que sus invitados suben la escalera hasta el último bocado del cierre de fiesta, todo estará coordinado por nosotros. Ustedes solo tienen que llegar, disfrutar y ser los novios.</p>
     <div class="price-pill">$110.000<span>por persona</span></div>
     <div class="price-note">Menores de 3 a 11 años: $80.000 · Mínimo 50 personas</div>
+  </div>
+
+  <div class="tab-photo">
+    <img src="/RE%20IMPORTANTE.jpeg" alt="Paquete Plata — Don Valentino Eventos" loading="lazy">
   </div>
 
   <div class="pkg-content">
@@ -697,6 +741,10 @@
     <p class="tagline">Nuestra propuesta más completa para celebrar una boda en Ushuaia. Cada detalle está pensado para que puedan vivir su gran noche como verdaderos protagonistas: sin preocupaciones, disfrutando cada momento junto a las personas que más quieren.</p>
     <div class="price-pill">$135.000<span>por persona</span></div>
     <div class="price-note">Menores de 3 a 11 años: $110.000</div>
+  </div>
+
+  <div class="tab-photo">
+    <img src="/WhatsApp%20Image%202026-09-16%20at%2010.45.09%20AM.jpeg" alt="Experiencia Oro — Don Valentino Eventos" loading="lazy">
   </div>
 
   <div class="pkg-content">
@@ -895,6 +943,14 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- ─────────────── GALERÍA ─────────────── -->
+<div class="photo-strip">
+  <img src="/TRA.jpeg" alt="Novios — Don Valentino Eventos" loading="lazy">
+  <img src="/WhatsApp%20Image%202026-09-16%20at%2010.28.40%20AM.jpeg" alt="Salón — Don Valentino Eventos" loading="lazy">
+  <img src="/WhatsApp%20Image%202026-09-16%20at%2010.08.44%20AM.jpeg" alt="Torta de boda — Don Valentino Eventos" loading="lazy">
+  <img src="/WhatsApp%20Image%202026-09-16%20at%2010.48.34%20AM.jpeg" alt="Petit fours — Don Valentino Eventos" loading="lazy">
 </div>
 
 <!-- ─────────────── CTA ─────────────── -->
