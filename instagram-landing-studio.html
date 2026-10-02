@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instagram Studio - Generador de Landing Pages</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
-    
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -21,13 +18,7 @@
                         display: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     colors: {
-                        ig: {
-                            pink: '#E1306C',
-                            purple: '#833AB4',
-                            orange: '#F56040',
-                            yellow: '#FCAF45',
-                            dark: '#121212'
-                        }
+                        ig: { pink: '#E1306C', purple: '#833AB4', orange: '#F56040', yellow: '#FCAF45', dark: '#121212' }
                     },
                     animation: {
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -35,916 +26,1119 @@
                         'fadeIn': 'fadeIn 0.3s ease-out forwards',
                     },
                     keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-6px)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'scale(0.97)' },
-                            '100%': { opacity: '1', transform: 'scale(1)' },
-                        }
+                        float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-6px)' } },
+                        fadeIn: { '0%': { opacity: '0', transform: 'scale(0.97)' }, '100%': { opacity: '1', transform: 'scale(1)' } }
                     }
                 }
             }
         }
     </script>
     <style>
-        .ig-gradient-bg {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-        }
-        .ig-gradient-text {
-            background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .ig-story-border {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            padding: 3px;
-        }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-        }
-        .dark .glass-panel {
-            background: rgba(18, 18, 18, 0.85);
-        }
-        /* Custom Scrollbars */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(150, 150, 150, 0.3);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(150, 150, 150, 0.5);
-        }
+        .ig-gradient-bg { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        .ig-gradient-text { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .ig-story-border { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); padding: 3px; }
+        .glass-panel { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); }
+        .dark .glass-panel { background: rgba(18,18,18,0.85); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(150,150,150,0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(150,150,150,0.5); }
+        .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0; transition: all 0.3s ease; z-index: 9999; pointer-events: none; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100 min-h-screen font-sans transition-colors duration-300 selection:bg-pink-500 selection:text-white">
 
-    <!-- STEP 1: ONBOARDING WIZARD SCREEN -->
-    <div id="onboardingScreen" class="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-gray-900 via-gray-950 to-purple-950 text-white relative overflow-hidden">
-        <!-- Ambient Light Gradients -->
-        <div class="absolute -top-40 -left-40 w-96 h-96 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+<!-- TOAST NOTIFICATION -->
+<div id="toast" class="toast px-5 py-3 rounded-2xl bg-gray-900 text-white text-sm font-semibold shadow-2xl flex items-center gap-2">
+    <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
+    <span id="toastMsg">Listo</span>
+</div>
 
-        <div class="max-w-xl w-full bg-gray-900/80 border border-gray-800 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative z-10 animate-fadeIn">
-            
-            <!-- Header Brand -->
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl ig-gradient-bg mb-4 shadow-lg shadow-pink-500/20">
-                    <i data-lucide="instagram" class="w-8 h-8 text-white"></i>
+<!-- STEP 1: ONBOARDING -->
+<div id="onboardingScreen" class="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-gray-900 via-gray-950 to-purple-950 text-white relative overflow-hidden">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-xl w-full bg-gray-900/80 border border-gray-800 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative z-10 animate-fadeIn">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl ig-gradient-bg mb-4 shadow-lg shadow-pink-500/20">
+                <i data-lucide="instagram" class="w-8 h-8 text-white"></i>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold font-display tracking-tight">Crea tu Landing Page</h1>
+            <p class="text-gray-400 text-sm mt-2">Convierte tu perfil de Instagram en una web profesional con links, productos y catálogo interactivo en segundos.</p>
+        </div>
+
+        <form id="onboardingForm" onsubmit="generateLandingPage(event)" class="space-y-5">
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Usuario de Instagram</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm font-semibold">@</span>
+                    <input type="text" id="initHandle" required placeholder="tu_marca" class="w-full pl-8 pr-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium">
                 </div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold font-display tracking-tight">Crea tu Landing Page</h1>
-                <p class="text-gray-400 text-sm mt-2">Convierte tu perfil de Instagram en una web profesional con links, productos y catálogo interactivo en segundos.</p>
             </div>
 
-            <!-- Onboarding Form -->
-            <form id="onboardingForm" onsubmit="generateLandingPage(event)" class="space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Usuario de Instagram</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm font-semibold">@</span>
-                        <input type="text" id="initHandle" required placeholder="tu_marca" class="w-full pl-8 pr-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium">
-                    </div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Nombre / Marca</label>
+                    <input type="text" id="initName" required placeholder="Ej. Camila Marketing" class="w-full px-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium">
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Nombre / Marca</label>
-                        <input type="text" id="initName" required placeholder="Ej. Camila Marketing" class="w-full px-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Categoría</label>
-                        <select id="initCategory" class="w-full px-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium">
-                            <option value="Servicios Digitales">Servicios Digitales</option>
-                            <option value="Marca Personal / Creador">Marca Personal / Creador</option>
-                            <option value="Tienda Online / E-commerce">Tienda Online / E-commerce</option>
-                            <option value="Consultoría / Coaching">Consultoría / Coaching</option>
-                            <option value="Restaurante / Gastronomía">Restaurante / Gastronomía</option>
-                            <option value="Estética & Belleza">Estética & Belleza</option>
-                        </select>
-                    </div>
-                </div>
-
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">WhatsApp de Contacto (con código)</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
-                            <i data-lucide="phone" class="w-4 h-4"></i>
-                        </span>
-                        <input type="text" id="initPhone" required placeholder="5491112345678" class="w-full pl-10 pr-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium">
-                    </div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Categoría</label>
+                    <select id="initCategory" class="w-full px-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium">
+                        <option value="Servicios Digitales">Servicios Digitales</option>
+                        <option value="Marca Personal / Creador">Marca Personal / Creador</option>
+                        <option value="Tienda Online / E-commerce">Tienda Online / E-commerce</option>
+                        <option value="Consultoría / Coaching">Consultoría / Coaching</option>
+                        <option value="Restaurante / Gastronomía">Restaurante / Gastronomía</option>
+                        <option value="Estética & Belleza">Estética & Belleza</option>
+                    </select>
                 </div>
+            </div>
 
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">WhatsApp de Contacto (con código de país)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                        <i data-lucide="phone" class="w-4 h-4"></i>
+                    </span>
+                    <input type="text" id="initPhone" required placeholder="5491112345678" class="w-full pl-10 pr-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Biografía o Propuesta de Valor</label>
-                    <textarea id="initBio" rows="3" required placeholder="Describe brevemente lo que ofreces o haces..." class="w-full px-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium">✨ Ayudo a marcas y profesionales a destacar en el mundo digital.
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Posts</label>
+                    <input type="text" id="initStatPosts" placeholder="48" class="w-full px-3 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium text-center">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Seguidores</label>
+                    <input type="text" id="initStatFollowers" placeholder="12.4K" class="w-full px-3 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium text-center">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Clientes</label>
+                    <input type="text" id="initStatClients" placeholder="250+" class="w-full px-3 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium text-center">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">Biografía o Propuesta de Valor</label>
+                <textarea id="initBio" rows="3" required placeholder="Describe brevemente lo que ofreces o haces..." class="w-full px-4 py-3 bg-gray-800/90 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 transition-all font-medium">✨ Ayudo a marcas y profesionales a destacar en el mundo digital.
 🚀 Asesorías, estrategias & crecimiento garantizado.
 📩 Agenda tu reunión directa por WhatsApp.</textarea>
-                </div>
+            </div>
 
-                <button type="submit" class="w-full py-3.5 px-6 rounded-xl font-bold text-white ig-gradient-bg shadow-lg shadow-pink-500/30 hover:opacity-95 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 text-base">
-                    <span>Generar mi Web Ahora</span>
-                    <i data-lucide="sparkles" class="w-5 h-5"></i>
-                </button>
-            </form>
-            
-            <p class="text-center text-xs text-gray-500 mt-6">Podrás editar las fotos, publicaciones, servicios y colores en tiempo real una vez generada.</p>
+            <button type="submit" class="w-full py-3.5 px-6 rounded-xl font-bold text-white ig-gradient-bg shadow-lg shadow-pink-500/30 hover:opacity-95 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 text-base">
+                <span>Generar mi Web Ahora</span>
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </button>
+        </form>
+        <p class="text-center text-xs text-gray-500 mt-6">Podrás editar fotos, publicaciones, servicios y colores en tiempo real una vez generada.</p>
+    </div>
+</div>
+
+<!-- STEP 2: LANDING PAGE -->
+<div id="websiteScreen" class="hidden min-h-screen flex flex-col pb-20">
+
+    <!-- Top Control Bar -->
+    <div class="bg-gray-900 text-white text-xs py-2.5 px-4 sticky top-0 z-50 border-b border-gray-800 flex items-center justify-between shadow-md">
+        <div class="flex items-center gap-3">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-pink-500/20 text-pink-400 font-bold border border-pink-500/30">
+                <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>
+                Vista Previa Live
+            </span>
+            <span class="hidden md:inline text-gray-400">Página de <strong id="topBarHandle" class="text-white">@tu_marca</strong></span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="toggleCustomizer()" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-medium flex items-center gap-1.5 transition-colors">
+                <i data-lucide="sliders" class="w-3.5 h-3.5 text-pink-400"></i>
+                <span>Editar</span>
+            </button>
+            <button onclick="openExportModal()" class="px-3 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-bold flex items-center gap-1.5 transition-colors shadow">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Exportar Web</span>
+            </button>
+            <button onclick="resetToOnboarding()" class="px-2.5 py-1.5 rounded-lg bg-gray-800 hover:bg-red-900/50 text-gray-300 hover:text-red-300 font-medium transition-colors" title="Reiniciar">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            </button>
         </div>
     </div>
 
-    <!-- STEP 2: GENERATED LANDING PAGE APPLICATION -->
-    <div id="websiteScreen" class="hidden min-h-screen flex flex-col pb-20">
-        
-        <!-- Top Control Bar (Creator Bar) -->
-        <div class="bg-gray-900 text-white text-xs py-2.5 px-4 sticky top-0 z-50 border-b border-gray-800 flex items-center justify-between shadow-md">
+    <!-- Navigation Header -->
+    <header class="sticky top-[41px] z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <a href="#profile" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded-full ig-story-border flex items-center justify-center transition-transform group-hover:scale-105">
+                    <img id="navAvatar" src="" alt="Avatar" class="w-full h-full object-cover rounded-full border border-white dark:border-gray-900">
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span id="navUsername" class="font-extrabold text-base tracking-tight">@tu_marca</span>
+                    <i data-lucide="badge-check" class="w-4 h-4 text-blue-500 fill-blue-500"></i>
+                </div>
+            </a>
+            <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-gray-600 dark:text-gray-300">
+                <a href="#destacados" class="hover:text-pink-500 transition-colors">Destacados</a>
+                <a href="#feed" class="hover:text-pink-500 transition-colors">Publicaciones</a>
+                <a href="#servicios" class="hover:text-pink-500 transition-colors">Servicios</a>
+                <a href="#testimonios" class="hover:text-pink-500 transition-colors">Reseñas</a>
+            </nav>
             <div class="flex items-center gap-3">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-pink-500/20 text-pink-400 font-bold border border-pink-500/30">
-                    <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>
-                    Modo Vista Previa Live
-                </span>
-                <span class="hidden md:inline text-gray-400">Página generada para <strong id="topBarHandle" class="text-white">@tu_marca</strong></span>
+                <button onclick="toggleDarkMode()" class="p-2 rounded-xl text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i data-lucide="moon" id="themeIcon" class="w-5 h-5"></i>
+                </button>
+                <a id="navWspBtn" href="" target="_blank" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-green-600 hover:bg-green-700 transition-all shadow-sm flex items-center gap-1.5">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    <span>WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 max-w-5xl mx-auto px-4 sm:px-6 pt-8 w-full">
+
+        <!-- PROFILE HERO -->
+        <section id="profile" class="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 relative overflow-hidden transition-all">
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+                <div class="relative group flex-shrink-0 cursor-pointer" onclick="openStoryModal(0)">
+                    <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full ig-story-border shadow-lg transition-transform duration-300 group-hover:scale-105 p-1">
+                        <img id="profileImg" src="" alt="Foto de perfil" class="w-full h-full object-cover rounded-full border-4 border-white dark:border-gray-900">
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-pink-600 text-white p-1.5 rounded-full border-2 border-white dark:border-gray-900 shadow">
+                        <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                    </div>
+                </div>
+                <div class="flex-1 text-center md:text-left space-y-4">
+                    <div class="flex flex-col sm:flex-row items-center gap-3 justify-center md:justify-start">
+                        <h1 id="profileName" class="text-2xl sm:text-3xl font-extrabold font-display tracking-tight">Nombre de Marca</h1>
+                        <span id="profileCategoryBadge" class="px-3 py-1 bg-pink-100 dark:bg-pink-950/60 text-pink-600 dark:text-pink-400 text-xs font-extrabold rounded-full uppercase tracking-wider border border-pink-200 dark:border-pink-800">Categoría</span>
+                    </div>
+                    <p id="profileHandleDisplay" class="text-sm font-semibold text-gray-500 dark:text-gray-400">@tu_marca</p>
+                    <div class="flex items-center justify-center md:justify-start gap-6 py-3 border-y border-gray-100 dark:border-gray-800">
+                        <div class="text-center md:text-left">
+                            <span id="statPosts" class="block font-black text-lg sm:text-xl text-gray-900 dark:text-white">—</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Publicaciones</span>
+                        </div>
+                        <div class="w-px h-8 bg-gray-200 dark:bg-gray-800"></div>
+                        <div class="text-center md:text-left">
+                            <span id="statFollowers" class="block font-black text-lg sm:text-xl text-gray-900 dark:text-white">—</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Seguidores</span>
+                        </div>
+                        <div class="w-px h-8 bg-gray-200 dark:bg-gray-800"></div>
+                        <div class="text-center md:text-left">
+                            <span id="statClients" class="block font-black text-lg sm:text-xl text-gray-900 dark:text-white">—</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Clientes</span>
+                        </div>
+                    </div>
+                    <div id="profileBioDisplay" class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line font-medium max-w-2xl"></div>
+                    <div class="pt-3 flex flex-wrap items-center justify-center md:justify-start gap-3">
+                        <a id="heroWspBtn" href="" target="_blank" class="px-6 py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2 transform hover:-translate-y-0.5">
+                            <i data-lucide="message-square" class="w-4 h-4"></i>
+                            <span>Contactar por WhatsApp</span>
+                        </a>
+                        <a id="heroIgBtn" href="" target="_blank" class="px-5 py-3 rounded-xl font-semibold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all flex items-center gap-2">
+                            <i data-lucide="instagram" class="w-4 h-4 text-pink-500"></i>
+                            <span>Perfil de Instagram</span>
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <div class="flex items-center gap-2">
-                <button onclick="toggleCustomizer()" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-medium flex items-center gap-1.5 transition-colors">
-                    <i data-lucide="sliders" class="w-3.5 h-3.5 text-pink-400"></i>
-                    <span>Personalizar</span>
-                </button>
-                
-                <button onclick="openExportModal()" class="px-3 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-bold flex items-center gap-1.5 transition-colors shadow">
-                    <i data-lucide="code" class="w-3.5 h-3.5"></i>
-                    <span>Exportar Web</span>
-                </button>
+            <!-- HIGHLIGHTS -->
+            <div id="destacados" class="mt-10 pt-6 border-t border-gray-100 dark:border-gray-800">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Historias Destacadas</p>
+                <div class="flex items-center gap-6 overflow-x-auto pb-2" id="highlightsList"></div>
+            </div>
+        </section>
 
-                <button onclick="resetToOnboarding()" class="px-2.5 py-1.5 rounded-lg bg-gray-800 hover:bg-red-900/50 text-gray-300 hover:text-red-300 font-medium transition-colors" title="Reiniciar datos">
-                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+        <!-- TABS -->
+        <section id="feed" class="mt-10">
+            <div class="flex items-center justify-center border-b border-gray-200 dark:border-gray-800 mb-8">
+                <button onclick="switchTab('posts')" id="tab-posts" class="tab-btn active px-6 py-3 border-b-2 border-pink-500 font-bold text-sm text-pink-600 dark:text-pink-400 flex items-center gap-2 transition-all">
+                    <i data-lucide="grid" class="w-4 h-4"></i><span>Publicaciones</span>
                 </button>
+                <button onclick="switchTab('services')" id="tab-services" class="tab-btn px-6 py-3 border-b-2 border-transparent font-semibold text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center gap-2 transition-all">
+                    <i data-lucide="briefcase" class="w-4 h-4"></i><span>Servicios</span>
+                </button>
+                <button onclick="switchTab('testimonials')" id="tab-testimonials" class="tab-btn px-6 py-3 border-b-2 border-transparent font-semibold text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center gap-2 transition-all">
+                    <i data-lucide="star" class="w-4 h-4"></i><span>Reseñas</span>
+                </button>
+            </div>
+            <div id="content-posts" class="tab-content">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="postsGrid"></div>
+            </div>
+            <div id="content-services" class="tab-content hidden" id="servicios">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="servicesGrid"></div>
+            </div>
+            <div id="content-testimonials" class="tab-content hidden" id="testimonios">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="testimonialsGrid"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FLOATING WHATSAPP -->
+    <a id="floatingWspBtn" href="" target="_blank" class="fixed bottom-6 right-6 z-30 p-4 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center group animate-float">
+        <i data-lucide="message-circle" class="w-7 h-7"></i>
+        <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs group-hover:ml-2 transition-all duration-300 font-bold text-sm">¿Hablamos?</span>
+    </a>
+
+    <footer class="mt-20 border-t border-gray-200 dark:border-gray-800 py-10 text-center text-xs text-gray-500 dark:text-gray-400">
+        <p id="footerText">© 2026 @tu_marca. Todos los derechos reservados.</p>
+        <p class="mt-2">Creado con Instagram Studio Generator</p>
+    </footer>
+</div>
+
+<!-- CUSTOMIZER DRAWER -->
+<div id="customizerDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-gray-900 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 overflow-y-auto border-l border-gray-200 dark:border-gray-800">
+    <div class="p-5 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between sticky top-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur z-10">
+        <div class="flex items-center gap-2">
+            <i data-lucide="sliders" class="w-5 h-5 text-pink-500"></i>
+            <h3 class="font-bold text-base font-display">Editor en Tiempo Real</h3>
+        </div>
+        <button onclick="toggleCustomizer()" class="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+    </div>
+
+    <div class="p-5 space-y-6">
+        <!-- Perfil -->
+        <div class="space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">1. Datos del Perfil</h4>
+            <div>
+                <label class="block text-xs font-medium mb-1">Nombre / Título</label>
+                <input type="text" id="editName" oninput="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            </div>
+            <div>
+                <label class="block text-xs font-medium mb-1">Usuario (@handle)</label>
+                <input type="text" id="editHandle" oninput="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            </div>
+            <div>
+                <label class="block text-xs font-medium mb-1">Categoría</label>
+                <input type="text" id="editCategory" oninput="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            </div>
+            <div>
+                <label class="block text-xs font-medium mb-1">Foto de Perfil (URL)</label>
+                <input type="text" id="editAvatar" onchange="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            </div>
+            <div>
+                <label class="block text-xs font-medium mb-1">WhatsApp</label>
+                <input type="text" id="editPhone" oninput="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            </div>
+            <div>
+                <label class="block text-xs font-medium mb-1">Biografía</label>
+                <textarea id="editBio" rows="3" oninput="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
             </div>
         </div>
 
-        <!-- Navigation Header -->
-        <header class="sticky top-[41px] z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-                <!-- Brand / Logo -->
-                <a href="#profile" class="flex items-center gap-3 group">
-                    <div class="w-9 h-9 rounded-full ig-story-border flex items-center justify-center transition-transform group-hover:scale-105">
-                        <img id="navAvatar" src="" alt="Avatar" class="w-full h-full object-cover rounded-full border border-white dark:border-gray-900">
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <span id="navUsername" class="font-extrabold text-base tracking-tight">@tu_marca</span>
-                        <i data-lucide="badge-check" class="w-4 h-4 text-blue-500 fill-blue-500 text-white"></i>
-                    </div>
-                </a>
-
-                <!-- Desktop Nav Links -->
-                <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-gray-600 dark:text-gray-300">
-                    <a href="#destacados" class="hover:text-pink-500 transition-colors">Destacados</a>
-                    <a href="#feed" class="hover:text-pink-500 transition-colors">Publicaciones</a>
-                    <a href="#servicios" class="hover:text-pink-500 transition-colors">Servicios</a>
-                    <a href="#testimonios" class="hover:text-pink-500 transition-colors">Reseñas</a>
-                </nav>
-
-                <!-- Actions -->
-                <div class="flex items-center gap-3">
-                    <button onclick="toggleDarkMode()" class="p-2 rounded-xl text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="Cambiar tema">
-                        <i data-lucide="moon" id="themeIcon" class="w-5 h-5"></i>
-                    </button>
-                    <a id="navWspBtn" href="" target="_blank" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-green-600 hover:bg-green-700 transition-all shadow-sm flex items-center gap-1.5">
-                        <i data-lucide="message-circle" class="w-4 h-4"></i>
-                        <span>WhatsApp</span>
-                    </a>
+        <!-- Métricas -->
+        <div class="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">2. Métricas</h4>
+            <div class="grid grid-cols-3 gap-2">
+                <div>
+                    <label class="block text-xs font-medium mb-1">Posts</label>
+                    <input type="text" id="editPostsStat" oninput="liveUpdateProfile()" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-center">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium mb-1">Seguidores</label>
+                    <input type="text" id="editFollowersStat" oninput="liveUpdateProfile()" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-center">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium mb-1">Clientes</label>
+                    <input type="text" id="editClientsStat" oninput="liveUpdateProfile()" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-center">
                 </div>
             </div>
-        </header>
+        </div>
 
-        <!-- MAIN PROFILE HERO SECTION -->
-        <main class="flex-1 max-w-5xl mx-auto px-4 sm:px-6 pt-8 w-full">
-            <section id="profile" class="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-10 shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 relative overflow-hidden transition-all">
-                
-                <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
-                    <!-- Instagram Avatar Story Ring -->
-                    <div class="relative group flex-shrink-0 cursor-pointer" onclick="viewStory(0)">
-                        <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full ig-story-border shadow-lg transition-transform duration-300 group-hover:scale-105 p-1">
-                            <img id="profileImg" src="" alt="Foto de perfil" class="w-full h-full object-cover rounded-full border-4 border-white dark:border-gray-900">
-                        </div>
-                        <div class="absolute bottom-1 right-1 bg-pink-600 text-white p-1.5 rounded-full border-2 border-white dark:border-gray-900 shadow">
-                            <i data-lucide="camera" class="w-3.5 h-3.5"></i>
-                        </div>
-                    </div>
-
-                    <!-- Profile Bio & Stats -->
-                    <div class="flex-1 text-center md:text-left space-y-4">
-                        <div class="flex flex-col sm:flex-row items-center gap-3 justify-center md:justify-start">
-                            <h1 id="profileName" class="text-2xl sm:text-3xl font-extrabold font-display tracking-tight">Nombre de Marca</h1>
-                            <span id="profileCategoryBadge" class="px-3 py-1 bg-pink-100 dark:bg-pink-950/60 text-pink-600 dark:text-pink-400 text-xs font-extrabold rounded-full uppercase tracking-wider border border-pink-200 dark:border-pink-800">Categoría</span>
-                        </div>
-
-                        <p id="profileHandleDisplay" class="text-sm font-semibold text-gray-500 dark:text-gray-400">@tu_marca</p>
-
-                        <!-- Stats Strip -->
-                        <div class="flex items-center justify-center md:justify-start gap-6 py-3 border-y border-gray-100 dark:border-gray-800 my-4">
-                            <div class="text-center md:text-left">
-                                <span id="statPosts" class="block font-black text-lg sm:text-xl text-gray-900 dark:text-white">12</span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Publicaciones</span>
-                            </div>
-                            <div class="w-px h-8 bg-gray-200 dark:bg-gray-800"></div>
-                            <div class="text-center md:text-left">
-                                <span id="statFollowers" class="block font-black text-lg sm:text-xl text-gray-900 dark:text-white">18.4K</span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Seguidores</span>
-                            </div>
-                            <div class="w-px h-8 bg-gray-200 dark:bg-gray-800"></div>
-                            <div class="text-center md:text-left">
-                                <span id="statClients" class="block font-black text-lg sm:text-xl text-gray-900 dark:text-white">250+</span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Clientes</span>
-                            </div>
-                        </div>
-
-                        <!-- Bio Content -->
-                        <div id="profileBioDisplay" class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line font-medium max-w-2xl">
-                            Cargando biografía...
-                        </div>
-
-                        <!-- Main Call to Actions -->
-                        <div class="pt-3 flex flex-wrap items-center justify-center md:justify-start gap-3">
-                            <a id="heroWspBtn" href="" target="_blank" class="px-6 py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2 transform hover:-translate-y-0.5">
-                                <i data-lucide="message-square" class="w-4 h-4"></i>
-                                <span>Contactar por WhatsApp</span>
-                            </a>
-                            <a id="heroIgBtn" href="" target="_blank" class="px-5 py-3 rounded-xl font-semibold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all flex items-center gap-2">
-                                <i data-lucide="instagram" class="w-4 h-4 text-pink-500"></i>
-                                <span>Perfil de Instagram</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- HIGHLIGHTS / HISTORIAS DESTACADAS -->
-                <div id="destacados" class="mt-10 pt-6 border-t border-gray-100 dark:border-gray-800">
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Historias Destacadas</p>
-                    <div class="flex items-center gap-6 overflow-x-auto pb-2 scrollbar-none" id="highlightsList">
-                        <!-- Rendered by JS -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- TABS & SECTION CONTENT -->
-            <section id="feed" class="mt-10">
-                <!-- Navigation Tabs -->
-                <div class="flex items-center justify-center border-b border-gray-200 dark:border-gray-800 mb-8">
-                    <button onclick="switchTab('posts')" id="tab-posts" class="tab-btn active px-6 py-3 border-b-2 border-pink-500 font-bold text-sm text-pink-600 dark:text-pink-400 flex items-center gap-2 transition-all">
-                        <i data-lucide="grid" class="w-4 h-4"></i>
-                        <span>Publicaciones</span>
-                    </button>
-                    <button onclick="switchTab('services')" id="tab-services" class="tab-btn px-6 py-3 border-b-2 border-transparent font-semibold text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center gap-2 transition-all">
-                        <i data-lucide="briefcase" class="w-4 h-4"></i>
-                        <span>Servicios</span>
-                    </button>
-                    <button onclick="switchTab('testimonials')" id="tab-testimonials" class="tab-btn px-6 py-3 border-b-2 border-transparent font-semibold text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center gap-2 transition-all">
-                        <i data-lucide="star" class="w-4 h-4"></i>
-                        <span>Reseñas</span>
-                    </button>
-                </div>
-
-                <!-- TAB CONTENT 1: POSTS GRID -->
-                <div id="content-posts" class="tab-content">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="postsGrid">
-                        <!-- Posts rendered by JS -->
-                    </div>
-                </div>
-
-                <!-- TAB CONTENT 2: SERVICES -->
-                <div id="content-services" class="tab-content hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="servicesGrid">
-                        <!-- Services rendered by JS -->
-                    </div>
-                </div>
-
-                <!-- TAB CONTENT 3: TESTIMONIALS -->
-                <div id="content-testimonials" class="tab-content hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="testimonialsGrid">
-                        <!-- Testimonials rendered by JS -->
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- FLOATING WHATSAPP BUTTON -->
-        <a id="floatingWspBtn" href="" target="_blank" class="fixed bottom-6 right-6 z-30 p-4 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center group animate-float" title="Chatear por WhatsApp">
-            <i data-lucide="message-circle" class="w-7 h-7"></i>
-            <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs group-hover:ml-2 transition-all duration-300 font-bold text-sm">¿Hablamos?</span>
-        </a>
-
-        <!-- FOOTER -->
-        <footer class="mt-20 border-t border-gray-200 dark:border-gray-800 py-10 text-center text-xs text-gray-500 dark:text-gray-400">
-            <p id="footerText">© 2026 @tu_marca. Todos los derechos reservados.</p>
-            <p class="mt-2">Creado con Instagram Studio Generator</p>
-        </footer>
-    </div>
-
-    <!-- EDIT CUSTOMIZER SIDE DRAWER -->
-    <div id="customizerDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-gray-900 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 overflow-y-auto border-l border-gray-200 dark:border-gray-800">
-        <div class="p-5 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between sticky top-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur z-10">
-            <div class="flex items-center gap-2">
-                <i data-lucide="sliders" class="w-5 h-5 text-pink-500"></i>
-                <h3 class="font-bold text-base font-display">Editor en Tiempo Real</h3>
+        <!-- Agregar Post -->
+        <div class="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">3. Agregar Publicación</h4>
+            <div>
+                <label class="block text-xs font-medium mb-1">Imagen (URL)</label>
+                <input type="text" id="newPostImg" placeholder="https://..." class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
             </div>
-            <button onclick="toggleCustomizer()" class="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-white">
-                <i data-lucide="x" class="w-5 h-5"></i>
+            <div>
+                <label class="block text-xs font-medium mb-1">Caption</label>
+                <input type="text" id="newPostCaption" placeholder="¡Nuevo proyecto lanzado!" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            </div>
+            <button onclick="addNewPost()" class="w-full py-2 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-xl text-xs transition-colors">
+                + Publicar Post
             </button>
         </div>
 
-        <div class="p-5 space-y-6">
-            <!-- Section 1: Profile Info -->
-            <div class="space-y-4">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">1. Datos del Perfil</h4>
-                
-                <div>
-                    <label class="block text-xs font-medium mb-1">Nombre / Título</label>
-                    <input type="text" id="editName" oninput="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
-                </div>
+        <!-- Editar Servicios -->
+        <div class="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">4. Servicios</h4>
+            <div id="servicesEditor" class="space-y-3"></div>
+            <button onclick="addService()" class="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition-colors">
+                + Agregar Servicio
+            </button>
+        </div>
 
-                <div>
-                    <label class="block text-xs font-medium mb-1">Usuario (@handle)</label>
-                    <input type="text" id="editHandle" oninput="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
-                </div>
+        <!-- Editar Testimonios -->
+        <div class="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">5. Reseñas</h4>
+            <div id="testimonialsEditor" class="space-y-3"></div>
+            <button onclick="addTestimonial()" class="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-xl text-xs transition-colors">
+                + Agregar Reseña
+            </button>
+        </div>
+    </div>
+</div>
 
-                <div>
-                    <label class="block text-xs font-medium mb-1">Categoría</label>
-                    <input type="text" id="editCategory" oninput="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
+<!-- POST LIGHTBOX MODAL -->
+<div id="postModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-900 rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
+        <div class="md:w-1/2 bg-black flex items-center justify-center max-h-[350px] md:max-h-[500px]">
+            <img id="modalPostImg" src="" alt="Post" class="w-full h-full object-contain">
+        </div>
+        <div class="md:w-1/2 p-6 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-4 mb-4">
+                    <div class="flex items-center gap-3">
+                        <img id="modalAvatar" src="" class="w-8 h-8 rounded-full object-cover">
+                        <span id="modalHandle" class="font-bold text-sm">@tu_marca</span>
+                    </div>
+                    <button onclick="closePostModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
                 </div>
-
-                <div>
-                    <label class="block text-xs font-medium mb-1">Foto de Perfil (URL)</label>
-                    <input type="text" id="editAvatar" onchange="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium mb-1">WhatsApp</label>
-                    <input type="text" id="editPhone" oninput="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium mb-1">Biografía</label>
-                    <textarea id="editBio" rows="3" oninput="liveUpdateProfile()" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
-                </div>
+                <p id="modalCaption" class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4"></p>
             </div>
-
-            <!-- Section 2: Stats -->
-            <div class="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-800">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">2. Métricas</h4>
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block text-xs font-medium mb-1">Posts</label>
-                        <input type="text" id="editPostsStat" oninput="liveUpdateProfile()" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium mb-1">Seguidores</label>
-                        <input type="text" id="editFollowersStat" oninput="liveUpdateProfile()" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium mb-1">Clientes</label>
-                        <input type="text" id="editClientsStat" oninput="liveUpdateProfile()" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <div class="border-t border-gray-200 dark:border-gray-800 pt-4 space-y-3">
+                <div class="flex items-center gap-4 text-gray-700 dark:text-gray-300">
+                    <button onclick="toggleModalLike()" id="modalLikeBtn" class="flex items-center gap-1.5 font-semibold text-sm hover:text-red-500 transition-colors">
+                        <i data-lucide="heart" id="modalLikeIcon" class="w-5 h-5"></i>
+                        <span id="modalLikesCount">0</span>
+                    </button>
+                    <div class="flex items-center gap-1.5 font-semibold text-sm">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        <span id="modalCommentsCount">0</span>
                     </div>
                 </div>
-            </div>
-
-            <!-- Section 3: Add new Post -->
-            <div class="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-800">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">3. Agregar Publicación</h4>
-                <div>
-                    <label class="block text-xs font-medium mb-1">Imagen (URL)</label>
-                    <input type="text" id="newPostImg" placeholder="https://..." class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium mb-1">Descripción / Caption</label>
-                    <input type="text" id="newPostCaption" placeholder="¡Nuevo proyecto lanzado!" class="w-full px-3 py-2 rounded-xl text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-                </div>
-                <button onclick="addNewPost()" class="w-full py-2 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-xl text-xs transition-colors">
-                    + Publicar Post
-                </button>
+                <a id="modalWspAction" href="" target="_blank" class="w-full py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors">
+                    <i data-lucide="message-square" class="w-4 h-4"></i>
+                    <span>Consultar por este post en WhatsApp</span>
+                </a>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- POST LIGHTBOX MODAL -->
-    <div id="postModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
-            <div class="md:w-1/2 bg-black flex items-center justify-center max-h-[350px] md:max-h-[500px]">
-                <img id="modalPostImg" src="" alt="Post Detail" class="w-full h-full object-contain">
-            </div>
-            <div class="md:w-1/2 p-6 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-4 mb-4">
-                        <div class="flex items-center gap-3">
-                            <img id="modalAvatar" src="" class="w-8 h-8 rounded-full object-cover">
-                            <span id="modalHandle" class="font-bold text-sm">@tu_marca</span>
-                        </div>
-                        <button onclick="closePostModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white">
-                            <i data-lucide="x" class="w-5 h-5"></i>
-                        </button>
-                    </div>
-
-                    <p id="modalCaption" class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">Caption aquí...</p>
-                </div>
-
-                <div class="border-t border-gray-200 dark:border-gray-800 pt-4 space-y-3">
-                    <div class="flex items-center gap-4 text-gray-700 dark:text-gray-300">
-                        <button onclick="toggleModalLike()" id="modalLikeBtn" class="flex items-center gap-1.5 font-semibold text-sm hover:text-red-500 transition-colors">
-                            <i data-lucide="heart" id="modalLikeIcon" class="w-5 h-5"></i>
-                            <span id="modalLikesCount">124</span>
-                        </button>
-                        <div class="flex items-center gap-1.5 font-semibold text-sm">
-                            <i data-lucide="message-circle" class="w-5 h-5"></i>
-                            <span id="modalCommentsCount">18</span>
-                        </div>
-                    </div>
-                    
-                    <a id="modalWspAction" href="" target="_blank" class="w-full py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors">
-                        <i data-lucide="message-square" class="w-4 h-4"></i>
-                        <span>Consultar por este post en WhatsApp</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CODE EXPORT MODAL -->
-    <div id="exportModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col space-y-4">
-            <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
-                <h3 class="font-bold text-lg font-display flex items-center gap-2">
-                    <i data-lucide="code" class="w-5 h-5 text-pink-500"></i>
-                    Exportar Código HTML
-                </h3>
-                <button onclick="closeExportModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <p class="text-xs text-gray-500 dark:text-gray-400">Puedes copiar este código autónomo para subirlo directamente a cualquier servidor, Netlify, Vercel o GitHub Pages.</p>
-
-            <textarea id="exportedCodeTextarea" readonly class="w-full h-64 p-3 bg-gray-950 text-pink-400 font-mono text-xs rounded-xl border border-gray-800 focus:outline-none resize-none"></textarea>
-
-            <div class="flex items-center justify-end gap-3 pt-2">
-                <button onclick="copyExportedCode()" class="px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5">
-                    <i data-lucide="copy" class="w-4 h-4"></i>
-                    <span>Copiar al Portapapeles</span>
-                </button>
-                <button onclick="downloadExportedCode()" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5">
-                    <i data-lucide="download" class="w-4 h-4"></i>
-                    <span>Descargar index.html</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // APP STATE DATA
-        let appData = {
-            handle: "tu_marca",
-            name: "Nombre de Marca",
-            category: "Servicios Digitales",
-            phone: "5491112345678",
-            bio: "",
-            avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
-            stats: {
-                posts: "18",
-                followers: "12.4K",
-                clients: "320+"
-            },
-            highlights: [
-                { title: "Servicios", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=150&auto=format&fit=crop&q=80" },
-                { title: "Clientes", img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=150&auto=format&fit=crop&q=80" },
-                { title: "Reseñas", img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=150&auto=format&fit=crop&q=80" },
-                { title: "FAQ", img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=150&auto=format&fit=crop&q=80" }
-            ],
-            posts: [
-                {
-                    id: 1,
-                    img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80",
-                    caption: "🚀 Potencia la presencia digital de tu negocio hoy mismo. Estrategias a la medida de tu presupuesto.",
-                    likes: 184,
-                    comments: 24
-                },
-                {
-                    id: 2,
-                    img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&auto=format&fit=crop&q=80",
-                    caption: "✨ Detrás de escena: Creando la nueva identidad visual para nuestros clientes de este mes.",
-                    likes: 240,
-                    comments: 31
-                },
-                {
-                    id: 3,
-                    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=80",
-                    caption: "📊 3 Consejos fundamentales para aumentar tus conversiones directamente desde Instagram.",
-                    likes: 312,
-                    comments: 42
-                },
-                {
-                    id: 4,
-                    img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&auto=format&fit=crop&q=80",
-                    caption: "🤝 Reunión estratégica de equipo. Definiendo los nuevos lanzamientos del próximo trimestre.",
-                    likes: 156,
-                    comments: 12
-                },
-                {
-                    id: 5,
-                    img: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600&auto=format&fit=crop&q=80",
-                    caption: "💻 Tu web lista para recibir ventas las 24 horas del día. Haz clic en nuestro enlace.",
-                    likes: 289,
-                    comments: 19
-                },
-                {
-                    id: 6,
-                    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&auto=format&fit=crop&q=80",
-                    caption: "🎉 Celebrando +300 clientes satisfechos en toda la región. ¡Gracias por la confianza!",
-                    likes: 410,
-                    comments: 53
-                }
-            ],
-            services: [
-                {
-                    title: "Asesoría 1 a 1",
-                    desc: "Sesión intensiva de 60 minutos para auditar tu marca y diseñar tu plan de acción.",
-                    price: "Consultar"
-                },
-                {
-                    title: "Diseño Web Express",
-                    desc: "Landing Page optimizada para vender tus servicios e integrar tu WhatsApp.",
-                    price: "Destacado"
-                },
-                {
-                    title: "Estrategia de Contenido",
-                    desc: "Calendario mensual + Guiones para Reels y publicaciones con alto engagement.",
-                    price: "Popular"
-                }
-            ],
-            testimonials: [
-                {
-                    name: "Valeria Gómez",
-                    role: "Fundadora de StudioV",
-                    text: "Increíble trabajo. Duplicamos las consultas por WhatsApp en la primera semana de lanzar la web.",
-                    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80"
-                },
-                {
-                    name: "Lucas Peralta",
-                    role: "Consultor de Negocios",
-                    text: "Tener una landing directa desde mi Instagram le dio muchísima más seriedad a mis propuestas.",
-                    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
-                }
-            ]
-        };
-
-        let currentModalPostId = null;
-
-        // INITIALIZATION
-        window.onload = function() {
-            lucide.createIcons();
-        };
-
-        // ONBOARDING FORM SUBMISSION
-        function generateLandingPage(e) {
-            e.preventDefault();
-            
-            // Extract Form Values
-            const rawHandle = document.getElementById('initHandle').value.replace('@', '').trim();
-            appData.handle = rawHandle || "tu_marca";
-            appData.name = document.getElementById('initName').value.trim() || "Nombre de Marca";
-            appData.category = document.getElementById('initCategory').value;
-            appData.phone = document.getElementById('initPhone').value.trim() || "5491112345678";
-            appData.bio = document.getElementById('initBio').value.trim();
-
-            // Populate Editor Inputs
-            document.getElementById('editHandle').value = "@" + appData.handle;
-            document.getElementById('editName').value = appData.name;
-            document.getElementById('editCategory').value = appData.category;
-            document.getElementById('editPhone').value = appData.phone;
-            document.getElementById('editBio').value = appData.bio;
-            document.getElementById('editAvatar').value = appData.avatar;
-            document.getElementById('editPostsStat').value = appData.stats.posts;
-            document.getElementById('editFollowersStat').value = appData.stats.followers;
-            document.getElementById('editClientsStat').value = appData.stats.clients;
-
-            // Render Page
-            renderAll();
-
-            // Switch Screen View
-            document.getElementById('onboardingScreen').classList.add('hidden');
-            document.getElementById('websiteScreen').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function resetToOnboarding() {
-            if(confirm('¿Deseas volver al inicio y reconfigurar la página?')) {
-                document.getElementById('websiteScreen').classList.add('hidden');
-                document.getElementById('onboardingScreen').classList.remove('hidden');
-            }
-        }
-
-        function renderAll() {
-            renderHeaderAndProfile();
-            renderHighlights();
-            renderPosts();
-            renderServices();
-            renderTestimonials();
-            lucide.createIcons();
-        }
-
-        function renderHeaderAndProfile() {
-            const handleText = "@" + appData.handle.replace('@','');
-            const wspUrl = `https://wa.me/${appData.phone}?text=Hola%20${encodeURIComponent(appData.name)},%20vengo%20desde%20tu%20web!`;
-            const igUrl = `https://instagram.com/${appData.handle.replace('@','')}`;
-
-            // Topbar & Nav
-            document.getElementById('topBarHandle').innerText = handleText;
-            document.getElementById('navUsername').innerText = handleText;
-            document.getElementById('navAvatar').src = appData.avatar;
-            document.getElementById('navWspBtn').href = wspUrl;
-
-            // Hero Profile
-            document.getElementById('profileImg').src = appData.avatar;
-            document.getElementById('profileName').innerText = appData.name;
-            document.getElementById('profileCategoryBadge').innerText = appData.category;
-            document.getElementById('profileHandleDisplay').innerText = handleText;
-            document.getElementById('profileBioDisplay').innerText = appData.bio;
-
-            // Stats
-            document.getElementById('statPosts').innerText = appData.stats.posts;
-            document.getElementById('statFollowers').innerText = appData.stats.followers;
-            document.getElementById('statClients').innerText = appData.stats.clients;
-
-            // Buttons
-            document.getElementById('heroWspBtn').href = wspUrl;
-            document.getElementById('heroIgBtn').href = igUrl;
-            document.getElementById('floatingWspBtn').href = wspUrl;
-
-            // Footer
-            document.getElementById('footerText').innerText = `© 2026 ${handleText}. Todos los derechos reservados.`;
-        }
-
-        function renderHighlights() {
-            const container = document.getElementById('highlightsList');
-            container.innerHTML = appData.highlights.map((h, index) => `
-                <div class="flex flex-col items-center gap-1.5 cursor-pointer group flex-shrink-0" onclick="viewStory(${index})">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full ig-story-border p-0.5 transition-transform group-hover:scale-105">
-                        <img src="${h.img}" class="w-full h-full object-cover rounded-full border-2 border-white dark:border-gray-900">
-                    </div>
-                    <span class="text-xs font-semibold text-gray-700 dark:text-gray-300 max-w-[70px] truncate text-center">${h.title}</span>
-                </div>
-            `).join('');
-        }
-
-        function renderPosts() {
-            const grid = document.getElementById('postsGrid');
-            grid.innerHTML = appData.posts.map(post => `
-                <div onclick="openPostModal(${post.id})" class="group relative aspect-square bg-gray-200 dark:bg-gray-800 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all">
-                    <img src="${post.img}" alt="Post" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    
-                    <!-- Hover overlay -->
-                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white font-bold text-sm">
-                        <div class="flex items-center gap-1.5">
-                            <i data-lucide="heart" class="w-5 h-5 fill-white"></i>
-                            <span>${post.likes}</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <i data-lucide="message-circle" class="w-5 h-5 fill-white"></i>
-                            <span>${post.comments}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderServices() {
-            const grid = document.getElementById('servicesGrid');
-            grid.innerHTML = appData.services.map(s => `
-                <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-md hover:shadow-lg transition-all flex flex-col justify-between space-y-4">
+<!-- STORY MODAL -->
+<div id="storyModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm hidden items-center justify-center p-4" onclick="closeStoryModal()">
+    <div class="relative max-w-sm w-full" onclick="event.stopPropagation()">
+        <button onclick="closeStoryModal()" class="absolute top-3 right-3 z-10 text-white bg-black/40 rounded-full p-1.5 hover:bg-black/70 transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <!-- Progress bar -->
+        <div class="absolute top-0 left-0 right-0 flex gap-1 p-3 z-10" id="storyProgress"></div>
+        <div class="bg-gray-900 rounded-3xl overflow-hidden aspect-[9/16] flex items-center justify-center relative">
+            <img id="storyImg" src="" class="w-full h-full object-cover">
+            <div class="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/80 to-transparent">
+                <div class="flex items-center gap-3 mb-3">
+                    <img id="storyAvatar" src="" class="w-9 h-9 rounded-full border-2 border-white object-cover">
                     <div>
-                        <div class="inline-block px-2.5 py-1 rounded-full bg-pink-100 dark:bg-pink-950/60 text-pink-600 dark:text-pink-400 text-xs font-bold mb-3">
-                            ${s.price}
-                        </div>
-                        <h3 class="font-bold text-lg font-display mb-2">${s.title}</h3>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">${s.desc}</p>
-                    </div>
-                    <a href="https://wa.me/${appData.phone}?text=${encodeURIComponent('Hola! Me interesa el servicio: ' + s.title)}" target="_blank" class="w-full py-2.5 rounded-xl font-bold text-xs text-center text-white bg-gray-900 dark:bg-gray-800 hover:bg-pink-600 transition-colors flex items-center justify-center gap-2">
-                        <span>Consultar Servicio</span>
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                    </a>
-                </div>
-            `).join('');
-        }
-
-        function renderTestimonials() {
-            const grid = document.getElementById('testimonialsGrid');
-            grid.innerHTML = appData.testimonials.map(t => `
-                <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-md flex items-start gap-4">
-                    <img src="${t.avatar}" class="w-12 h-12 rounded-full object-cover border-2 border-pink-500 flex-shrink-0">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-1 text-yellow-400">
-                            <i data-lucide="star" class="w-3.5 h-3.5 fill-yellow-400"></i>
-                            <i data-lucide="star" class="w-3.5 h-3.5 fill-yellow-400"></i>
-                            <i data-lucide="star" class="w-3.5 h-3.5 fill-yellow-400"></i>
-                            <i data-lucide="star" class="w-3.5 h-3.5 fill-yellow-400"></i>
-                            <i data-lucide="star" class="w-3.5 h-3.5 fill-yellow-400"></i>
-                        </div>
-                        <p class="text-xs text-gray-600 dark:text-gray-300 italic leading-relaxed">"${t.text}"</p>
-                        <p class="text-xs font-bold pt-1">${t.name} <span class="text-gray-400 font-normal">· ${t.role}</span></p>
+                        <p id="storyHandle" class="text-white font-bold text-sm"></p>
+                        <p id="storyTitle" class="text-gray-300 text-xs"></p>
                     </div>
                 </div>
-            `).join('');
-        }
+                <a id="storyWspBtn" href="" target="_blank" class="w-full py-2.5 bg-white text-black rounded-2xl font-bold text-sm flex items-center justify-center gap-2" onclick="event.stopPropagation()">
+                    <i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i>
+                    <span>Enviar mensaje</span>
+                </a>
+            </div>
+        </div>
+        <div class="flex justify-between mt-4">
+            <button onclick="prevStory()" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-bold transition-colors">← Anterior</button>
+            <button onclick="nextStory()" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-bold transition-colors">Siguiente →</button>
+        </div>
+    </div>
+</div>
 
-        // TABS SWITCHING
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active', 'border-pink-500', 'text-pink-600', 'dark:text-pink-400', 'font-bold');
-                btn.classList.add('border-transparent', 'text-gray-500', 'font-semibold');
-            });
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+<!-- EXPORT MODAL -->
+<div id="exportModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-900 rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col space-y-4">
+        <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+            <h3 class="font-bold text-lg font-display flex items-center gap-2">
+                <i data-lucide="download" class="w-5 h-5 text-pink-500"></i>
+                Exportar Página Web Completa
+            </h3>
+            <button onclick="closeExportModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Descargá tu web completa como un único archivo HTML. Podés subirlo a Netlify, Vercel, GitHub Pages o cualquier hosting.</p>
+        <textarea id="exportedCodeTextarea" readonly class="w-full h-56 p-3 bg-gray-950 text-green-400 font-mono text-xs rounded-xl border border-gray-800 focus:outline-none resize-none"></textarea>
+        <div class="flex items-center justify-end gap-3 pt-2">
+            <button onclick="copyExportedCode()" class="px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+                <span>Copiar Código</span>
+            </button>
+            <button onclick="downloadExportedCode()" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Descargar index.html</span>
+            </button>
+        </div>
+    </div>
+</div>
 
-            const activeBtn = document.getElementById(`tab-${tabName}`);
-            activeBtn.classList.add('active', 'border-pink-500', 'text-pink-600', 'dark:text-pink-400', 'font-bold');
-            activeBtn.classList.remove('border-transparent', 'text-gray-500');
+<script>
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function esc(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
 
-            document.getElementById(`content-${tabName}`).classList.remove('hidden');
-        }
+function showToast(msg, icon = 'check-circle') {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+}
 
-        // POST LIGHTBOX LOGIC
-        function openPostModal(id) {
-            const post = appData.posts.find(p => p.id === id);
-            if(!post) return;
-            currentModalPostId = id;
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let appData = {
+    handle: "tu_marca",
+    name: "Nombre de Marca",
+    category: "Servicios Digitales",
+    phone: "5491112345678",
+    bio: "",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
+    stats: { posts: "—", followers: "—", clients: "—" },
+    highlights: [
+        { title: "Servicios", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&auto=format&fit=crop&q=80" },
+        { title: "Clientes", img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=300&auto=format&fit=crop&q=80" },
+        { title: "Reseñas", img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=300&auto=format&fit=crop&q=80" },
+        { title: "FAQ", img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=300&auto=format&fit=crop&q=80" }
+    ],
+    posts: [
+        { id: 1, img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80", caption: "🚀 Potencia la presencia digital de tu negocio hoy mismo. Estrategias a la medida de tu presupuesto.", likes: 184, comments: 24 },
+        { id: 2, img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&auto=format&fit=crop&q=80", caption: "✨ Detrás de escena: Creando la nueva identidad visual para nuestros clientes de este mes.", likes: 240, comments: 31 },
+        { id: 3, img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=80", caption: "📊 3 Consejos fundamentales para aumentar tus conversiones directamente desde Instagram.", likes: 312, comments: 42 },
+        { id: 4, img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&auto=format&fit=crop&q=80", caption: "🤝 Reunión estratégica de equipo. Definiendo los nuevos lanzamientos del próximo trimestre.", likes: 156, comments: 12 },
+        { id: 5, img: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600&auto=format&fit=crop&q=80", caption: "💻 Tu web lista para recibir ventas las 24 horas del día. Haz clic en nuestro enlace.", likes: 289, comments: 19 },
+        { id: 6, img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&auto=format&fit=crop&q=80", caption: "🎉 Celebrando +300 clientes satisfechos en toda la región. ¡Gracias por la confianza!", likes: 410, comments: 53 }
+    ],
+    services: [
+        { title: "Asesoría 1 a 1", desc: "Sesión intensiva de 60 minutos para auditar tu marca y diseñar tu plan de acción.", price: "Consultar" },
+        { title: "Diseño Web Express", desc: "Landing Page optimizada para vender tus servicios e integrar tu WhatsApp.", price: "Destacado" },
+        { title: "Estrategia de Contenido", desc: "Calendario mensual + Guiones para Reels y publicaciones con alto engagement.", price: "Popular" }
+    ],
+    testimonials: [
+        { name: "Valeria Gómez", role: "Fundadora de StudioV", text: "Increíble trabajo. Duplicamos las consultas por WhatsApp en la primera semana de lanzar la web.", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80" },
+        { name: "Lucas Peralta", role: "Consultor de Negocios", text: "Tener una landing directa desde mi Instagram le dio muchísima más seriedad a mis propuestas.", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" }
+    ]
+};
 
-            document.getElementById('modalPostImg').src = post.img;
-            document.getElementById('modalAvatar').src = appData.avatar;
-            document.getElementById('modalHandle').innerText = "@" + appData.handle.replace('@','');
-            document.getElementById('modalCaption').innerText = post.caption;
-            document.getElementById('modalLikesCount').innerText = post.likes;
-            document.getElementById('modalCommentsCount').innerText = post.comments;
-            document.getElementById('modalWspAction').href = `https://wa.me/${appData.phone}?text=${encodeURIComponent('Hola! Quisiera información sobre este post: ' + post.caption)}`;
+let currentModalPostId = null;
+let currentStoryIndex = 0;
+let storyTimer = null;
 
-            document.getElementById('postModal').classList.remove('hidden');
-            document.getElementById('postModal').classList.add('flex');
-            lucide.createIcons();
-        }
+// ── INIT ──────────────────────────────────────────────────────────────────────
+window.onload = function() { lucide.createIcons(); };
 
-        function closePostModal() {
-            document.getElementById('postModal').classList.add('hidden');
-            document.getElementById('postModal').classList.remove('flex');
-        }
+// ── ONBOARDING ────────────────────────────────────────────────────────────────
+function generateLandingPage(e) {
+    e.preventDefault();
+    appData.handle = document.getElementById('initHandle').value.replace('@','').trim() || "tu_marca";
+    appData.name = document.getElementById('initName').value.trim() || "Nombre de Marca";
+    appData.category = document.getElementById('initCategory').value;
+    appData.phone = document.getElementById('initPhone').value.trim() || "5491112345678";
+    appData.bio = document.getElementById('initBio').value.trim();
+    appData.stats.posts = document.getElementById('initStatPosts').value.trim() || "—";
+    appData.stats.followers = document.getElementById('initStatFollowers').value.trim() || "—";
+    appData.stats.clients = document.getElementById('initStatClients').value.trim() || "—";
 
-        function toggleModalLike() {
-            const post = appData.posts.find(p => p.id === currentModalPostId);
-            if(post) {
-                post.likes += 1;
-                document.getElementById('modalLikesCount').innerText = post.likes;
-                renderPosts();
-            }
-        }
+    // populate editor
+    document.getElementById('editHandle').value = "@" + appData.handle;
+    document.getElementById('editName').value = appData.name;
+    document.getElementById('editCategory').value = appData.category;
+    document.getElementById('editPhone').value = appData.phone;
+    document.getElementById('editBio').value = appData.bio;
+    document.getElementById('editAvatar').value = appData.avatar;
+    document.getElementById('editPostsStat').value = appData.stats.posts;
+    document.getElementById('editFollowersStat').value = appData.stats.followers;
+    document.getElementById('editClientsStat').value = appData.stats.clients;
 
-        function viewStory(index) {
-            alert(`✨ Simulación de Historia Destacada: "${appData.highlights[index]?.title || 'Destacado'}"`);
-        }
+    renderAll();
+    document.getElementById('onboardingScreen').classList.add('hidden');
+    document.getElementById('websiteScreen').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-        // CUSTOMIZER DRAWER
-        function toggleCustomizer() {
-            const drawer = document.getElementById('customizerDrawer');
-            drawer.classList.toggle('translate-x-full');
-        }
+function resetToOnboarding() {
+    if(confirm('¿Deseas volver al inicio y reconfigurar la página?')) {
+        document.getElementById('websiteScreen').classList.add('hidden');
+        document.getElementById('onboardingScreen').classList.remove('hidden');
+    }
+}
 
-        function liveUpdateProfile() {
-            appData.name = document.getElementById('editName').value || "Nombre de Marca";
-            appData.handle = document.getElementById('editHandle').value.replace('@','') || "tu_marca";
-            appData.category = document.getElementById('editCategory').value || "Categoría";
-            appData.avatar = document.getElementById('editAvatar').value || appData.avatar;
-            appData.phone = document.getElementById('editPhone').value || "5491112345678";
-            appData.bio = document.getElementById('editBio').value;
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderAll() {
+    renderHeaderAndProfile();
+    renderHighlights();
+    renderPosts();
+    renderServices();
+    renderTestimonials();
+    renderServicesEditor();
+    renderTestimonialsEditor();
+    lucide.createIcons();
+}
 
-            appData.stats.posts = document.getElementById('editPostsStat').value;
-            appData.stats.followers = document.getElementById('editFollowersStat').value;
-            appData.stats.clients = document.getElementById('editClientsStat').value;
+function renderHeaderAndProfile() {
+    const handle = appData.handle.replace('@','');
+    const handleText = "@" + handle;
+    const wspUrl = `https://wa.me/${appData.phone}?text=${encodeURIComponent('Hola ' + appData.name + ', vengo desde tu web!')}`;
+    const igUrl = `https://instagram.com/${handle}`;
 
-            renderAll();
-        }
+    document.getElementById('topBarHandle').textContent = handleText;
+    document.getElementById('navUsername').textContent = handleText;
+    document.getElementById('navAvatar').src = appData.avatar;
+    document.getElementById('navWspBtn').href = wspUrl;
+    document.getElementById('profileImg').src = appData.avatar;
+    document.getElementById('profileName').textContent = appData.name;
+    document.getElementById('profileCategoryBadge').textContent = appData.category;
+    document.getElementById('profileHandleDisplay').textContent = handleText;
+    document.getElementById('profileBioDisplay').textContent = appData.bio;
+    document.getElementById('statPosts').textContent = appData.stats.posts;
+    document.getElementById('statFollowers').textContent = appData.stats.followers;
+    document.getElementById('statClients').textContent = appData.stats.clients;
+    document.getElementById('heroWspBtn').href = wspUrl;
+    document.getElementById('heroIgBtn').href = igUrl;
+    document.getElementById('floatingWspBtn').href = wspUrl;
+    document.getElementById('footerText').textContent = `© ${new Date().getFullYear()} ${handleText}. Todos los derechos reservados.`;
+}
 
-        function addNewPost() {
-            const img = document.getElementById('newPostImg').value.trim();
-            const caption = document.getElementById('newPostCaption').value.trim();
+function renderHighlights() {
+    const container = document.getElementById('highlightsList');
+    container.innerHTML = appData.highlights.map((h, i) => `
+        <div class="flex flex-col items-center gap-1.5 cursor-pointer group flex-shrink-0" onclick="openStoryModal(${i})">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full ig-story-border p-0.5 transition-transform group-hover:scale-105">
+                <img src="${esc(h.img)}" class="w-full h-full object-cover rounded-full border-2 border-white dark:border-gray-900" onerror="this.src='https://images.unsplash.com/photo-1531482615713-2afd69097998?w=150&auto=format&fit=crop&q=80'">
+            </div>
+            <span class="text-xs font-semibold text-gray-700 dark:text-gray-300 max-w-[70px] truncate text-center">${esc(h.title)}</span>
+        </div>
+    `).join('');
+}
 
-            if(!img) {
-                alert('Ingresa la URL de una imagen para la publicación.');
-                return;
-            }
+function renderPosts() {
+    const grid = document.getElementById('postsGrid');
+    grid.innerHTML = appData.posts.map(post => `
+        <div onclick="openPostModal(${post.id})" class="group relative aspect-square bg-gray-200 dark:bg-gray-800 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all">
+            <img src="${esc(post.img)}" alt="Post" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.parentElement.style.background='#374151'">
+            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white font-bold text-sm">
+                <div class="flex items-center gap-1.5"><i data-lucide="heart" class="w-5 h-5 fill-white"></i><span>${esc(String(post.likes))}</span></div>
+                <div class="flex items-center gap-1.5"><i data-lucide="message-circle" class="w-5 h-5 fill-white"></i><span>${esc(String(post.comments))}</span></div>
+            </div>
+        </div>
+    `).join('');
+}
 
-            const newPost = {
-                id: Date.now(),
-                img: img,
-                caption: caption || "Publicación de mi marca",
-                likes: Math.floor(Math.random() * 200) + 50,
-                comments: Math.floor(Math.random() * 20) + 5
-            };
+function renderServices() {
+    const grid = document.getElementById('servicesGrid');
+    grid.innerHTML = appData.services.map((s, i) => `
+        <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-md hover:shadow-lg transition-all flex flex-col justify-between space-y-4">
+            <div>
+                <div class="inline-block px-2.5 py-1 rounded-full bg-pink-100 dark:bg-pink-950/60 text-pink-600 dark:text-pink-400 text-xs font-bold mb-3">${esc(s.price)}</div>
+                <h3 class="font-bold text-lg font-display mb-2">${esc(s.title)}</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">${esc(s.desc)}</p>
+            </div>
+            <a href="https://wa.me/${esc(appData.phone)}?text=${encodeURIComponent('Hola! Me interesa el servicio: ' + s.title)}" target="_blank" class="w-full py-2.5 rounded-xl font-bold text-xs text-center text-white bg-gray-900 dark:bg-gray-800 hover:bg-pink-600 transition-colors flex items-center justify-center gap-2">
+                <span>Consultar Servicio</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+    `).join('');
+}
 
-            appData.posts.unshift(newPost);
-            appData.stats.posts = (parseInt(appData.stats.posts) || 0) + 1;
-            document.getElementById('editPostsStat').value = appData.stats.posts;
+function renderTestimonials() {
+    const grid = document.getElementById('testimonialsGrid');
+    grid.innerHTML = appData.testimonials.map(t => `
+        <div class="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-md flex items-start gap-4">
+            <img src="${esc(t.avatar)}" class="w-12 h-12 rounded-full object-cover border-2 border-pink-500 flex-shrink-0" onerror="this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80'">
+            <div class="space-y-1">
+                <div class="flex items-center gap-1 text-yellow-400">
+                    ${[...Array(5)].map(() => `<i data-lucide="star" class="w-3.5 h-3.5 fill-yellow-400"></i>`).join('')}
+                </div>
+                <p class="text-xs text-gray-600 dark:text-gray-300 italic leading-relaxed">"${esc(t.text)}"</p>
+                <p class="text-xs font-bold pt-1">${esc(t.name)} <span class="text-gray-400 font-normal">· ${esc(t.role)}</span></p>
+            </div>
+        </div>
+    `).join('');
+}
 
-            document.getElementById('newPostImg').value = '';
-            document.getElementById('newPostCaption').value = '';
+function renderServicesEditor() {
+    const container = document.getElementById('servicesEditor');
+    container.innerHTML = appData.services.map((s, i) => `
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-3 space-y-2 border border-gray-200 dark:border-gray-700">
+            <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-gray-500">Servicio ${i + 1}</span>
+                <button onclick="removeService(${i})" class="text-red-400 hover:text-red-600 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+            </div>
+            <input type="text" value="${esc(s.title)}" onchange="updateService(${i},'title',this.value)" placeholder="Título" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <input type="text" value="${esc(s.price)}" onchange="updateService(${i},'price',this.value)" placeholder="Etiqueta (Popular, Destacado…)" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <textarea onchange="updateService(${i},'desc',this.value)" rows="2" placeholder="Descripción" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 resize-none">${esc(s.desc)}</textarea>
+        </div>
+    `).join('');
+}
 
-            renderAll();
-            alert('¡Post agregado correctamente!');
-        }
+function renderTestimonialsEditor() {
+    const container = document.getElementById('testimonialsEditor');
+    container.innerHTML = appData.testimonials.map((t, i) => `
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-3 space-y-2 border border-gray-200 dark:border-gray-700">
+            <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-gray-500">Reseña ${i + 1}</span>
+                <button onclick="removeTestimonial(${i})" class="text-red-400 hover:text-red-600 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+            </div>
+            <input type="text" value="${esc(t.name)}" onchange="updateTestimonial(${i},'name',this.value)" placeholder="Nombre" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <input type="text" value="${esc(t.role)}" onchange="updateTestimonial(${i},'role',this.value)" placeholder="Rol / Empresa" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <input type="text" value="${esc(t.avatar)}" onchange="updateTestimonial(${i},'avatar',this.value)" placeholder="URL de foto (opcional)" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <textarea onchange="updateTestimonial(${i},'text',this.value)" rows="2" placeholder="Texto de la reseña" class="w-full px-2 py-1.5 rounded-lg text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 resize-none">${esc(t.text)}</textarea>
+        </div>
+    `).join('');
+}
 
-        // DARK MODE TOGGLE
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            document.getElementById('themeIcon').setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-            lucide.createIcons();
-        }
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'border-pink-500', 'text-pink-600', 'dark:text-pink-400', 'font-bold');
+        btn.classList.add('border-transparent', 'text-gray-500', 'font-semibold');
+    });
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+    const activeBtn = document.getElementById(`tab-${tabName}`);
+    activeBtn.classList.add('active', 'border-pink-500', 'text-pink-600', 'font-bold');
+    activeBtn.classList.remove('border-transparent', 'text-gray-500');
+    document.getElementById(`content-${tabName}`).classList.remove('hidden');
+}
 
-        // EXPORT CODE MODAL
-        function openExportModal() {
-            // Generate full HTML string
-            const htmlContent = `<!DOCTYPE html>
+// ── POST MODAL ────────────────────────────────────────────────────────────────
+function openPostModal(id) {
+    const post = appData.posts.find(p => p.id === id);
+    if (!post) return;
+    currentModalPostId = id;
+    document.getElementById('modalPostImg').src = post.img;
+    document.getElementById('modalAvatar').src = appData.avatar;
+    document.getElementById('modalHandle').textContent = "@" + appData.handle.replace('@','');
+    document.getElementById('modalCaption').textContent = post.caption;
+    document.getElementById('modalLikesCount').textContent = post.likes;
+    document.getElementById('modalCommentsCount').textContent = post.comments;
+    document.getElementById('modalWspAction').href = `https://wa.me/${appData.phone}?text=${encodeURIComponent('Hola! Quisiera información sobre este post: ' + post.caption)}`;
+    document.getElementById('postModal').classList.remove('hidden');
+    document.getElementById('postModal').classList.add('flex');
+    lucide.createIcons();
+}
+
+function closePostModal() {
+    document.getElementById('postModal').classList.add('hidden');
+    document.getElementById('postModal').classList.remove('flex');
+}
+
+function toggleModalLike() {
+    const post = appData.posts.find(p => p.id === currentModalPostId);
+    if (post) {
+        post.likes += 1;
+        document.getElementById('modalLikesCount').textContent = post.likes;
+        renderPosts();
+        lucide.createIcons();
+    }
+}
+
+// ── STORY MODAL ───────────────────────────────────────────────────────────────
+function openStoryModal(index) {
+    currentStoryIndex = index;
+    showStory(index);
+    document.getElementById('storyModal').classList.remove('hidden');
+    document.getElementById('storyModal').classList.add('flex');
+    lucide.createIcons();
+}
+
+function showStory(index) {
+    const h = appData.highlights[index];
+    if (!h) return;
+    document.getElementById('storyImg').src = h.img;
+    document.getElementById('storyAvatar').src = appData.avatar;
+    document.getElementById('storyHandle').textContent = "@" + appData.handle.replace('@','');
+    document.getElementById('storyTitle').textContent = h.title;
+    document.getElementById('storyWspBtn').href = `https://wa.me/${appData.phone}?text=${encodeURIComponent('Hola! Vi tus historias de ' + h.title + ' y quiero más info.')}`;
+
+    // progress bars
+    const prog = document.getElementById('storyProgress');
+    prog.innerHTML = appData.highlights.map((_, i) => `
+        <div class="flex-1 h-0.5 rounded-full ${i < index ? 'bg-white' : i === index ? 'bg-white/90' : 'bg-white/30'}"></div>
+    `).join('');
+
+    clearTimeout(storyTimer);
+    storyTimer = setTimeout(() => nextStory(), 5000);
+}
+
+function nextStory() {
+    if (currentStoryIndex < appData.highlights.length - 1) {
+        currentStoryIndex++;
+        showStory(currentStoryIndex);
+    } else {
+        closeStoryModal();
+    }
+}
+
+function prevStory() {
+    if (currentStoryIndex > 0) {
+        currentStoryIndex--;
+        showStory(currentStoryIndex);
+    }
+}
+
+function closeStoryModal() {
+    clearTimeout(storyTimer);
+    document.getElementById('storyModal').classList.add('hidden');
+    document.getElementById('storyModal').classList.remove('flex');
+}
+
+// ── CUSTOMIZER ────────────────────────────────────────────────────────────────
+function toggleCustomizer() {
+    document.getElementById('customizerDrawer').classList.toggle('translate-x-full');
+}
+
+function liveUpdateProfile() {
+    appData.name = document.getElementById('editName').value || "Nombre de Marca";
+    appData.handle = document.getElementById('editHandle').value.replace('@','') || "tu_marca";
+    appData.category = document.getElementById('editCategory').value || "Categoría";
+    appData.avatar = document.getElementById('editAvatar').value || appData.avatar;
+    appData.phone = document.getElementById('editPhone').value || "5491112345678";
+    appData.bio = document.getElementById('editBio').value;
+    appData.stats.posts = document.getElementById('editPostsStat').value;
+    appData.stats.followers = document.getElementById('editFollowersStat').value;
+    appData.stats.clients = document.getElementById('editClientsStat').value;
+    renderHeaderAndProfile();
+    lucide.createIcons();
+}
+
+function addNewPost() {
+    const img = document.getElementById('newPostImg').value.trim();
+    const caption = document.getElementById('newPostCaption').value.trim();
+    if (!img) { showToast('Ingresá la URL de una imagen', 'alert-circle'); return; }
+    appData.posts.unshift({
+        id: Date.now(),
+        img,
+        caption: caption || "Publicación de mi marca",
+        likes: Math.floor(Math.random() * 200) + 50,
+        comments: Math.floor(Math.random() * 20) + 5
+    });
+    appData.stats.posts = (parseInt(appData.stats.posts) || 0) + 1;
+    document.getElementById('editPostsStat').value = appData.stats.posts;
+    document.getElementById('newPostImg').value = '';
+    document.getElementById('newPostCaption').value = '';
+    renderPosts();
+    renderHeaderAndProfile();
+    lucide.createIcons();
+    showToast('Post agregado correctamente');
+}
+
+// ── SERVICES CRUD ─────────────────────────────────────────────────────────────
+function updateService(i, field, val) {
+    appData.services[i][field] = val;
+    renderServices();
+    lucide.createIcons();
+}
+function removeService(i) {
+    appData.services.splice(i, 1);
+    renderServices();
+    renderServicesEditor();
+    lucide.createIcons();
+    showToast('Servicio eliminado');
+}
+function addService() {
+    appData.services.push({ title: "Nuevo Servicio", desc: "Descripción del servicio.", price: "Consultar" });
+    renderServices();
+    renderServicesEditor();
+    lucide.createIcons();
+    showToast('Servicio agregado');
+}
+
+// ── TESTIMONIALS CRUD ─────────────────────────────────────────────────────────
+function updateTestimonial(i, field, val) {
+    appData.testimonials[i][field] = val;
+    renderTestimonials();
+    lucide.createIcons();
+}
+function removeTestimonial(i) {
+    appData.testimonials.splice(i, 1);
+    renderTestimonials();
+    renderTestimonialsEditor();
+    lucide.createIcons();
+    showToast('Reseña eliminada');
+}
+function addTestimonial() {
+    appData.testimonials.push({ name: "Nombre Cliente", role: "Empresa", text: "Excelente servicio, muy recomendado.", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80" });
+    renderTestimonials();
+    renderTestimonialsEditor();
+    lucide.createIcons();
+    showToast('Reseña agregada');
+}
+
+// ── DARK MODE ─────────────────────────────────────────────────────────────────
+function toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+    const isDark = document.documentElement.classList.contains('dark');
+    document.getElementById('themeIcon').setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+    lucide.createIcons();
+}
+
+// ── EXPORT ────────────────────────────────────────────────────────────────────
+function openExportModal() {
+    const postsHtml = appData.posts.map(post => `
+            <div class="post-card" onclick="openPost(${post.id})">
+                <img src="${post.img}" alt="Post" onerror="this.parentElement.style.background='#374151'">
+                <div class="post-overlay">
+                    <span>♥ ${post.likes}</span>
+                    <span>💬 ${post.comments}</span>
+                </div>
+            </div>`).join('');
+
+    const servicesHtml = appData.services.map(s => `
+            <div class="service-card">
+                <div class="service-badge">${s.price}</div>
+                <h3>${s.title}</h3>
+                <p>${s.desc}</p>
+                <a href="https://wa.me/${appData.phone}?text=${encodeURIComponent('Hola! Me interesa el servicio: ' + s.title)}" target="_blank" class="btn-dark">Consultar →</a>
+            </div>`).join('');
+
+    const testimonialsHtml = appData.testimonials.map(t => `
+            <div class="testimonial-card">
+                <img src="${t.avatar}" alt="${t.name}" onerror="this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80'">
+                <div>
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"${t.text}"</p>
+                    <p class="testimonial-author">${t.name} <span>· ${t.role}</span></p>
+                </div>
+            </div>`).join('');
+
+    const highlightsHtml = appData.highlights.map(h => `
+            <div class="highlight">
+                <div class="highlight-ring">
+                    <img src="${h.img}" alt="${h.title}">
+                </div>
+                <span>${h.title}</span>
+            </div>`).join('');
+
+    const wspUrl = `https://wa.me/${appData.phone}?text=${encodeURIComponent('Hola ' + appData.name + ', vengo desde tu web!')}`;
+    const igUrl = `https://instagram.com/${appData.handle.replace('@','')}`;
+
+    const htmlContent = `<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${appData.name} (@${appData.handle})</title>
-    <script src="https://cdn.tailwindcss.com"><\/script>
-    <script src="https://unpkg.com/lucide@latest"><\/script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>${appData.name} | @${appData.handle.replace('@','')}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .ig-gradient-bg { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-        .ig-story-border { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); padding: 3px; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #f9fafb; color: #111827; }
+        a { text-decoration: none; color: inherit; }
+        /* NAV */
+        nav { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 100; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between; max-width: 900px; margin: 0 auto; width: 100%; }
+        .nav-wrap { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e5e7eb; }
+        .nav-handle { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .btn-wsp { background: #16a34a; color: white; font-weight: 700; font-size: 0.8rem; padding: 8px 16px; border-radius: 12px; display: flex; align-items: center; gap: 6px; }
+        .btn-wsp:hover { background: #15803d; }
+        /* MAIN */
+        main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+        /* PROFILE */
+        .profile-card { background: white; border: 1px solid #e5e7eb; border-radius: 24px; padding: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.06); margin-bottom: 2rem; }
+        .profile-inner { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+        @media(min-width: 640px) { .profile-inner { flex-direction: row; align-items: flex-start; } }
+        .ig-ring { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); padding: 3px; border-radius: 9999px; width: 128px; height: 128px; flex-shrink: 0; }
+        .ig-ring img { width: 100%; height: 100%; object-fit: cover; border-radius: 9999px; border: 4px solid white; }
+        .profile-info { text-align: center; }
+        @media(min-width: 640px) { .profile-info { text-align: left; } }
+        .profile-name { font-size: 1.75rem; font-weight: 800; margin-bottom: 4px; }
+        .profile-category { display: inline-block; background: #fce7f3; color: #be185d; font-size: 0.7rem; font-weight: 800; padding: 3px 12px; border-radius: 999px; border: 1px solid #fbcfe8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .profile-handle { color: #6b7280; font-size: 0.85rem; font-weight: 600; margin-bottom: 12px; }
+        .stats { display: flex; gap: 1.5rem; padding: 12px 0; border-top: 1px solid #f3f4f6; border-bottom: 1px solid #f3f4f6; margin-bottom: 1rem; }
+        .stat-item { text-align: center; }
+        @media(min-width: 640px) { .stat-item { text-align: left; } }
+        .stat-num { font-size: 1.25rem; font-weight: 900; display: block; }
+        .stat-label { font-size: 0.7rem; color: #9ca3af; }
+        .profile-bio { font-size: 0.875rem; color: #4b5563; white-space: pre-line; line-height: 1.6; margin-bottom: 1rem; }
+        .cta-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        @media(min-width: 640px) { .cta-row { justify-content: flex-start; } }
+        .btn-green { background: #16a34a; color: white; font-weight: 700; padding: 12px 22px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.875rem; }
+        .btn-green:hover { background: #15803d; }
+        .btn-gray { background: #f3f4f6; color: #374151; font-weight: 600; padding: 12px 20px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.875rem; }
+        .btn-gray:hover { background: #e5e7eb; }
+        /* HIGHLIGHTS */
+        .highlights-section { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #f3f4f6; }
+        .section-label { font-size: 0.7rem; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .highlights-list { display: flex; gap: 1.5rem; overflow-x: auto; padding-bottom: 8px; }
+        .highlight { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0; }
+        .highlight-ring { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); padding: 2px; border-radius: 9999px; width: 70px; height: 70px; }
+        .highlight-ring img { width: 100%; height: 100%; object-fit: cover; border-radius: 9999px; border: 2px solid white; }
+        .highlight span { font-size: 0.7rem; font-weight: 600; color: #374151; max-width: 70px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* TABS */
+        .tabs { display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 2rem; }
+        .tab { padding: 12px 24px; font-size: 0.875rem; font-weight: 600; color: #9ca3af; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+        .tab.active { color: #db2777; border-color: #db2777; font-weight: 700; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        /* POSTS */
+        .posts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media(min-width: 480px) { .posts-grid { grid-template-columns: repeat(3, 1fr); } }
+        .post-card { aspect-ratio: 1; border-radius: 16px; overflow: hidden; position: relative; cursor: pointer; background: #e5e7eb; }
+        .post-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .post-card:hover img { transform: scale(1.08); }
+        .post-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 24px; color: white; font-weight: 700; font-size: 0.875rem; }
+        .post-card:hover .post-overlay { opacity: 1; }
+        /* SERVICES */
+        .services-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media(min-width: 640px) { .services-grid { grid-template-columns: repeat(3, 1fr); } }
+        .service-card { background: white; border: 1px solid #e5e7eb; border-radius: 20px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; }
+        .service-badge { display: inline-block; background: #fce7f3; color: #be185d; font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
+        .service-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+        .service-card p { font-size: 0.8rem; color: #6b7280; line-height: 1.5; }
+        .btn-dark { display: flex; align-items: center; justify-content: center; gap: 6px; background: #111827; color: white; font-weight: 700; font-size: 0.75rem; padding: 10px 16px; border-radius: 12px; margin-top: 12px; }
+        .btn-dark:hover { background: #db2777; }
+        /* TESTIMONIALS */
+        .testimonials-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media(min-width: 640px) { .testimonials-grid { grid-template-columns: repeat(2, 1fr); } }
+        .testimonial-card { background: white; border: 1px solid #e5e7eb; border-radius: 20px; padding: 1.5rem; display: flex; gap: 1rem; align-items: flex-start; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        .testimonial-card img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #ec4899; flex-shrink: 0; }
+        .stars { color: #f59e0b; font-size: 0.875rem; margin-bottom: 4px; }
+        .testimonial-text { font-size: 0.8rem; color: #4b5563; font-style: italic; line-height: 1.6; margin-bottom: 6px; }
+        .testimonial-author { font-size: 0.75rem; font-weight: 700; }
+        .testimonial-author span { font-weight: 400; color: #9ca3af; }
+        /* FLOATING */
+        .floating-wsp { position: fixed; bottom: 24px; right: 24px; z-index: 99; background: #22c55e; color: white; border-radius: 50px; padding: 14px 18px; display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.875rem; box-shadow: 0 8px 30px rgba(34,197,94,0.4); }
+        .floating-wsp:hover { background: #16a34a; }
+        /* FOOTER */
+        footer { text-align: center; padding: 2.5rem 1rem; font-size: 0.75rem; color: #9ca3af; border-top: 1px solid #e5e7eb; margin-top: 3rem; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans pb-12">
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
-        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <span class="font-extrabold text-lg">@${appData.handle}</span>
-            </div>
-            <a href="https://wa.me/${appData.phone}" target="_blank" class="px-4 py-2 bg-green-600 text-white font-bold rounded-xl text-xs">WhatsApp</a>
-        </div>
-    </header>
+<body>
 
-    <!-- Main Profile -->
-    <main class="max-w-4xl mx-auto px-4 pt-8 space-y-8">
-        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-center gap-6">
-            <div class="w-32 h-32 rounded-full ig-story-border p-1">
-                <img src="${appData.avatar}" class="w-full h-full object-cover rounded-full">
+<div class="nav-wrap">
+    <nav>
+        <a href="#" class="nav-handle">
+            <div class="ig-ring" style="width:36px;height:36px;padding:2px;"><img src="${appData.avatar}" alt="avatar"></div>
+            <span>@${appData.handle.replace('@','')}</span>
+        </a>
+        <a href="${wspUrl}" target="_blank" class="btn-wsp">💬 WhatsApp</a>
+    </nav>
+</div>
+
+<main>
+    <!-- PROFILE -->
+    <section class="profile-card">
+        <div class="profile-inner">
+            <div class="ig-ring">
+                <img src="${appData.avatar}" alt="${appData.name}">
             </div>
-            <div class="space-y-3 text-center md:text-left">
-                <h1 class="text-2xl font-bold">${appData.name}</h1>
-                <p class="text-xs font-bold text-pink-600">${appData.category}</p>
-                <p class="text-sm text-gray-600 whitespace-pre-line">${appData.bio}</p>
-                <a href="https://wa.me/${appData.phone}" target="_blank" class="inline-block px-6 py-3 bg-green-600 text-white font-bold rounded-xl text-sm">Chatear por WhatsApp</a>
+            <div class="profile-info">
+                <h1 class="profile-name">${appData.name}</h1>
+                <span class="profile-category">${appData.category}</span>
+                <p class="profile-handle">@${appData.handle.replace('@','')}</p>
+                <div class="stats">
+                    <div class="stat-item"><span class="stat-num">${appData.stats.posts}</span><span class="stat-label">Publicaciones</span></div>
+                    <div class="stat-item"><span class="stat-num">${appData.stats.followers}</span><span class="stat-label">Seguidores</span></div>
+                    <div class="stat-item"><span class="stat-num">${appData.stats.clients}</span><span class="stat-label">Clientes</span></div>
+                </div>
+                <p class="profile-bio">${appData.bio}</p>
+                <div class="cta-row">
+                    <a href="${wspUrl}" target="_blank" class="btn-green">💬 Contactar por WhatsApp</a>
+                    <a href="${igUrl}" target="_blank" class="btn-gray">📸 Perfil de Instagram</a>
+                </div>
             </div>
         </div>
-    </main>
-    <script>lucide.createIcons();<\/script>
+        <!-- HIGHLIGHTS -->
+        <div class="highlights-section">
+            <p class="section-label">Historias Destacadas</p>
+            <div class="highlights-list">
+                ${highlightsHtml}
+            </div>
+        </div>
+    </section>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <div class="tab active" onclick="switchExportTab('posts',this)">Publicaciones</div>
+        <div class="tab" onclick="switchExportTab('services',this)">Servicios</div>
+        <div class="tab" onclick="switchExportTab('testimonials',this)">Reseñas</div>
+    </div>
+
+    <div id="exp-posts" class="tab-panel active">
+        <div class="posts-grid">${postsHtml}</div>
+    </div>
+    <div id="exp-services" class="tab-panel">
+        <div class="services-grid">${servicesHtml}</div>
+    </div>
+    <div id="exp-testimonials" class="tab-panel">
+        <div class="testimonials-grid">${testimonialsHtml}</div>
+    </div>
+</main>
+
+<a href="${wspUrl}" target="_blank" class="floating-wsp">💬 ¿Hablamos?</a>
+
+<footer>
+    <p>© ${new Date().getFullYear()} @${appData.handle.replace('@','')}. Todos los derechos reservados.</p>
+    <p style="margin-top:4px;">Creado con Instagram Studio Generator</p>
+</footer>
+
+<script>
+function switchExportTab(name, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('exp-' + name).classList.add('active');
+}
+
+const posts = ${JSON.stringify(appData.posts)};
+function openPost(id) {
+    const p = posts.find(x => x.id === id);
+    if (!p) return;
+    if (confirm('📸 ' + p.caption + '\\n\\n¿Querés consultar por este post en WhatsApp?')) {
+        window.open('https://wa.me/${appData.phone}?text=' + encodeURIComponent('Hola! Quisiera info sobre este post: ' + p.caption), '_blank');
+    }
+}
+<\/script>
 </body>
 </html>`;
 
-            document.getElementById('exportedCodeTextarea').value = htmlContent;
-            document.getElementById('exportModal').classList.remove('hidden');
-            document.getElementById('exportModal').classList.add('flex');
-            lucide.createIcons();
-        }
+    document.getElementById('exportedCodeTextarea').value = htmlContent;
+    document.getElementById('exportModal').classList.remove('hidden');
+    document.getElementById('exportModal').classList.add('flex');
+    lucide.createIcons();
+}
 
-        function closeExportModal() {
-            document.getElementById('exportModal').classList.add('hidden');
-            document.getElementById('exportModal').classList.remove('flex');
-        }
+function closeExportModal() {
+    document.getElementById('exportModal').classList.add('hidden');
+    document.getElementById('exportModal').classList.remove('flex');
+}
 
-        function copyExportedCode() {
-            const textarea = document.getElementById('exportedCodeTextarea');
-            textarea.select();
-            document.execCommand('copy');
-            alert('¡Código copiado al portapapeles!');
-        }
+function copyExportedCode() {
+    const code = document.getElementById('exportedCodeTextarea').value;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(() => showToast('Código copiado al portapapeles'));
+    } else {
+        const ta = document.getElementById('exportedCodeTextarea');
+        ta.select();
+        document.execCommand('copy');
+        showToast('Código copiado al portapapeles');
+    }
+}
 
-        function downloadExportedCode() {
-            const code = document.getElementById('exportedCodeTextarea').value;
-            const blob = new Blob([code], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `index-${appData.handle}.html`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-    </script>
+function downloadExportedCode() {
+    const code = document.getElementById('exportedCodeTextarea').value;
+    const blob = new Blob([code], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `landing-${appData.handle.replace('@','')}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Descarga iniciada');
+}
+</script>
 </body>
 </html>
